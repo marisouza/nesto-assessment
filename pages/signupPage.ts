@@ -103,16 +103,12 @@ export class SignupPage {
     return JSON.parse(data);
   }
 
-// Is this too much logging?
 async navigateToSignupPage() {
   const url = await this.getSignupUrl();
   console.log(`Navigating to signup page: ${url}`);
   
   try {
-    await this.page.goto(url);
-    console.log('Page loaded successfully');
-    
-    await this.page.waitForResponse(
+    const reponse = this.page.waitForResponse(
       (resp) => {
         const matchesUrl = resp.url().includes("/api/geolocation/all");
         const matchesMethod = resp.request().method() === "GET";
@@ -125,6 +121,10 @@ async navigateToSignupPage() {
         return matchesUrl && matchesMethod && matchesStatus;
       },
     );
+    await this.page.goto(url);
+    await reponse;
+    console.log('Page loaded successfully');
+  
     console.log('Geolocation API response received successfully');
   } catch (error) {
     console.error('Error navigating to signup page:', error);

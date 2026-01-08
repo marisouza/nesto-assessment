@@ -77,6 +77,7 @@ const runSignupTests = (lang: Language) => {
           .slice(0, 7);
         await signupPage.fillInputField(signupPage.phoneInput, invalidPhone);
         await signupPage.submitSignupForm();
+        await signupPage.phoneInput.waitFor({ state: "visible" });
 
         expect(signupPage.phoneInput).toHaveValue(invalidPhone);
         const locator = signupPage.page.getByText(
@@ -94,6 +95,7 @@ const runSignupTests = (lang: Language) => {
         const invalidEmail = "invalid-email@test";
         await signupPage.fillInputField(signupPage.emailInput, invalidEmail);
         await signupPage.submitSignupForm();
+        await signupPage.emailInput.waitFor({ state: "visible" });
 
         expect(signupPage.emailInput).toHaveValue(invalidEmail);
         const error = await signupPage.getErrorMessageByTestId(
@@ -115,6 +117,7 @@ const runSignupTests = (lang: Language) => {
           "Different123",
         );
         await signupPage.submitSignupForm();
+        await signupPage.confirmPasswordInput.waitFor({ state: "visible" });
 
         const error = await signupPage.getErrorMessageByTestId(
           "passwordConfirmation-error-message-typography",
@@ -129,6 +132,7 @@ const runSignupTests = (lang: Language) => {
       }) => {
         await signupPage.fillInputField(signupPage.passwordInput, "Pass1");
         await signupPage.submitSignupForm();
+        await signupPage.passwordInput.waitFor({ state: "visible" });
 
         const error = await signupPage.getErrorMessageByTestId(
           "password-error-message-typography",
@@ -148,6 +152,7 @@ const runSignupTests = (lang: Language) => {
           tooLongPassword,
         );
         await signupPage.submitSignupForm();
+        await signupPage.passwordInput.waitFor({ state: "visible" });
 
         const expectedText = await helper.getLocaleText(
           "passwordMaximumRequirement",
@@ -167,6 +172,7 @@ const runSignupTests = (lang: Language) => {
           "Password1234",
         );
         await signupPage.submitSignupForm();
+        await signupPage.passwordInput.waitFor({ state: "visible" });
         await expect(
           await signupPage.getLocatorByTestId(
             "password-error-message-typography",
@@ -180,6 +186,7 @@ const runSignupTests = (lang: Language) => {
         const longPassword = "A".repeat(30) + "1a";
         await signupPage.fillInputField(signupPage.passwordInput, longPassword);
         await signupPage.submitSignupForm();
+        await signupPage.passwordInput.waitFor({ state: "visible" });
         await expect(
           await signupPage.getLocatorByTestId(
             "password-error-message-typography",
