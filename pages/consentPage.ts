@@ -1,4 +1,4 @@
-import { type Locator, type Page, expect } from "@playwright/test";
+import { type Locator, type Page } from "@playwright/test";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -51,8 +51,13 @@ export class ConsentPage {
   }
 
   async isConsentVisible() {
-    await expect(this.consentModal).toBeAttached();
-    return await this.consentModal.isVisible();
+    try {
+      await this.consentModal.waitFor({ state: 'visible' });
+      return await this.consentModal.isVisible();
+    } catch {
+      console.error("Consent modal not visible within timeout");
+      return false;
+    }
   }
 
   async isConsentNotVisible() {
