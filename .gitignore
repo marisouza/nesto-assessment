@@ -5,9 +5,9 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
-/playwright/.auth/**
-/tests/helper/consent.json
+/playwright/.auth/
 /allure-results/
+/allure-report/
 
 # Prettier
 .prettierrc
