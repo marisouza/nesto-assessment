@@ -14,7 +14,7 @@ export class ConsentPage {
     this.page = page;
     this.language = language;
     const localeData = this.getLocaleData();
-    this.consentModal = page.getByTestId("notice");
+    this.consentModal =  page.getByTestId("notice");
     this.partners = page.getByText(localeData.consentPartnersButton, {
       exact: true,
     });
@@ -48,16 +48,11 @@ export class ConsentPage {
         ? "https://app.qa.nesto.ca/fr/signup"
         : "https://app.qa.nesto.ca/signup";
     await this.page.goto(url);
-  }
+    // Fast navigation
+    await this.page.goto(url, { waitUntil: 'domcontentloaded' });
 
-  async isConsentVisible() {
-    try {
-      await this.consentModal.waitFor({ state: 'visible' });
-      return await this.consentModal.isVisible();
-    } catch {
-      console.error("Consent modal not visible within timeout");
-      return false;
-    }
+    // Wait for what you actually need
+    await this.consentModal.waitFor({ state: 'attached' });
   }
 
   async isConsentNotVisible() {

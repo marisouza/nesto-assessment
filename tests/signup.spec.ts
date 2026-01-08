@@ -33,6 +33,7 @@ const runSignupTests = (lang: Language) => {
           }
         });
         await signupPage.submitSignupForm();
+        await signupPage.confirmPasswordInput.waitFor({ state: "visible" });
         const errors = await signupPage.getErrorMessages();
 
         // 5 inline errors for 5 mandatory fields

@@ -14,30 +14,10 @@ const runSignupTests = (lang: Language) => {
       consentPage = new ConsentPage(page, lang);
     });
 
-    // TODO: add scenario that consent is acceptaded and page reload the consent is not shown again
-    test("should not show consent after first acceptance", async ({ page }) => {
-      await helper.applyConsent(page);
-      await consentPage.goto();
-
-      const cookies = await consentPage.page.context().cookies();
-      const localStorage = await consentPage.page.evaluate(() =>
-        Object.assign({}, window.localStorage),
-      );
-
-      const isHidden = await consentPage.isConsentNotVisible();
-      await expect(isHidden).toBe(true);
-      await expect(
-        cookies.find((cookie) => cookie.name === "didomi_token"),
-      ).not.toBeNull();
-      await expect(
-        cookies.find((cookie) => cookie.name === "euconsent-v2"),
-      ).not.toBeNull();
-      await expect(localStorage["euconsent-v2"]).not.toBeNull();
-    });
-
     test("should show consent on first visit", async () => {
       await consentPage.goto();
-      const isVisible = await consentPage.isConsentVisible();
+      // const isVisible = await consentPage.isConsentVisible();
+      await consentPage.consentModal.waitFor({ state: 'visible' });
 
       const expectedAcceptText = await helper.getLocaleText(
         "consentAcceptButton",
@@ -49,12 +29,30 @@ const runSignupTests = (lang: Language) => {
         "consentPartnersButton",
       );
 
-      await expect(isVisible).toBe(true);
+      await expect(consentPage.consentModal).toBeVisible();
       await expect(consentPage.agreeButton).toContainText(expectedAcceptText);
       await expect(consentPage.learnMoreButton).toContainText(
         expectedLearnMoreText,
       );
       await expect(consentPage.partners).toContainText(expectedPartnersText);
+    });
+
+    test("should not show consent after accepting it", async () => {
+      await consentPage.goto();
+      // const isVisible = await consentPage.isConsentVisible();
+      await consentPage.consentModal.waitFor({ state: 'visible' });
+
+      // await expect(isVisible).toBe(true);
+      await expect(consentPage.consentModal).toBeVisible();
+      await consentPage.acceptConsent();
+
+      const isHidden = await consentPage.isConsentNotVisible();
+      await expect(isHidden).toBe(true);
+
+      consentPage.page.reload();
+       await consentPage.consentModal.waitFor({ state: 'hidden' });
+      const isHiddenAfterReload = await consentPage.isConsentNotVisible();
+      await expect(isHiddenAfterReload).toBe(true);
     });
   });
 };
