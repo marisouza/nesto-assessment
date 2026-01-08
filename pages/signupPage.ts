@@ -103,16 +103,35 @@ export class SignupPage {
     return JSON.parse(data);
   }
 
-  async navigateToSignupPage() {
-    const url = await this.getSignupUrl();
-    await this.page.goto(url);
-    await this.page.waitForResponse(
-      (resp) =>
-        resp.url().includes("/api/geolocation/all") &&
-        resp.request().method() === "GET" &&
-        resp.status() === 200,
+async navigateToSignupPage() {
+  const url = await this.getSignupUrl();
+  console.log(`Navigating to signup page: ${url}`);
+  
+  try {
+    const reponse = this.page.waitForResponse(
+      (resp) => {
+        const matchesUrl = resp.url().includes("/api/geolocation/all");
+        const matchesMethod = resp.request().method() === "GET";
+        const matchesStatus = resp.status() === 200;
+        
+        if (matchesUrl) {
+          console.log(`Geolocation API response - Status: ${resp.status()}, Method: ${resp.request().method()}`);
+        }
+        
+        return matchesUrl && matchesMethod && matchesStatus;
+      },
     );
+    await this.page.goto(url);
+    await reponse;
+    console.log('Page loaded successfully');
+  
+    console.log('Geolocation API response received successfully');
+  } catch (error) {
+    console.error('Error navigating to signup page:', error);
+    console.error(`Failed URL: ${url}`);
+    throw error;
   }
+}
 
   async submitSignupForm() {
     await this.signUpButton.click();
@@ -187,13 +206,5 @@ export class SignupPage {
   async getErrorMessageByText(text: string) {
     const locator = this.page.getByText(text);
     return await locator.textContent();
-  }
-
-  // TODO: duplicate of SignupPage getLocaleText - consider refactoring
-  async setLanguage(lang: "en" | "fr") {
-    await this.page.addInitScript(
-      `localStorage.setItem('language', '${lang}');`,
-    );
-    await this.page.reload();
   }
 }

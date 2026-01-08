@@ -59,13 +59,6 @@ export class LoginPage {
     return await this.passwordError.textContent();
   }
 
-  async setLanguage(lang: "en" | "fr") {
-    await this.page.addInitScript(
-      `localStorage.setItem('language', '${lang}');`,
-    );
-    await this.page.reload();
-  }
-
   // TODO: refactor duplicate of ConsentPage
   private getLocaleData() {
     const localeMap = {

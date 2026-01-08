@@ -11,10 +11,13 @@ type Language = "en" | "fr";
 const selectedLanguage = (process.env.LANGUAGE?.toLowerCase() as Language) || "en";
 
 export async function applyConsent(page: Page) {
-  // Fake consent values
-  // const didomi = 'eyJ1c2VyX2lkIjoiMTliOTBmOGItYTU1OC02YjY2LWJkMGEtNTVkODFkNzIzYjNmIiwiY3JlYXRlZCI6IjIwMjYtMDEtMDZUMDE6NDI6NTguMzg5WiIsInVwZGF0ZWQiOiIyMDI2LTAxLTA2VDAxOjQ5OjQ5LjI3M1oiLCJ2ZW5kb3JzIjp7ImVuYWJsZWQiOlsiZ29vZ2xlIiwiYzpnb29nbGVhbmEtNFRYbkppZ1IiLCJjOnN3aXRjaGdyby1lZ0FUSmh4SiIsImM6dW5ib3VuY2UiLCJjOmxpbmtlZGluIiwiYzptaWNyb3NvZnQiLCJjOmxhcHJlc3NlLXFiaFVxUW1mIiwiYzpjb252ZXJ0ZXgtekE4cldyVUQiXX0sInB1cnBvc2VzIjp7ImVuYWJsZWQiOlsiYWR2ZXJ0aXNpbi03V2QyNFJLaiIsInBlcmZvcm1hbmMtRVJQWGZyRmIiXX0sInZlbmRvcnNfbGkiOnsiZW5hYmxlZCI6WyJnb29nbGUiXX0sInZlcnNpb24iOjIsImFjIjoiQUZtQUNBRmsuQUZtQUNBRmsifQ==';
-  // const eu = 'CQdmyUAQdmyUAAHABBENCMFgAP_AAELAAAAAGMwAgF5gMZAvOACAvMAA.f_gACFgAAAAA';
-
+  // Check if consent file exists
+  if (!fs.existsSync(consentFilePath)) {
+    throw new Error(
+      `Consent file not found at: ${consentFilePath}\n` +
+      `Please ensure the consent.json file exists in the playwright/.auth/ directory.`
+    );
+  }
  
   const data = fs.readFileSync(consentFilePath, "utf-8");
   const didomi = process.env.DIDOMI
@@ -23,9 +26,6 @@ export async function applyConsent(page: Page) {
   const eu = process.env.EUCONSENT
     ? process.env.EUCONSENT
     : JSON.parse(data)["euconsent-v2"];
-
-  console.log("Applying consent with didomi:", didomi);
-  console.log("Applying consent with euconsent-v2:", eu);
 
   // Set localStorage via addInitScript
   await page.addInitScript(
@@ -65,6 +65,7 @@ export async function applyConsent(page: Page) {
       sameSite: "Lax",
     },
   ]);
+  await page.reload();
 }
 
 async function getLocaleData() {

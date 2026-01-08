@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { ConsentPage } from "../pages/consentPage";
-import { applyConsent2 } from "./helper/helper";
+import * as helper from "./helper/helper";
 
 type Language = "en" | "fr";
 const selectedLanguage =
@@ -12,12 +12,11 @@ const runSignupTests = (lang: Language) => {
 
     test.beforeEach(async ({ page }) => {
       consentPage = new ConsentPage(page, lang);
-      await consentPage.setLanguage(lang);
     });
 
     // TODO: add scenario that consent is acceptaded and page reload the consent is not shown again
     test("should not show consent after first acceptance", async ({ page }) => {
-      await applyConsent2(page);
+      await helper.applyConsent(page);
       await consentPage.goto();
 
       const cookies = await consentPage.page.context().cookies();
@@ -40,13 +39,13 @@ const runSignupTests = (lang: Language) => {
       await consentPage.goto();
       const isVisible = await consentPage.isConsentVisible();
 
-      const expectedAcceptText = await consentPage.getLocaleText(
+      const expectedAcceptText = await helper.getLocaleText(
         "consentAcceptButton",
       );
-      const expectedLearnMoreText = await consentPage.getLocaleText(
+      const expectedLearnMoreText = await helper.getLocaleText(
         "consentLearnMoreButton",
       );
-      const expectedPartnersText = await consentPage.getLocaleText(
+      const expectedPartnersText = await helper.getLocaleText(
         "consentPartnersButton",
       );
 

@@ -3,7 +3,6 @@ import { SignupPage } from "../pages/signupPage";
 import { faker } from "@faker-js/faker";
 import * as helper from "./helper/helper";
 
-// Custom fixture for SignupPage
 const test = baseTest.extend<{ signupPage: SignupPage }>({
   signupPage: async ({ page }, use) => {
     const language = selectedLanguage;
@@ -33,9 +32,6 @@ const runSignupTests = (lang: Language) => {
             accountRequestTriggered = true;
           }
         });
-        // await signupPage.page.waitForTimeout(2000);
-        // await expect(signupPage.page.getByText("Agree and clode")).toBeDefined();
-        // await signupPage.page.getByRole('button', { name: 'Agree and close: Agree to our' }).click();
         await signupPage.submitSignupForm();
         const errors = await signupPage.getErrorMessages();
 
@@ -81,6 +77,7 @@ const runSignupTests = (lang: Language) => {
           .slice(0, 7);
         await signupPage.fillInputField(signupPage.phoneInput, invalidPhone);
         await signupPage.submitSignupForm();
+        await signupPage.phoneInput.waitFor({ state: "visible" });
 
         expect(signupPage.phoneInput).toHaveValue(invalidPhone);
         const locator = signupPage.page.getByText(
@@ -98,6 +95,7 @@ const runSignupTests = (lang: Language) => {
         const invalidEmail = "invalid-email@test";
         await signupPage.fillInputField(signupPage.emailInput, invalidEmail);
         await signupPage.submitSignupForm();
+        await signupPage.emailInput.waitFor({ state: "visible" });
 
         expect(signupPage.emailInput).toHaveValue(invalidEmail);
         const error = await signupPage.getErrorMessageByTestId(
@@ -119,6 +117,7 @@ const runSignupTests = (lang: Language) => {
           "Different123",
         );
         await signupPage.submitSignupForm();
+        await signupPage.confirmPasswordInput.waitFor({ state: "visible" });
 
         const error = await signupPage.getErrorMessageByTestId(
           "passwordConfirmation-error-message-typography",
@@ -133,6 +132,7 @@ const runSignupTests = (lang: Language) => {
       }) => {
         await signupPage.fillInputField(signupPage.passwordInput, "Pass1");
         await signupPage.submitSignupForm();
+        await signupPage.passwordInput.waitFor({ state: "visible" });
 
         const error = await signupPage.getErrorMessageByTestId(
           "password-error-message-typography",
@@ -152,6 +152,7 @@ const runSignupTests = (lang: Language) => {
           tooLongPassword,
         );
         await signupPage.submitSignupForm();
+        await signupPage.passwordInput.waitFor({ state: "visible" });
 
         const expectedText = await helper.getLocaleText(
           "passwordMaximumRequirement",
@@ -171,6 +172,7 @@ const runSignupTests = (lang: Language) => {
           "Password1234",
         );
         await signupPage.submitSignupForm();
+        await signupPage.passwordInput.waitFor({ state: "visible" });
         await expect(
           await signupPage.getLocatorByTestId(
             "password-error-message-typography",
@@ -184,6 +186,7 @@ const runSignupTests = (lang: Language) => {
         const longPassword = "A".repeat(30) + "1a";
         await signupPage.fillInputField(signupPage.passwordInput, longPassword);
         await signupPage.submitSignupForm();
+        await signupPage.passwordInput.waitFor({ state: "visible" });
         await expect(
           await signupPage.getLocatorByTestId(
             "password-error-message-typography",
@@ -265,6 +268,7 @@ const runSignupTests = (lang: Language) => {
       test("should have correct link for terms of service", async ({
         signupPage,
       }) => {
+        await expect(signupPage.signUpButton).toBeVisible();
         const href = await signupPage.getTermsOfServiceHref();
         const expectedText =
           await helper.getLocaleText("termsOfServiceLink");
@@ -441,7 +445,6 @@ const runSignupTests = (lang: Language) => {
             resp.status() === 401,
         );
 
-        
         const accountResponseBody = await accountResponse.json();
         expect(accountResponseBody.account.firstName).toEqual(
           randomUserFirstName,
@@ -455,6 +458,7 @@ const runSignupTests = (lang: Language) => {
           selectedLanguage === "fr"
             ? "https://app.qa.nesto.ca/getaquote/fr"
             : "https://app.qa.nesto.ca/getaquote";
+
         // ensure redirection to next step after signup
         await signupPage.page.waitForResponse(
           (resp) =>

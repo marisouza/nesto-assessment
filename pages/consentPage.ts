@@ -24,7 +24,7 @@ export class ConsentPage {
     });
   }
 
-  // duplicate of SignupPage getLocaleData - consider refactoring
+  // TODO: Refactor duplicate of LoginPage and PortfolioPage
   private getLocaleData() {
     const localeMap = {
       en: "en-EN.json",
@@ -65,19 +65,5 @@ export class ConsentPage {
 
   async learnMore() {
     await this.learnMoreButton.click();
-  }
-
-  // TODO: duplicate of SignupPage getLocaleText - consider refactoring
-  async getLocaleText(key: string) {
-    const localeData = this.getLocaleData();
-    return localeData[key];
-  }
-
-  // TODO: duplicate of SignupPage getLocaleText - consider refactoring
-  async setLanguage(lang: "en" | "fr") {
-    await this.page.addInitScript(
-      `localStorage.setItem('language', '${lang}');`,
-    );
-    await this.page.reload();
   }
 }
