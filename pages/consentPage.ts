@@ -24,7 +24,7 @@ export class ConsentPage {
     });
   }
 
-  // duplicate of SignupPage getLocaleData - consider refactoring
+  // TODO: Refactor duplicate of LoginPage and PortfolioPage
   private getLocaleData() {
     const localeMap = {
       en: "en-EN.json",
