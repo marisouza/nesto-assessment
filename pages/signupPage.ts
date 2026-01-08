@@ -188,11 +188,7 @@ export class SignupPage {
     const locator = this.page.getByText(text);
     return await locator.textContent();
   }
-  // TODO: duplicate of SignupPage getLocaleText - consider refactoring
-  async getLocaleText(key: string) {
-    const localeData = this.getLocaleData();
-    return localeData[key];
-  }
+
   // TODO: duplicate of SignupPage getLocaleText - consider refactoring
   async setLanguage(lang: "en" | "fr") {
     await this.page.addInitScript(

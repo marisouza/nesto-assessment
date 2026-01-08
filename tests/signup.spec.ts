@@ -1,15 +1,14 @@
 import { test as baseTest, expect } from "../fixtures";
 import { SignupPage } from "../pages/signupPage";
 import { faker } from "@faker-js/faker";
-import { applyConsent2 } from "./helper/helper";
+import * as helper from "./helper/helper";
 
 // Custom fixture for SignupPage
 const test = baseTest.extend<{ signupPage: SignupPage }>({
   signupPage: async ({ page }, use) => {
     const language = selectedLanguage;
     const signupPage = new SignupPage(page, language);
-    await applyConsent2(page);
-    // await browser.newContext({ locale: language });
+    await helper.applyConsent(page);
     await signupPage.navigateToSignupPage();
     await expect(signupPage.page).toHaveURL(await signupPage.getSignupUrl());
     await use(signupPage);
@@ -34,18 +33,20 @@ const runSignupTests = (lang: Language) => {
             accountRequestTriggered = true;
           }
         });
-
+        // await signupPage.page.waitForTimeout(2000);
+        // await expect(signupPage.page.getByText("Agree and clode")).toBeDefined();
+        // await signupPage.page.getByRole('button', { name: 'Agree and close: Agree to our' }).click();
         await signupPage.submitSignupForm();
         const errors = await signupPage.getErrorMessages();
 
         // 5 inline errors for 5 mandatory fields
         expect(errors.length).toBe(5);
         expect(errors).toEqual([
-          await signupPage.getLocaleText("mandatoryField"),
-          await signupPage.getLocaleText("mandatoryField"),
-          await signupPage.getLocaleText("invalidPhoneNumber"),
-          await signupPage.getLocaleText("invalidEmail"),
-          await signupPage.getLocaleText("passwordsMinimumRequirement"),
+          await helper.getLocaleText("mandatoryField"),
+          await helper.getLocaleText("mandatoryField"),
+          await helper.getLocaleText("invalidPhoneNumber"),
+          await helper.getLocaleText("invalidEmail"),
+          await helper.getLocaleText("passwordsMinimumRequirement"),
         ]);
 
         const expectedUrl = await signupPage.getSignupUrl();
@@ -53,10 +54,7 @@ const runSignupTests = (lang: Language) => {
         expect(accountRequestTriggered).toBe(false);
       });
 
-      // Assumption:
-      // country selected only occurs when + valis area code and phone number provided.
-      // if form only contain CA region then only ca nu,ber should be accepted
-      // BUG: valid phone number with different country code not triggering error
+      // SU-003: Validate phone number based on country code selected
       test.skip("should show line error when phone number and country selection are different", async ({
         signupPage,
       }) => {
@@ -66,12 +64,12 @@ const runSignupTests = (lang: Language) => {
         await signupPage.submitSignupForm();
 
         expect(signupPage.phoneInput).toHaveValue(invalidPhone);
-        const locator = await signupPage.page.getByText(
-          await signupPage.getLocaleText("invalidPhoneNumber"),
+        const locator = signupPage.page.getByText(
+          await helper.getLocaleText("invalidPhoneNumber"),
         );
         await expect(locator).toBeVisible();
         await expect(locator).toHaveText(
-          await signupPage.getLocaleText("invalidPhoneNumber"),
+          await helper.getLocaleText("invalidPhoneNumber"),
         );
       });
 
@@ -86,11 +84,11 @@ const runSignupTests = (lang: Language) => {
 
         expect(signupPage.phoneInput).toHaveValue(invalidPhone);
         const locator = signupPage.page.getByText(
-          await signupPage.getLocaleText("invalidPhoneNumber"),
+          await helper.getLocaleText("invalidPhoneNumber"),
         );
         await expect(locator).toBeVisible();
         await expect(locator).toHaveText(
-          await signupPage.getLocaleText("invalidPhoneNumber"),
+          await helper.getLocaleText("invalidPhoneNumber"),
         );
       });
 
@@ -105,7 +103,7 @@ const runSignupTests = (lang: Language) => {
         const error = await signupPage.getErrorMessageByTestId(
           "email-error-message-typography",
         );
-        const expectedText = await signupPage.getLocaleText("invalidEmail");
+        const expectedText = await helper.getLocaleText("invalidEmail");
         expect(error).toContain(expectedText);
       });
 
@@ -126,7 +124,7 @@ const runSignupTests = (lang: Language) => {
           "passwordConfirmation-error-message-typography",
         );
         const expectedText =
-          await signupPage.getLocaleText("passwordsMismatch");
+          await helper.getLocaleText("passwordsMismatch");
         expect(error).toEqual(expectedText);
       });
 
@@ -139,7 +137,7 @@ const runSignupTests = (lang: Language) => {
         const error = await signupPage.getErrorMessageByTestId(
           "password-error-message-typography",
         );
-        const expectedText = await signupPage.getLocaleText(
+        const expectedText = await helper.getLocaleText(
           "passwordsMinimumRequirement",
         );
         expect(error).toEqual(expectedText);
@@ -155,7 +153,7 @@ const runSignupTests = (lang: Language) => {
         );
         await signupPage.submitSignupForm();
 
-        const expectedText = await signupPage.getLocaleText(
+        const expectedText = await helper.getLocaleText(
           "passwordMaximumRequirement",
         );
         expect(
@@ -203,7 +201,7 @@ const runSignupTests = (lang: Language) => {
         );
         await signupPage.submitSignupForm();
 
-        const expectedText = await signupPage.getLocaleText(
+        const expectedText = await helper.getLocaleText(
           "passwordRequirements",
         );
         const error = await signupPage.getErrorMessageByText(expectedText);
@@ -257,7 +255,7 @@ const runSignupTests = (lang: Language) => {
         await signupPage.clickLoginHref();
         expect(signupPage.page.url()).toContain("/login");
 
-        const expectedText = await signupPage.getLocaleText("logIn");
+        const expectedText = await helper.getLocaleText("logIn");
         await signupPage.page.waitForSelector("button", { state: "visible" });
         await expect(
           signupPage.page.getByRole("button", { name: expectedText }),
@@ -269,17 +267,17 @@ const runSignupTests = (lang: Language) => {
       }) => {
         const href = await signupPage.getTermsOfServiceHref();
         const expectedText =
-          await signupPage.getLocaleText("termsOfServiceLink");
+          await helper.getLocaleText("termsOfServiceLink");
         expect(href).toContain(expectedText);
       });
 
-      //BUG: Test is skipped until the privacy policy link is for EN users is fixed
+      //SU-006: Test is skipped until the privacy policy link is for EN users is fixed
       test.skip("should have correct link for privacy policy", async ({
         signupPage,
       }) => {
         const href = await signupPage.getPrivacyPolicyHref();
         const expectedText =
-          await signupPage.getLocaleText("privacyPolicyLink");
+          await helper.getLocaleText("privacyPolicyLink");
         expect(href).toContain(expectedText);
       });
 
@@ -300,7 +298,7 @@ const runSignupTests = (lang: Language) => {
         });
         await signupPage.submitSignupForm();
 
-        const expectedText = await signupPage.getLocaleText("toastError");
+        const expectedText = await helper.getLocaleText("toastError");
         const locator = signupPage.page.getByText(expectedText, {
           exact: true,
         });
@@ -338,9 +336,9 @@ const runSignupTests = (lang: Language) => {
         // 3 inline errors for first name, last name and invalid email
         expect(errors.length).toBe(3);
         expect(errors).toEqual([
-          await signupPage.getLocaleText("mandatoryField"),
-          await signupPage.getLocaleText("mandatoryField"),
-          await signupPage.getLocaleText("invalidEmail"),
+          await helper.getLocaleText("mandatoryField"),
+          await helper.getLocaleText("mandatoryField"),
+          await helper.getLocaleText("invalidEmail"),
         ]);
 
         // Check that no alert popup is triggered
@@ -358,58 +356,115 @@ const runSignupTests = (lang: Language) => {
       });
     });
 
-    test("should successfully submit signup form", async ({ signupPage }) => {
-      const randomUserFirstName = faker.person.firstName();
-      const randomUserLastName = faker.person.lastName();
-      const randomEmail = faker.internet.email({
-        firstName: randomUserFirstName,
-        lastName: `${randomUserLastName}${Date.now().toFixed()}`,
+    test.describe("Account Creation", () => {
+      test("should create account when valid inputs are provided", async ({ signupPage }) => {
+        const randomUserFirstName = faker.person.firstName();
+        const randomUserLastName = faker.person.lastName();
+        const randomEmail = faker.internet.email({
+          firstName: randomUserFirstName,
+          lastName: `${randomUserLastName}${Date.now().toFixed()}`,
+        });
+        const phoneNumber = "+15141234567";
+        const pwd = "PPassword1234";
+        const region = "AB";
+
+        // Submit the form and wait for the response
+        await signupPage.fillSignupForm({
+          firstName: randomUserFirstName,
+          lastName: randomUserLastName,
+          phoneNumber: phoneNumber,
+          email: randomEmail,
+          password: pwd,
+          region: region,
+        });
+
+        await signupPage.submitSignupForm();
+        const accountResponse = await signupPage.page.waitForResponse(
+          (resp) =>
+            resp.url().includes("/api/accounts") &&
+            resp.request().method() === "POST" &&
+            resp.status() === 201,
+        );
+
+        
+        const accountResponseBody = await accountResponse.json();
+        expect(accountResponseBody.account.firstName).toEqual(
+          randomUserFirstName,
+        );
+        expect(accountResponseBody.account.lastName).toEqual(randomUserLastName);
+        expect(accountResponseBody.account.email).toEqual(randomEmail);
+        expect(accountResponseBody.account.phone).toEqual(phoneNumber);
+        expect(accountResponseBody.account.region).toEqual(region);
+
+        const url =
+          selectedLanguage === "fr"
+            ? "https://app.qa.nesto.ca/getaquote/fr"
+            : "https://app.qa.nesto.ca/getaquote";
+        // ensure redirection to next step after signup
+        await signupPage.page.waitForResponse(
+          (resp) =>
+            resp.url().includes("https://auth.nesto.ca/oauth/token") &&
+            resp.request().method() === "POST" &&
+            resp.status() === 200,
+        );
+        await expect(signupPage.page).toHaveURL(url);
+        await expect(signupPage.page.getByTestId("new-mortgage")).toBeVisible();
       });
-      const phoneNumber = faker.phone.number({ style: "international" });
-      const pwd = "PPassword1234";
-      const region = "AB";
 
-      // Submit the form and wait for the response
-      await signupPage.fillSignupForm({
-        firstName: randomUserFirstName,
-        lastName: randomUserLastName,
-        phoneNumber: phoneNumber,
-        email: randomEmail,
-        password: pwd,
-        region: region,
+      // SU-001: Signup allows non-Canadian phone numbers
+      test.skip("should not create account for non-Canadian phone numbers", async ({ signupPage }) => {
+        const randomUserFirstName = faker.person.firstName();
+        const randomUserLastName = faker.person.lastName();
+        const randomEmail = faker.internet.email({
+          firstName: randomUserFirstName,
+          lastName: `${randomUserLastName}${Date.now().toFixed()}`,
+        });
+        const phoneNumber = faker.phone.number({ style: "international" });
+        const pwd = "PPassword1234";
+        const region = "AB";
+
+        // Submit the form and wait for the response
+        await signupPage.fillSignupForm({
+          firstName: randomUserFirstName,
+          lastName: randomUserLastName,
+          phoneNumber: phoneNumber,
+          email: randomEmail,
+          password: pwd,
+          region: region,
+        });
+
+        await signupPage.submitSignupForm();
+        const accountResponse = await signupPage.page.waitForResponse(
+          (resp) =>
+            resp.url().includes("/api/accounts") &&
+            resp.request().method() === "POST" &&
+            resp.status() === 401,
+        );
+
+        
+        const accountResponseBody = await accountResponse.json();
+        expect(accountResponseBody.account.firstName).toEqual(
+          randomUserFirstName,
+        );
+        expect(accountResponseBody.account.lastName).toEqual(randomUserLastName);
+        expect(accountResponseBody.account.email).toEqual(randomEmail);
+        expect(accountResponseBody.account.phone).toEqual(phoneNumber);
+        expect(accountResponseBody.account.region).toEqual(region);
+
+        const url =
+          selectedLanguage === "fr"
+            ? "https://app.qa.nesto.ca/getaquote/fr"
+            : "https://app.qa.nesto.ca/getaquote";
+        // ensure redirection to next step after signup
+        await signupPage.page.waitForResponse(
+          (resp) =>
+            resp.url().includes("https://auth.nesto.ca/oauth/token") &&
+            resp.request().method() === "POST" &&
+            resp.status() === 200,
+        );
+        await expect(signupPage.page).toHaveURL(url);
+        await expect(signupPage.page.getByTestId("new-mortgage")).toBeVisible();
       });
-
-      await signupPage.submitSignupForm();
-      const accountResponse = await signupPage.page.waitForResponse(
-        (resp) =>
-          resp.url().includes("/api/accounts") &&
-          resp.request().method() === "POST" &&
-          resp.status() === 201,
-      );
-
-      
-      const accountResponseBody = await accountResponse.json();
-      expect(accountResponseBody.account.firstName).toEqual(
-        randomUserFirstName,
-      );
-      expect(accountResponseBody.account.lastName).toEqual(randomUserLastName);
-      expect(accountResponseBody.account.email).toEqual(randomEmail);
-      expect(accountResponseBody.account.phone).toEqual(phoneNumber);
-      expect(accountResponseBody.account.region).toEqual(region);
-
-      const url =
-        selectedLanguage === "fr"
-          ? "https://app.qa.nesto.ca/getaquote/fr"
-          : "https://app.qa.nesto.ca/getaquote";
-      // ensure redirection to next step after signup
-      await signupPage.page.waitForResponse(
-        (resp) =>
-          resp.url().includes("https://auth.nesto.ca/oauth/token") &&
-          resp.request().method() === "POST" &&
-          resp.status() === 200,
-      );
-      await expect(signupPage.page).toHaveURL(url);
-      await expect(signupPage.page.getByTestId("new-mortgage")).toBeVisible();
     });
   });
 };

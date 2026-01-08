@@ -10,7 +10,7 @@ const test = baseTest.extend<{ portfolioPage: PortfolioPage }>({
   portfolioPage: async ({ page }, use) => {
     const language = selectedLanguage;
     const portfolioPage = new PortfolioPage(page, language);
-    await helper.applyConsent2(page);
+    await helper.applyConsent(page);
     await portfolioPage.goto();
     await expect(portfolioPage.page).toHaveURL(await portfolioPage.getUrl());
     await use(portfolioPage);
