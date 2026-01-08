@@ -27,9 +27,6 @@ export async function applyConsent(page: Page) {
     ? process.env.EUCONSENT
     : JSON.parse(data)["euconsent-v2"];
 
-  console.log("Applying consent with didomi:", didomi);
-  console.log("Applying consent with euconsent-v2:", eu);
-
   // Set localStorage via addInitScript
   await page.addInitScript(
     ([didomi, eu]) => {
@@ -68,6 +65,7 @@ export async function applyConsent(page: Page) {
       sameSite: "Lax",
     },
   ]);
+  await page.reload();
 }
 
 async function getLocaleData() {

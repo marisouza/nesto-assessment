@@ -261,6 +261,7 @@ const runSignupTests = (lang: Language) => {
       test("should have correct link for terms of service", async ({
         signupPage,
       }) => {
+        await expect(signupPage.signUpButton).toBeVisible();
         const href = await signupPage.getTermsOfServiceHref();
         const expectedText =
           await helper.getLocaleText("termsOfServiceLink");

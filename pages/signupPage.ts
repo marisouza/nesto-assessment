@@ -103,16 +103,35 @@ export class SignupPage {
     return JSON.parse(data);
   }
 
-  async navigateToSignupPage() {
-    const url = await this.getSignupUrl();
+// Is this too much logging?
+async navigateToSignupPage() {
+  const url = await this.getSignupUrl();
+  console.log(`Navigating to signup page: ${url}`);
+  
+  try {
     await this.page.goto(url);
+    console.log('Page loaded successfully');
+    
     await this.page.waitForResponse(
-      (resp) =>
-        resp.url().includes("/api/geolocation/all") &&
-        resp.request().method() === "GET" &&
-        resp.status() === 200,
+      (resp) => {
+        const matchesUrl = resp.url().includes("/api/geolocation/all");
+        const matchesMethod = resp.request().method() === "GET";
+        const matchesStatus = resp.status() === 200;
+        
+        if (matchesUrl) {
+          console.log(`Geolocation API response - Status: ${resp.status()}, Method: ${resp.request().method()}`);
+        }
+        
+        return matchesUrl && matchesMethod && matchesStatus;
+      },
     );
+    console.log('Geolocation API response received successfully');
+  } catch (error) {
+    console.error('Error navigating to signup page:', error);
+    console.error(`Failed URL: ${url}`);
+    throw error;
   }
+}
 
   async submitSignupForm() {
     await this.signUpButton.click();
