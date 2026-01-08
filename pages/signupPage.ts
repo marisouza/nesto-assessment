@@ -199,7 +199,6 @@ async navigateToSignupPage() {
   // Returns specific error message text by test ID
   async getErrorMessageByTestId(testId: string) {
     const locator = this.page.getByTestId(testId);
-    await locator.waitFor({ state: 'visible'});
     return await locator.textContent();
   }
 

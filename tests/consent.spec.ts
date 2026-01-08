@@ -12,13 +12,11 @@ const runSignupTests = (lang: Language) => {
 
     test.beforeEach(async ({ page }) => {
       consentPage = new ConsentPage(page, lang);
+      await consentPage.goto();
+      await consentPage.consentModal.waitFor({ state: 'visible' });
     });
 
     test("should show consent on first visit", async () => {
-      await consentPage.goto();
-      // const isVisible = await consentPage.isConsentVisible();
-      await consentPage.consentModal.waitFor({ state: 'visible' });
-
       const expectedAcceptText = await helper.getLocaleText(
         "consentAcceptButton",
       );
@@ -38,11 +36,6 @@ const runSignupTests = (lang: Language) => {
     });
 
     test("should not show consent after accepting it", async () => {
-      await consentPage.goto();
-      // const isVisible = await consentPage.isConsentVisible();
-      await consentPage.consentModal.waitFor({ state: 'visible' });
-
-      // await expect(isVisible).toBe(true);
       await expect(consentPage.consentModal).toBeVisible();
       await consentPage.acceptConsent();
 

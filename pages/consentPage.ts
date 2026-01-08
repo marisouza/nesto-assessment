@@ -48,9 +48,6 @@ export class ConsentPage {
         ? "https://app.qa.nesto.ca/fr/signup"
         : "https://app.qa.nesto.ca/signup";
     await this.page.goto(url);
-    // Fast navigation
-    await this.page.goto(url, { waitUntil: 'domcontentloaded' });
-
     // Wait for what you actually need
     await this.consentModal.waitFor({ state: 'attached' });
   }
