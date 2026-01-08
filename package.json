@@ -10,9 +10,9 @@
     "test:headed": "npx playwright test --project=chromium --headed",
     "report:show": "npx playwright show-report",
     "report:allure": "allure generate ./allure-results --clean -o ./allure-report && allure open ./allure-report",
-    "lint": "npx eslint . --ext .ts",
-    "lint:fix": "npx eslint . --ext .ts --fix",
-    "format": "npx prettier --write ."
+    "lint": "npx tsc -p tsconfig.json --noEmit",
+    "format:check": "prettier . --check",
+    "format:fix": "prettier . --write"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +26,9 @@
     "@playwright/test": "^1.57.0",
     "@types/node": "^25.0.3",
     "allure-playwright": "^3.4.3",
-    "typescript": "^5.9.3"
+    "eslint": "^9.39.2",
+    "prettier": "3.7.4",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.52.0"
   }
 }

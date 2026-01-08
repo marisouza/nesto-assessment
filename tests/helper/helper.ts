@@ -63,6 +63,7 @@ async function getLocaleData() {
         en: 'en-EN.json',
         fr: 'fr-FR.json'
     };
+
     const localeFile = localeMap[selectedLanguage];
     const localePath = path.join(path.dirname(new URL(import.meta.url).pathname), '../..', 'resources', 'locales', localeFile);
     const data = fs.readFileSync(localePath, 'utf-8');

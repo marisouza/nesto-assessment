@@ -60,13 +60,12 @@ const runSignupTests = (lang: Language) => {
       const url = selectedLanguage === 'fr' ? 'https://app.qa.nesto.ca/fr/signup' : 'https://app.qa.nesto.ca/signup'
       await portfolioPage.page.goto(url);
       await expect(portfolioPage.page.getByTestId('banner')).toBeVisible();
-      
+
       const redirectLink = selectedLanguage === 'fr' ? '/fr' : '/';
       await expect(portfolioPage.page.getByText(await helper.getLocaleText("alreadyloggedInWarning"))).toBeVisible()
       await expect(portfolioPage.page.getByText(await helper.getLocaleText("alreadyloggedInLink"))).toHaveAttribute('href', redirectLink);
     });
 
-   
     // List of other scenarios to be implemented
     // test.skip('should be able to delete account', async ({ portfolioPage }) => {;
     // });
