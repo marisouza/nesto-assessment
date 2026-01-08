@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { ConsentPage } from "../pages/consentPage";
-import { applyConsent2 } from "./helper/helper";
+import { applyConsent } from "./helper/helper";
 
 type Language = "en" | "fr";
 const selectedLanguage =
@@ -17,7 +17,7 @@ const runSignupTests = (lang: Language) => {
 
     // TODO: add scenario that consent is acceptaded and page reload the consent is not shown again
     test("should not show consent after first acceptance", async ({ page }) => {
-      await applyConsent2(page);
+      await applyConsent(page);
       await consentPage.goto();
 
       const cookies = await consentPage.page.context().cookies();
