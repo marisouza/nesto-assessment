@@ -9,4 +9,5 @@ node_modules/
 /tests/helper/consent.json
 /allure-results/
 
-user-cookie.json
+# Prettier
+.prettierrc
