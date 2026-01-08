@@ -36,7 +36,7 @@ const runSignupTests = (lang: Language) => {
       await expect(localStorage["euconsent-v2"]).not.toBeNull();
     });
 
-    test("should show consent on first visit", async ({}) => {
+    test("should show consent on first visit", async () => {
       await consentPage.goto();
       const isVisible = await consentPage.isConsentVisible();
 

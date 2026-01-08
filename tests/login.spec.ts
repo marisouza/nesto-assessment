@@ -10,7 +10,7 @@ const runSignupTests = (lang: Language) => {
   test.describe(`Login Page - ${lang.toUpperCase()}`, () => {
     let loginPage: LoginPage;
 
-    test.beforeEach(async ({ page, language }) => {
+    test.beforeEach(async ({ page }) => {
       loginPage = new LoginPage(page);
       // await loginPage.setLanguage(language);
       await loginPage.goto();

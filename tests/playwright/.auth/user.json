@@ -2,10 +2,10 @@
   "cookies": [
     {
       "name": "_csrf",
-      "value": "gVF8VL9SuiGas-4z1C4k2tIz",
+      "value": "T03C9Jzl-be5bqzH1RHL6ijm",
       "domain": "auth.nesto.ca",
       "path": "/usernamepassword/login",
-      "expires": 1768715542.188129,
+      "expires": 1768717292.971595,
       "httpOnly": true,
       "secure": true,
       "sameSite": "Lax"
@@ -25,7 +25,7 @@
       "value": "utmcsr=(direct)|utmcmd=(none)|utmccn=(not set)|channel=Direct",
       "domain": ".nesto.ca",
       "path": "/",
-      "expires": 1783403545,
+      "expires": 1783405297,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -42,40 +42,40 @@
     },
     {
       "name": "didomi_token",
-      "value": "eyJ1c2VyX2lkIjoiMTliOWMyOWMtNGFjYy02M2FmLTgwZjktMDVlZmM4MTNlZjE5IiwiY3JlYXRlZCI6IjIwMjYtMDEtMDhUMDU6NTI6MjEuNjc2WiIsInVwZGF0ZWQiOiIyMDI2LTAxLTA4VDA1OjUyOjIxLjY3NloiLCJ2ZXJzaW9uIjpudWxsfQ==",
+      "value": "eyJ1c2VyX2lkIjoiMTliOWM0NDctYmQwZC02MDAxLWFmNTItMzJmZTc3ZjY2N2JmIiwiY3JlYXRlZCI6IjIwMjYtMDEtMDhUMDY6MjE6MzIuNDk2WiIsInVwZGF0ZWQiOiIyMDI2LTAxLTA4VDA2OjIxOjMyLjQ5NloiLCJ2ZXJzaW9uIjpudWxsfQ==",
       "domain": ".nesto.ca",
       "path": "/",
-      "expires": 1799473941,
+      "expires": 1799475692,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
     },
     {
       "name": "did",
-      "value": "s%3Av0%3A4ff19e14-8d64-401d-8c6d-2192d1bdab9d.QK%2Bau8JoRtIGty4t2Xu3X9b3z%2BX8EuriVzep5eYpqKY",
+      "value": "s%3Av0%3A8cc85976-5428-4335-a439-fa530c8e7f99.Sq%2BDboiKnDSR7GCzfLK83jIkrQPxhuBEv7R266hZrZI",
       "domain": "auth.nesto.ca",
       "path": "/",
-      "expires": 1799409142.094782,
+      "expires": 1799410892.881523,
       "httpOnly": true,
       "secure": true,
       "sameSite": "None"
     },
     {
       "name": "did_compat",
-      "value": "s%3Av0%3A4ff19e14-8d64-401d-8c6d-2192d1bdab9d.QK%2Bau8JoRtIGty4t2Xu3X9b3z%2BX8EuriVzep5eYpqKY",
+      "value": "s%3Av0%3A8cc85976-5428-4335-a439-fa530c8e7f99.Sq%2BDboiKnDSR7GCzfLK83jIkrQPxhuBEv7R266hZrZI",
       "domain": "auth.nesto.ca",
       "path": "/",
-      "expires": 1799409142.0949,
+      "expires": 1799410892.881688,
       "httpOnly": true,
       "secure": true,
       "sameSite": "Lax"
     },
     {
       "name": "_gcl_au",
-      "value": "1.1.1357835703.1767851542",
+      "value": "1.1.139923434.1767853293",
       "domain": ".nesto.ca",
       "path": "/",
-      "expires": 1775627542,
+      "expires": 1775629293,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -85,34 +85,34 @@
       "value": "undefined",
       "domain": ".qa.nesto.ca",
       "path": "/",
-      "expires": 1783403545,
+      "expires": 1783405297,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
     },
     {
       "name": "auth0",
-      "value": "s%3All1nmEp7ch8lQWqc1jN0YfEqll852gdC.NfAW6AjBmSUUjyLdI44bnW3v5%2BIa4gxgTHx%2FFLcX9v8",
+      "value": "s%3Ak0FW_BtfhJ7Esry5NTIcsDEt5yQ_QcNN.JogZOqnEpdajiPEL9Z7jLUJ7BIeult%2Fy9K6okRG2SRs",
       "domain": "auth.nesto.ca",
       "path": "/",
-      "expires": 1768110745.377627,
+      "expires": 1768112496.84021,
       "httpOnly": true,
       "secure": true,
       "sameSite": "None"
     },
     {
       "name": "auth0_compat",
-      "value": "s%3All1nmEp7ch8lQWqc1jN0YfEqll852gdC.NfAW6AjBmSUUjyLdI44bnW3v5%2BIa4gxgTHx%2FFLcX9v8",
+      "value": "s%3Ak0FW_BtfhJ7Esry5NTIcsDEt5yQ_QcNN.JogZOqnEpdajiPEL9Z7jLUJ7BIeult%2Fy9K6okRG2SRs",
       "domain": "auth.nesto.ca",
       "path": "/",
-      "expires": 1768110745.377716,
+      "expires": 1768112496.840279,
       "httpOnly": true,
       "secure": true,
       "sameSite": "Lax"
     },
     {
       "name": "__existingsess",
-      "value": "Thu Jan 08 2026 00:52:25 GMT-0500 (Eastern Standard Time)",
+      "value": "Thu Jan 08 2026 01:21:37 GMT-0500 (Eastern Standard Time)",
       "domain": ".nesto.ca",
       "path": "/",
       "expires": -1,
@@ -122,70 +122,60 @@
     },
     {
       "name": "_dd_s",
-      "value": "rum=1&id=a9f431c1-9d63-41dc-b1a2-9051cbda704f&created=1767851541504&expire=1767852445565",
+      "value": "rum=1&id=0006784a-333b-43e3-b40e-0034cae6dce0&created=1767853292339&expire=1767854197040",
       "domain": "app.qa.nesto.ca",
       "path": "/",
-      "expires": 1767852445,
+      "expires": 1767854197,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Strict"
     },
     {
-      "name": "ga4_ga",
-      "value": "GA1.1.141046719.1767851546",
+      "name": "_switch_session_id",
+      "value": "cbe2028a-69a3-4316-bced-86e86aba75b8",
       "domain": ".nesto.ca",
       "path": "/",
-      "expires": 1802411545.758445,
+      "expires": 1768458097,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
     },
     {
-      "name": "_switch_session_id",
-      "value": "4a2bc977-79bd-4a60-a3f5-eb1338582144",
+      "name": "ga4_ga",
+      "value": "GA1.1.3972719.1767853297",
       "domain": ".nesto.ca",
       "path": "/",
-      "expires": 1768456345,
+      "expires": 1802413297.266954,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
     },
     {
       "name": "_uetsid",
-      "value": "35907170ec5611f0a0c041d59983d377",
+      "value": "49852bd0ec5a11f08897059319543d88",
       "domain": ".nesto.ca",
       "path": "/",
-      "expires": 1767937945,
+      "expires": 1767939697,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
     },
     {
       "name": "_uetvid",
-      "value": "35907c60ec5611f0887761c30652d388",
+      "value": "49853360ec5a11f0817d555fba55e6b3",
       "domain": ".nesto.ca",
       "path": "/",
-      "expires": 1801547545,
-      "httpOnly": false,
-      "secure": false,
-      "sameSite": "Lax"
-    },
-    {
-      "name": "_fbp",
-      "value": "fb.1.1767851545883.668951591466002050",
-      "domain": ".nesto.ca",
-      "path": "/",
-      "expires": 1775627545,
+      "expires": 1801549297,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
     },
     {
       "name": "MUID",
-      "value": "15C57CE32C0B66BD074D6A382D3067E6",
+      "value": "2D6585ED0E406ADF03CB93360F966B9F",
       "domain": ".bing.com",
       "path": "/",
-      "expires": 1801547545.88813,
+      "expires": 1801549298.361891,
       "httpOnly": false,
       "secure": true,
       "sameSite": "None"
@@ -195,37 +185,17 @@
       "value": "0",
       "domain": ".bat.bing.com",
       "path": "/",
-      "expires": 1768456345.888151,
+      "expires": 1768458098.361934,
       "httpOnly": false,
       "secure": true,
       "sameSite": "None"
-    },
-    {
-      "name": "FPID",
-      "value": "FPID2.2.4NTf2jHc2e%2FVFyPsibx4B%2F9hy59pYSSZBllpiuI43vw%3D.1767851546",
-      "domain": ".nesto.ca",
-      "path": "/",
-      "expires": 1802411546.109779,
-      "httpOnly": true,
-      "secure": true,
-      "sameSite": "Lax"
-    },
-    {
-      "name": "FPLC",
-      "value": "oTrKUnXPvYpf%2FssTg%2BS%2FRirqNdWIG7tzZYzR6jnLqpfFaYQ583O%2FQhW3ZF4Xw1cCNbfmpFhib8%2FdA0lsFaY43lDsYQUUDNYt7K6FNslLGwbY7J0BPJTaa3P9a6DNkg%3D%3D",
-      "domain": ".nesto.ca",
-      "path": "/",
-      "expires": 1767923545.972719,
-      "httpOnly": false,
-      "secure": true,
-      "sameSite": "Lax"
     },
     {
       "name": "_legacy_auth0.Fg4dnbZoCq7oA0rWplMLWnI1oE0HGy3l.is.authenticated",
       "value": "true",
       "domain": "app.qa.nesto.ca",
       "path": "/",
-      "expires": 1767937945,
+      "expires": 1767939697,
       "httpOnly": false,
       "secure": true,
       "sameSite": "Lax"
@@ -235,17 +205,47 @@
       "value": "true",
       "domain": "app.qa.nesto.ca",
       "path": "/",
-      "expires": 1767937945,
+      "expires": 1767939697,
       "httpOnly": false,
       "secure": true,
       "sameSite": "None"
     },
     {
-      "name": "ga4_ga_Z4M617HVKN",
-      "value": "GS2.1.s1767851545$o1$g0$t1767851546$j59$l0$h788205846",
+      "name": "FPID",
+      "value": "FPID2.2.vR29%2BohwLZH5fFAGq%2F54NVSblzo3nWyb0ji%2FsSskO1A%3D.1767853297",
       "domain": ".nesto.ca",
       "path": "/",
-      "expires": 1802411546.051727,
+      "expires": 1802413297.479611,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "FPLC",
+      "value": "6lSium5KM01g%2B7mO2%2BfTHSmORxvfNrheT5Z%2BmOP1M7BJ2d1R%2B9vjleigGGJd6OGwvppRWBFp6eb3I%2FexOqK2X9xe9fER0p1aQhYXvuL5LVyHjGsVZdS0M1uG%2Fvu7vw%3D%3D",
+      "domain": ".nesto.ca",
+      "path": "/",
+      "expires": 1767925297.412927,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "ga4_ga_Z4M617HVKN",
+      "value": "GS2.1.s1767853297$o1$g0$t1767853297$j60$l0$h1990717528",
+      "domain": ".nesto.ca",
+      "path": "/",
+      "expires": 1802413297.42522,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_fbp",
+      "value": "fb.1.1767853297507.473997325921868273",
+      "domain": ".nesto.ca",
+      "path": "/",
+      "expires": 1775629297,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -256,28 +256,28 @@
       "origin": "https://app.qa.nesto.ca",
       "localStorage": [
         {
-          "name": "@@auth0spajs@@::Fg4dnbZoCq7oA0rWplMLWnI1oE0HGy3l::https://qa.nesto.ca/api::openid profile email offline_access",
-          "value": "{\"body\":{\"access_token\":\"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImxwZWFxY0JtUS1oa0RsbUpsR2UyMCJ9.eyJodHRwOi8vbi5jYS9wYXJ0bmVyIjoibmVzdG8iLCJodHRwOi8vbi5jYS91c2VyX2lkIjozNjAxODAsImh0dHA6Ly9uLmNhL3VzZXJfcm9sZSI6ImJvcnJvd2VyIiwiaHR0cDovL24uY2EvdGVuYW50X2lkIjoibmVzdG8iLCJodHRwOi8vbi5jYS9lbWFpbCI6InZhbGlkLnVzZXIxMjNAdGVzdC5jb20iLCJpc3MiOiJodHRwczovL2F1dGgubmVzdG8uY2EvIiwic3ViIjoiYXV0aDB8MzYwMTgwIiwiYXVkIjpbImh0dHBzOi8vcWEubmVzdG8uY2EvYXBpIiwiaHR0cHM6Ly9uZXN0by10ZW5hbnQtbmVzdG8udXMuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTc2Nzg1MTU0NSwiZXhwIjoxNzY3ODg3NTQ1LCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIG9mZmxpbmVfYWNjZXNzIiwiYXpwIjoiRmc0ZG5iWm9DcTdvQTByV3BsTUxXbkkxb0UwSEd5M2wiLCJwZXJtaXNzaW9ucyI6WyJkZWxldGU6ZG9jdW1lbnRzIiwibWFuYWdlOm15cHJvZmlsZSIsInVwbG9hZDpkb2N1bWVudHMiLCJ2aWV3OmRvY3VtZW50cyJdfQ.N552b0v_WroiOMvXJYDAuPqjtloaV6f8s-VwLG19yFhBZaJrzixl4ndf74ZJJZflcLslu1BuxDMprdq4EPwS1ikD8EDy61i5iDy6mf7JZhCZP4icMLH0isjBcSMisJmHoqaXkaWsXEHxnINvdpauxXsqgrNPYIR1dX8YV8b5zVethkLnjRCCgi1wFTlgKWOSBmOS_XxMpy8EG1E2Xf2ujFc8bqDdGy8oFEJ4YaEFEnc5RW6uH3UNjvZUrbC_eL70BXQOTh0WAxTxeRLMWq082QwH1d1ta02pts3dsexb--3nYGs-AOScx60wi4902txxHlssciIsmLzAUvf01G0mMg\",\"refresh_token\":\"v1.MRhCfLB4cvygk1QDbTzGRaCo1DlvtEq6-LimF7c7RLW34Gn0bG5-E__ubAcahM00k7587LYFfoGLwdg2lLxqWeQ\",\"scope\":\"openid profile email offline_access\",\"expires_in\":36000,\"token_type\":\"Bearer\",\"audience\":\"https://qa.nesto.ca/api\",\"oauthTokenScope\":\"openid profile email offline_access\",\"client_id\":\"Fg4dnbZoCq7oA0rWplMLWnI1oE0HGy3l\"},\"expiresAt\":1767887545}"
+          "name": "@@auth0spajs@@::Fg4dnbZoCq7oA0rWplMLWnI1oE0HGy3l::@@user@@",
+          "value": "{\"id_token\":\"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImxwZWFxY0JtUS1oa0RsbUpsR2UyMCJ9.eyJuaWNrbmFtZSI6InZhbGlkLnVzZXIxMjMiLCJuYW1lIjoidmFsaWQudXNlcjEyM0B0ZXN0LmNvbSIsInBpY3R1cmUiOiJodHRwczovL3MuZ3JhdmF0YXIuY29tL2F2YXRhci9iMmYxZDE3YzBiMmE0ODY4ZWRkZDU4YmMxZDdiNzBhMj9zPTQ4MCZyPXBnJmQ9aHR0cHMlM0ElMkYlMkZjZG4uYXV0aDAuY29tJTJGYXZhdGFycyUyRnZhLnBuZyIsInVwZGF0ZWRfYXQiOiIyMDI2LTAxLTA4VDA2OjIxOjM1LjI5MloiLCJlbWFpbCI6InZhbGlkLnVzZXIxMjNAdGVzdC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOi8vYXV0aC5uZXN0by5jYS8iLCJhdWQiOiJGZzRkbmJab0NxN29BMHJXcGxNTFduSTFvRTBIR3kzbCIsInN1YiI6ImF1dGgwfDM2MDE4MCIsImlhdCI6MTc2Nzg1MzI5NywiZXhwIjoxNzY3ODg5Mjk3LCJzaWQiOiJmeU1KVkxicEZDaE41TmFEVWFEUXFZREtMVXVvMmhhXyIsIm5vbmNlIjoiV1doWlIzVnBZVGhKVkcxRlNqVk1iM2hOTlZkSUxteHVWalZHZEVOV05XNXJObkpxY2tSc00wRkZSQT09In0.hH6--K874W7_NNlHQltBSsGnQdnQc68YPCyaTiu8nP0UjCizj4jOQG6AHB8VEzpYAd16iSOpJQ92xNlhjPpgrEDXoANLcc7vvt2wi1JpbrkzXjd_587-QLLpYusTwVbCN2HHjiAKEBUdsnTM1MGMstesPRX6dx2-PRlxQf0r4tHczMfA7Tlgkwq4mEdDS9lyeYIx11m2ykQz8wTA4N5iPbvWR9BRLtfRs_a--kKxImW4X2AMtW-B89s8GewgXOLJifOV4ppfKL_0khDDqk_RzHHvjhHuahfnLHhY9P97lhrEUMe4HaaMifZtxkRf5DpOsUcNZW02r4IpjEeu0K1LSw\",\"decodedToken\":{\"encoded\":{\"header\":\"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImxwZWFxY0JtUS1oa0RsbUpsR2UyMCJ9\",\"payload\":\"eyJuaWNrbmFtZSI6InZhbGlkLnVzZXIxMjMiLCJuYW1lIjoidmFsaWQudXNlcjEyM0B0ZXN0LmNvbSIsInBpY3R1cmUiOiJodHRwczovL3MuZ3JhdmF0YXIuY29tL2F2YXRhci9iMmYxZDE3YzBiMmE0ODY4ZWRkZDU4YmMxZDdiNzBhMj9zPTQ4MCZyPXBnJmQ9aHR0cHMlM0ElMkYlMkZjZG4uYXV0aDAuY29tJTJGYXZhdGFycyUyRnZhLnBuZyIsInVwZGF0ZWRfYXQiOiIyMDI2LTAxLTA4VDA2OjIxOjM1LjI5MloiLCJlbWFpbCI6InZhbGlkLnVzZXIxMjNAdGVzdC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOi8vYXV0aC5uZXN0by5jYS8iLCJhdWQiOiJGZzRkbmJab0NxN29BMHJXcGxNTFduSTFvRTBIR3kzbCIsInN1YiI6ImF1dGgwfDM2MDE4MCIsImlhdCI6MTc2Nzg1MzI5NywiZXhwIjoxNzY3ODg5Mjk3LCJzaWQiOiJmeU1KVkxicEZDaE41TmFEVWFEUXFZREtMVXVvMmhhXyIsIm5vbmNlIjoiV1doWlIzVnBZVGhKVkcxRlNqVk1iM2hOTlZkSUxteHVWalZHZEVOV05XNXJObkpxY2tSc00wRkZSQT09In0\",\"signature\":\"hH6--K874W7_NNlHQltBSsGnQdnQc68YPCyaTiu8nP0UjCizj4jOQG6AHB8VEzpYAd16iSOpJQ92xNlhjPpgrEDXoANLcc7vvt2wi1JpbrkzXjd_587-QLLpYusTwVbCN2HHjiAKEBUdsnTM1MGMstesPRX6dx2-PRlxQf0r4tHczMfA7Tlgkwq4mEdDS9lyeYIx11m2ykQz8wTA4N5iPbvWR9BRLtfRs_a--kKxImW4X2AMtW-B89s8GewgXOLJifOV4ppfKL_0khDDqk_RzHHvjhHuahfnLHhY9P97lhrEUMe4HaaMifZtxkRf5DpOsUcNZW02r4IpjEeu0K1LSw\"},\"header\":{\"alg\":\"RS256\",\"typ\":\"JWT\",\"kid\":\"lpeaqcBmQ-hkDlmJlGe20\"},\"claims\":{\"__raw\":\"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImxwZWFxY0JtUS1oa0RsbUpsR2UyMCJ9.eyJuaWNrbmFtZSI6InZhbGlkLnVzZXIxMjMiLCJuYW1lIjoidmFsaWQudXNlcjEyM0B0ZXN0LmNvbSIsInBpY3R1cmUiOiJodHRwczovL3MuZ3JhdmF0YXIuY29tL2F2YXRhci9iMmYxZDE3YzBiMmE0ODY4ZWRkZDU4YmMxZDdiNzBhMj9zPTQ4MCZyPXBnJmQ9aHR0cHMlM0ElMkYlMkZjZG4uYXV0aDAuY29tJTJGYXZhdGFycyUyRnZhLnBuZyIsInVwZGF0ZWRfYXQiOiIyMDI2LTAxLTA4VDA2OjIxOjM1LjI5MloiLCJlbWFpbCI6InZhbGlkLnVzZXIxMjNAdGVzdC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOi8vYXV0aC5uZXN0by5jYS8iLCJhdWQiOiJGZzRkbmJab0NxN29BMHJXcGxNTFduSTFvRTBIR3kzbCIsInN1YiI6ImF1dGgwfDM2MDE4MCIsImlhdCI6MTc2Nzg1MzI5NywiZXhwIjoxNzY3ODg5Mjk3LCJzaWQiOiJmeU1KVkxicEZDaE41TmFEVWFEUXFZREtMVXVvMmhhXyIsIm5vbmNlIjoiV1doWlIzVnBZVGhKVkcxRlNqVk1iM2hOTlZkSUxteHVWalZHZEVOV05XNXJObkpxY2tSc00wRkZSQT09In0.hH6--K874W7_NNlHQltBSsGnQdnQc68YPCyaTiu8nP0UjCizj4jOQG6AHB8VEzpYAd16iSOpJQ92xNlhjPpgrEDXoANLcc7vvt2wi1JpbrkzXjd_587-QLLpYusTwVbCN2HHjiAKEBUdsnTM1MGMstesPRX6dx2-PRlxQf0r4tHczMfA7Tlgkwq4mEdDS9lyeYIx11m2ykQz8wTA4N5iPbvWR9BRLtfRs_a--kKxImW4X2AMtW-B89s8GewgXOLJifOV4ppfKL_0khDDqk_RzHHvjhHuahfnLHhY9P97lhrEUMe4HaaMifZtxkRf5DpOsUcNZW02r4IpjEeu0K1LSw\",\"nickname\":\"valid.user123\",\"name\":\"valid.user123@test.com\",\"picture\":\"https://s.gravatar.com/avatar/b2f1d17c0b2a4868eddd58bc1d7b70a2?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fva.png\",\"updated_at\":\"2026-01-08T06:21:35.292Z\",\"email\":\"valid.user123@test.com\",\"email_verified\":false,\"iss\":\"https://auth.nesto.ca/\",\"aud\":\"Fg4dnbZoCq7oA0rWplMLWnI1oE0HGy3l\",\"sub\":\"auth0|360180\",\"iat\":1767853297,\"exp\":1767889297,\"sid\":\"fyMJVLbpFChN5NaDUaDQqYDKLUuo2ha_\",\"nonce\":\"WWhZR3VpYThJVG1FSjVMb3hNNVdILmxuVjVGdENWNW5rNnJqckRsM0FFRA==\"},\"user\":{\"nickname\":\"valid.user123\",\"name\":\"valid.user123@test.com\",\"picture\":\"https://s.gravatar.com/avatar/b2f1d17c0b2a4868eddd58bc1d7b70a2?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fva.png\",\"updated_at\":\"2026-01-08T06:21:35.292Z\",\"email\":\"valid.user123@test.com\",\"email_verified\":false,\"sub\":\"auth0|360180\"}}}"
         },
         {
           "name": "lastExternalReferrerTime",
-          "value": "1767851545880"
+          "value": "1767853297504"
         },
         {
           "name": "didomi_token",
-          "value": "eyJ1c2VyX2lkIjoiMTliOWMyOWMtNGFjYy02M2FmLTgwZjktMDVlZmM4MTNlZjE5IiwiY3JlYXRlZCI6IjIwMjYtMDEtMDhUMDU6NTI6MjEuNjc2WiIsInVwZGF0ZWQiOiIyMDI2LTAxLTA4VDA1OjUyOjIxLjY3NloiLCJ2ZXJzaW9uIjpudWxsfQ=="
+          "value": "eyJ1c2VyX2lkIjoiMTliOWM0NDctYmQwZC02MDAxLWFmNTItMzJmZTc3ZjY2N2JmIiwiY3JlYXRlZCI6IjIwMjYtMDEtMDhUMDY6MjE6MzIuNDk2WiIsInVwZGF0ZWQiOiIyMDI2LTAxLTA4VDA2OjIxOjMyLjQ5NloiLCJ2ZXJzaW9uIjpudWxsfQ=="
         },
         {
           "name": "_uetvid_exp",
-          "value": "Tue, 02 Feb 2027 05:52:25 GMT"
+          "value": "Tue, 02 Feb 2027 06:21:37 GMT"
         },
         {
           "name": "_uetsid_exp",
-          "value": "Fri, 09 Jan 2026 05:52:25 GMT"
+          "value": "Fri, 09 Jan 2026 06:21:37 GMT"
         },
         {
           "name": "_uetvid",
-          "value": "35907c60ec5611f0887761c30652d388"
+          "value": "49853360ec5a11f0817d555fba55e6b3"
         },
         {
           "name": "lastExternalReferrer",
@@ -285,15 +285,15 @@
         },
         {
           "name": "_gcl_ls",
-          "value": "{\"schema\":\"gcl\",\"version\":1,\"gcl_ctr\":{\"value\":{\"value\":0,\"timeouts\":0,\"creationTimeMs\":1767851542172},\"expires\":1775627542172}}"
+          "value": "{\"schema\":\"gcl\",\"version\":1,\"gcl_ctr\":{\"value\":{\"value\":0,\"timeouts\":0,\"creationTimeMs\":1767853292985},\"expires\":1775629292985}}"
         },
         {
           "name": "_uetsid",
-          "value": "35907170ec5611f0a0c041d59983d377"
+          "value": "49852bd0ec5a11f08897059319543d88"
         },
         {
-          "name": "@@auth0spajs@@::Fg4dnbZoCq7oA0rWplMLWnI1oE0HGy3l::@@user@@",
-          "value": "{\"id_token\":\"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImxwZWFxY0JtUS1oa0RsbUpsR2UyMCJ9.eyJuaWNrbmFtZSI6InZhbGlkLnVzZXIxMjMiLCJuYW1lIjoidmFsaWQudXNlcjEyM0B0ZXN0LmNvbSIsInBpY3R1cmUiOiJodHRwczovL3MuZ3JhdmF0YXIuY29tL2F2YXRhci9iMmYxZDE3YzBiMmE0ODY4ZWRkZDU4YmMxZDdiNzBhMj9zPTQ4MCZyPXBnJmQ9aHR0cHMlM0ElMkYlMkZjZG4uYXV0aDAuY29tJTJGYXZhdGFycyUyRnZhLnBuZyIsInVwZGF0ZWRfYXQiOiIyMDI2LTAxLTA4VDA1OjUyOjI0LjQxMVoiLCJlbWFpbCI6InZhbGlkLnVzZXIxMjNAdGVzdC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOi8vYXV0aC5uZXN0by5jYS8iLCJhdWQiOiJGZzRkbmJab0NxN29BMHJXcGxNTFduSTFvRTBIR3kzbCIsInN1YiI6ImF1dGgwfDM2MDE4MCIsImlhdCI6MTc2Nzg1MTU0NSwiZXhwIjoxNzY3ODg3NTQ1LCJzaWQiOiJlbU83TmlzU2N0bVFXSVBxMmtqTUM2bnNvZ2YwNG44TyIsIm5vbmNlIjoiYzNveE1tSkxWRXhyTVZoRFZrVlZkMVp3YUVoa1RuRjVaazlvZmxkSE9XOHpaR3BHTjNSWlIyZGxRZz09In0.OHcsLfPUlfDlHHKxLkFQT2hPIcnJWxWX6GdQmByJmXZOS5Ktg3HjTidXrK6crATo7i9k5B6aGwc4oaqpdaMmdMjVUCL28NHOSriQSDVRxnllygDQvIpnTL3nKrpg0edAbso-RQ688_2KWDyauf4Xyx6DDKsmNm4-f-dsS1AGteoEliad0GLpGmCE6qy6Xg0QaAOEBjEMKI7KzpuX3YTsEKB8tIjEW5nhGBsL33LwE2P2x7sZmiSMeR5PxdZP-qWtI-5ELsmTNoeNG7U02xnYOVSZFWURm8MgoQkGOmrnopCp5XWYptgtPk-dnMZ8cpE126JRPvsI2ZYu47_MqdQMRQ\",\"decodedToken\":{\"encoded\":{\"header\":\"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImxwZWFxY0JtUS1oa0RsbUpsR2UyMCJ9\",\"payload\":\"eyJuaWNrbmFtZSI6InZhbGlkLnVzZXIxMjMiLCJuYW1lIjoidmFsaWQudXNlcjEyM0B0ZXN0LmNvbSIsInBpY3R1cmUiOiJodHRwczovL3MuZ3JhdmF0YXIuY29tL2F2YXRhci9iMmYxZDE3YzBiMmE0ODY4ZWRkZDU4YmMxZDdiNzBhMj9zPTQ4MCZyPXBnJmQ9aHR0cHMlM0ElMkYlMkZjZG4uYXV0aDAuY29tJTJGYXZhdGFycyUyRnZhLnBuZyIsInVwZGF0ZWRfYXQiOiIyMDI2LTAxLTA4VDA1OjUyOjI0LjQxMVoiLCJlbWFpbCI6InZhbGlkLnVzZXIxMjNAdGVzdC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOi8vYXV0aC5uZXN0by5jYS8iLCJhdWQiOiJGZzRkbmJab0NxN29BMHJXcGxNTFduSTFvRTBIR3kzbCIsInN1YiI6ImF1dGgwfDM2MDE4MCIsImlhdCI6MTc2Nzg1MTU0NSwiZXhwIjoxNzY3ODg3NTQ1LCJzaWQiOiJlbU83TmlzU2N0bVFXSVBxMmtqTUM2bnNvZ2YwNG44TyIsIm5vbmNlIjoiYzNveE1tSkxWRXhyTVZoRFZrVlZkMVp3YUVoa1RuRjVaazlvZmxkSE9XOHpaR3BHTjNSWlIyZGxRZz09In0\",\"signature\":\"OHcsLfPUlfDlHHKxLkFQT2hPIcnJWxWX6GdQmByJmXZOS5Ktg3HjTidXrK6crATo7i9k5B6aGwc4oaqpdaMmdMjVUCL28NHOSriQSDVRxnllygDQvIpnTL3nKrpg0edAbso-RQ688_2KWDyauf4Xyx6DDKsmNm4-f-dsS1AGteoEliad0GLpGmCE6qy6Xg0QaAOEBjEMKI7KzpuX3YTsEKB8tIjEW5nhGBsL33LwE2P2x7sZmiSMeR5PxdZP-qWtI-5ELsmTNoeNG7U02xnYOVSZFWURm8MgoQkGOmrnopCp5XWYptgtPk-dnMZ8cpE126JRPvsI2ZYu47_MqdQMRQ\"},\"header\":{\"alg\":\"RS256\",\"typ\":\"JWT\",\"kid\":\"lpeaqcBmQ-hkDlmJlGe20\"},\"claims\":{\"__raw\":\"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImxwZWFxY0JtUS1oa0RsbUpsR2UyMCJ9.eyJuaWNrbmFtZSI6InZhbGlkLnVzZXIxMjMiLCJuYW1lIjoidmFsaWQudXNlcjEyM0B0ZXN0LmNvbSIsInBpY3R1cmUiOiJodHRwczovL3MuZ3JhdmF0YXIuY29tL2F2YXRhci9iMmYxZDE3YzBiMmE0ODY4ZWRkZDU4YmMxZDdiNzBhMj9zPTQ4MCZyPXBnJmQ9aHR0cHMlM0ElMkYlMkZjZG4uYXV0aDAuY29tJTJGYXZhdGFycyUyRnZhLnBuZyIsInVwZGF0ZWRfYXQiOiIyMDI2LTAxLTA4VDA1OjUyOjI0LjQxMVoiLCJlbWFpbCI6InZhbGlkLnVzZXIxMjNAdGVzdC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOi8vYXV0aC5uZXN0by5jYS8iLCJhdWQiOiJGZzRkbmJab0NxN29BMHJXcGxNTFduSTFvRTBIR3kzbCIsInN1YiI6ImF1dGgwfDM2MDE4MCIsImlhdCI6MTc2Nzg1MTU0NSwiZXhwIjoxNzY3ODg3NTQ1LCJzaWQiOiJlbU83TmlzU2N0bVFXSVBxMmtqTUM2bnNvZ2YwNG44TyIsIm5vbmNlIjoiYzNveE1tSkxWRXhyTVZoRFZrVlZkMVp3YUVoa1RuRjVaazlvZmxkSE9XOHpaR3BHTjNSWlIyZGxRZz09In0.OHcsLfPUlfDlHHKxLkFQT2hPIcnJWxWX6GdQmByJmXZOS5Ktg3HjTidXrK6crATo7i9k5B6aGwc4oaqpdaMmdMjVUCL28NHOSriQSDVRxnllygDQvIpnTL3nKrpg0edAbso-RQ688_2KWDyauf4Xyx6DDKsmNm4-f-dsS1AGteoEliad0GLpGmCE6qy6Xg0QaAOEBjEMKI7KzpuX3YTsEKB8tIjEW5nhGBsL33LwE2P2x7sZmiSMeR5PxdZP-qWtI-5ELsmTNoeNG7U02xnYOVSZFWURm8MgoQkGOmrnopCp5XWYptgtPk-dnMZ8cpE126JRPvsI2ZYu47_MqdQMRQ\",\"nickname\":\"valid.user123\",\"name\":\"valid.user123@test.com\",\"picture\":\"https://s.gravatar.com/avatar/b2f1d17c0b2a4868eddd58bc1d7b70a2?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fva.png\",\"updated_at\":\"2026-01-08T05:52:24.411Z\",\"email\":\"valid.user123@test.com\",\"email_verified\":false,\"iss\":\"https://auth.nesto.ca/\",\"aud\":\"Fg4dnbZoCq7oA0rWplMLWnI1oE0HGy3l\",\"sub\":\"auth0|360180\",\"iat\":1767851545,\"exp\":1767887545,\"sid\":\"emO7NisSctmQWIPq2kjMC6nsogf04n8O\",\"nonce\":\"c3oxMmJLVExrMVhDVkVVd1ZwaEhkTnF5Zk9ofldHOW8zZGpGN3RZR2dlQg==\"},\"user\":{\"nickname\":\"valid.user123\",\"name\":\"valid.user123@test.com\",\"picture\":\"https://s.gravatar.com/avatar/b2f1d17c0b2a4868eddd58bc1d7b70a2?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fva.png\",\"updated_at\":\"2026-01-08T05:52:24.411Z\",\"email\":\"valid.user123@test.com\",\"email_verified\":false,\"sub\":\"auth0|360180\"}}}"
+          "name": "@@auth0spajs@@::Fg4dnbZoCq7oA0rWplMLWnI1oE0HGy3l::https://qa.nesto.ca/api::openid profile email offline_access",
+          "value": "{\"body\":{\"access_token\":\"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImxwZWFxY0JtUS1oa0RsbUpsR2UyMCJ9.eyJodHRwOi8vbi5jYS9wYXJ0bmVyIjoibmVzdG8iLCJodHRwOi8vbi5jYS91c2VyX2lkIjozNjAxODAsImh0dHA6Ly9uLmNhL3VzZXJfcm9sZSI6ImJvcnJvd2VyIiwiaHR0cDovL24uY2EvdGVuYW50X2lkIjoibmVzdG8iLCJodHRwOi8vbi5jYS9lbWFpbCI6InZhbGlkLnVzZXIxMjNAdGVzdC5jb20iLCJpc3MiOiJodHRwczovL2F1dGgubmVzdG8uY2EvIiwic3ViIjoiYXV0aDB8MzYwMTgwIiwiYXVkIjpbImh0dHBzOi8vcWEubmVzdG8uY2EvYXBpIiwiaHR0cHM6Ly9uZXN0by10ZW5hbnQtbmVzdG8udXMuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTc2Nzg1MzI5NywiZXhwIjoxNzY3ODg5Mjk3LCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIG9mZmxpbmVfYWNjZXNzIiwiYXpwIjoiRmc0ZG5iWm9DcTdvQTByV3BsTUxXbkkxb0UwSEd5M2wiLCJwZXJtaXNzaW9ucyI6WyJkZWxldGU6ZG9jdW1lbnRzIiwibWFuYWdlOm15cHJvZmlsZSIsInVwbG9hZDpkb2N1bWVudHMiLCJ2aWV3OmRvY3VtZW50cyJdfQ.Lp3OeF6CeKiMNcLfjC4cfqACk1jXaCD02A2rkYJeWM_Gf5nxZG2xfpk1etayIk5s952cd6Tj6FWWCO_VvsnKgozxgFwXNGYB4j9apBpvsjcCgAJ9xWoqaE_B-XsEI5B0ZWuH0InXIA8miuz0DCB1QQfUxJao6uuf1cClrUA_rgGkxPdpcDz9q78K2Pzhg-9FWIJeoP0QE3ZVB-3zTi0z0ITuVFGzN-2iARmicSEuIrsK5wzP5nA1IV8MrtgUAMYd0d4w7iVocfmCA-HR0saLhslgAzE4zXs8XHZtm9CUXkgDLiihWoaHP-Jjc7_Qd7qaUdhMr-xcNaUfswv2Aj89Ow\",\"refresh_token\":\"v1.MRK6VB_dwsgogxTYjsiyvupU1_nV3askhtBZjUYpuDozamOnq-S1F4xnnNQm8LTGwm70nCVovqdx1EkrkB96JSw\",\"scope\":\"openid profile email offline_access\",\"expires_in\":36000,\"token_type\":\"Bearer\",\"audience\":\"https://qa.nesto.ca/api\",\"oauthTokenScope\":\"openid profile email offline_access\",\"client_id\":\"Fg4dnbZoCq7oA0rWplMLWnI1oE0HGy3l\"},\"expiresAt\":1767889297}"
         }
       ]
     }
