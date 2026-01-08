@@ -12,7 +12,6 @@ const runSignupTests = (lang: Language) => {
 
     test.beforeEach(async ({ page }) => {
       loginPage = new LoginPage(page, lang);
-      await loginPage.setLanguage(selectedLanguage);
       await loginPage.goto();
       await expect(loginPage.page).toHaveURL(/login/);
       await expect(loginPage.emailInput).toBeVisible();

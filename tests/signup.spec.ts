@@ -3,7 +3,6 @@ import { SignupPage } from "../pages/signupPage";
 import { faker } from "@faker-js/faker";
 import * as helper from "./helper/helper";
 
-// Custom fixture for SignupPage
 const test = baseTest.extend<{ signupPage: SignupPage }>({
   signupPage: async ({ page }, use) => {
     const language = selectedLanguage;
@@ -33,9 +32,6 @@ const runSignupTests = (lang: Language) => {
             accountRequestTriggered = true;
           }
         });
-        // await signupPage.page.waitForTimeout(2000);
-        // await expect(signupPage.page.getByText("Agree and clode")).toBeDefined();
-        // await signupPage.page.getByRole('button', { name: 'Agree and close: Agree to our' }).click();
         await signupPage.submitSignupForm();
         const errors = await signupPage.getErrorMessages();
 
@@ -441,7 +437,6 @@ const runSignupTests = (lang: Language) => {
             resp.status() === 401,
         );
 
-        
         const accountResponseBody = await accountResponse.json();
         expect(accountResponseBody.account.firstName).toEqual(
           randomUserFirstName,
@@ -455,6 +450,7 @@ const runSignupTests = (lang: Language) => {
           selectedLanguage === "fr"
             ? "https://app.qa.nesto.ca/getaquote/fr"
             : "https://app.qa.nesto.ca/getaquote";
+
         // ensure redirection to next step after signup
         await signupPage.page.waitForResponse(
           (resp) =>

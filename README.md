@@ -52,6 +52,12 @@ nesto/
 
 ### Interactive Mode (UI)
 
+Note: To run tests in french just add LANGUAGE=fr before the npm commad
+
+```bash
+LANGUAGE=fr npm run test:all
+```
+
 Run all tests with Playwright UI:
 
 ```bash
@@ -135,10 +141,9 @@ npm run format:fix
 ### Playwright Configuration
 
 Test configuration is managed in [`playwright.config.ts`](playwright.config.ts):
+Configuration was kept the same for the assement purpose.
 
 - Test directory: `./tests`
-- Parallel execution enabled (except on CI)
-- Retry logic: 2 retries on CI, 0 locally
 - Reporters: HTML and Allure
 
 ### Project-Specific Settings

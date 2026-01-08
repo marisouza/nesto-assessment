@@ -11,14 +11,13 @@ setup("login", async ({ page }) => {
     selectedLanguage === "fr"
       ? "https://app.qa.nesto.ca/fr/signup"
       : "https://app.qa.nesto.ca/signup";
-  // await page.addInitScript(`localStorage.setItem('language', '${selectedLanguage}');`);
+
   await page.goto(url);
   if (await agreeButton.isVisible()) {
     await agreeButton.click();
   }
   await page.getByTestId("header-login-button").click();
 
-  // const label = selectedLanguage === 'fr' ? 'Connexion' : 'Log In';
   const loginButton = page.getByLabel("Log In", { exact: true });
   await expect(page).toHaveURL(/login/);
   await expect(loginButton).toBeVisible();
