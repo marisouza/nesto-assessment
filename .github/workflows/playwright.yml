@@ -29,8 +29,8 @@ jobs:
         suite: ['portfolio', 'login', 'signup']
       fail-fast: false
     env:
-      DIDOMI: ${{ secrets.DIDOMI }}
-      EUCONSENT: ${{ secrets.EUCONSENT }}
+      DIDOMI: ${{ vars.DIDOMI }}
+      EUCONSENT: ${{ vars.EUCONSENT }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
