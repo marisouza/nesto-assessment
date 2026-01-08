@@ -23,6 +23,9 @@ jobs:
       matrix:
         suite: ['portfolio', 'login', 'signup']
       fail-fast: false
+    env:
+      DIDOMI: ${{ vars.DIDOMI }}
+      EUCONSENT: ${{ vars.EUCONSENT }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -36,9 +39,6 @@ jobs:
         run: npx playwright install --with-deps
       - name: Run Tests
         run: npm run test-ci:${{ matrix.suite }}
-        env:
-          DIDOMI: ${{ env.DIDOMI }}
-          EUCONSENT: ${{ env.EUCONSENT }}
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
@@ -46,5 +46,5 @@ jobs:
           name: playwright-report
           path: 
             playwright-report/
-            allure-results/
-          retention-days: 4
+            allure-reports/
+          retention-days: 7
