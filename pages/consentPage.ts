@@ -1,4 +1,4 @@
-import { type Locator, type Page, expect } from "@playwright/test";
+import { type Locator, type Page } from "@playwright/test";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -14,7 +14,7 @@ export class ConsentPage {
     this.page = page;
     this.language = language;
     const localeData = this.getLocaleData();
-    this.consentModal = page.getByTestId("notice");
+    this.consentModal =  page.getByTestId("notice");
     this.partners = page.getByText(localeData.consentPartnersButton, {
       exact: true,
     });
@@ -48,11 +48,8 @@ export class ConsentPage {
         ? "https://app.qa.nesto.ca/fr/signup"
         : "https://app.qa.nesto.ca/signup";
     await this.page.goto(url);
-  }
-
-  async isConsentVisible() {
-    await expect(this.consentModal).toBeAttached();
-    return await this.consentModal.isVisible();
+    // Wait for what you actually need
+    await this.consentModal.waitFor({ state: 'attached' });
   }
 
   async isConsentNotVisible() {
