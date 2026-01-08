@@ -3,25 +3,25 @@
 ## Signup Page
 
 1. Form submission
-    - should not submit form and show errors inline errors when mandatory fields are empty
-    - should not submit form and show inline errorwhen invalid email address is provided
-    - should not submit form and show errors inline errors when password mismatch
-    - 
-    - should not submit form and show errors inline errors when password below minimum length
-    - should not show error password has minimum char lenght
-    - should not show error when password has maximum char lentgh
-    - should not submit form and show errors inline errors when password above maximum length
-    - should not submit form and show errors inline errors when not matching requirement (one uppercase letter, one lowercase letter and one number)
-    - should successfully submit form if all require fileds and requirements are met
+   - should not submit form and show errors inline errors when mandatory fields are empty
+   - should not submit form and show inline errorwhen invalid email address is provided
+   - should not submit form and show errors inline errors when password mismatch
+   -
+   - should not submit form and show errors inline errors when password below minimum length
+   - should not show error password has minimum char lenght
+   - should not show error when password has maximum char lentgh
+   - should not submit form and show errors inline errors when password above maximum length
+   - should not submit form and show errors inline errors when not matching requirement (one uppercase letter, one lowercase letter and one number)
+   - should successfully submit form if all require fileds and requirements are met
 2. Password filed
-    - no inline error should be shown when password contains special chars(?!#_- )
+   - no inline error should be shown when password contains special chars(?!#\_- )
 3. Link redirrection
-    - Log in href should redirect to login page ( validate href value only ??)
-    - Terms of Service (check href only since tagert black is responsible for browser to open new tab)
-    - Privacy Policy (check href only since tagert black is responsible for browser to open new tab)
+   - Log in href should redirect to login page ( validate href value only ??)
+   - Terms of Service (check href only since tagert black is responsible for browser to open new tab)
+   - Privacy Policy (check href only since tagert black is responsible for browser to open new tab)
 4. Error handling
-    - Signup using email form existing user should display an error API returns 400
-    - should not allow resubmission (fast click create account)
+   - Signup using email form existing user should display an error API returns 400
+   - should not allow resubmission (fast click create account)
 
 ### Security
 
@@ -41,17 +41,17 @@
 ## Portfolio Page
 
 1. Menu
-    - Settings
-        - should be able to change comm preferences
-        - should be able to sign out
-        - should be able to delete account
-    - should be able to switch language
-    - should validate privacy policy href
-    - should be able to logout
+   - Settings
+     - should be able to change comm preferences
+     - should be able to sign out
+     - should be able to delete account
+   - should be able to switch language
+   - should validate privacy policy href
+   - should be able to logout
 2. Portfolio
-    - should be able to navigate to new mortage page
-    - should be able to navigate to mortage renewal page
-    - should be able to navigate to refinance mortage page
+   - should be able to navigate to new mortage page
+   - should be able to navigate to mortage renewal page
+   - should be able to navigate to refinance mortage page
 
 ## Consent Page
 

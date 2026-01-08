@@ -1,7 +1,6 @@
-import { defineConfig, devices } from '@playwright/test';
-import * as path from 'path';
-import { fileURLToPath } from 'url';
-
+import { defineConfig, devices } from "@playwright/test";
+import * as path from "path";
+import { fileURLToPath } from "url";
 
 /**
  * Read environment variables from file.
@@ -20,11 +19,11 @@ import { fileURLToPath } from 'url';
 // };
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const authFile = path.join(__dirname, './playwright/.auth/user.json');
+const authFile = path.join(__dirname, "./playwright/.auth/user.json");
 
 export default defineConfig({
   // tsconfig: './tsconfig.json',
-  testDir: './tests',
+  testDir: "./tests",
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -34,82 +33,84 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [
-      ['html'],
-      ['allure-playwright']
-    ],
+  reporter: [["html"], ["allure-playwright"]],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
     // baseURL: 'https://app.qa.nesto.ca/signup',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    trace: "on-first-retry",
   },
 
   /* Configure projects for major browsers */
   projects: [
-    { 
-      name: 'setup',
+    {
+      name: "setup",
       testMatch: /.*auth\.setup\.ts/,
     },
     {
-      name: 'navigate-setup',
-      testMatch: /.*navigate\.setup\.ts/,
+      name: "login-setup",
+      testMatch: /.*login\.setup\.ts/,
     },
     {
-      name: 'chromium-auth-setup',
-      use: { 
-        ...devices['Desktop Chrome'],
+      name: "portfolio",
+      use: {
+        ...devices["Desktop Chrome"],
         storageState: authFile,
-        locale: process.env.LANGUAGE || 'en',
+        locale: process.env.LANGUAGE || "en",
       },
       testMatch: /.*portfolio\.spec\.ts/,
-      dependencies: ['setup'],
+      dependencies: ["setup"],
     },
     {
-      name: 'chromium-navigate-setup',
-      use: { 
-        ...devices['Desktop Chrome'],
-        locale: process.env.LANGUAGE || 'en',
+      name: "login",
+      use: {
+        ...devices["Desktop Chrome"],
+        locale: process.env.LANGUAGE || "en",
       },
       testMatch: /.*login\.spec\.ts/,
-      dependencies: ['navigate-setup'],
+      dependencies: ["login-setup"],
     },
-    //  {
-    //   name: 'chromium-navigate2-setup',
-    //   use: { 
-    //     ...devices['Desktop Chrome'],
-    //     storageState: authFileNav,
+    {
+      name: "signup",
+      use: {
+        ...devices["Desktop Chrome"],
+        locale: process.env.LANGUAGE || "en",
+      },
+      testIgnore: [
+        /.*portfolio\.spec\.ts/,
+        /.*portfolio\.setup\.ts/,
+        /.*login\.spec\.ts/,
+        /.*login\.setup\.ts/,
+      ],
+    },
+    // {
+    //   name: "firefox",
+    //   use: {
+    //     ...devices["Desktop Firefox"],
+    //     locale: process.env.LANGUAGE || "en",
     //   },
-    //   testMatch: /.*login\.spec\.ts/,
-    //   dependencies: ['navigate2-setup'],
+    //   testIgnore: [
+    //     /.*portfolio\.spec\.ts/,
+    //     /.*portfolio\.setup\.ts/,
+    //     /.*login\.spec\.ts/,
+    //     /.*login\.setup\.ts/,
+    //   ],
     // },
-    {
-      name: 'chromium',
-      use: { 
-        ...devices['Desktop Chrome'],
-        locale: process.env.LANGUAGE || 'en',
-        // storageState: authFileConsent,
-      },
-      testIgnore: [/.*portfolio\.spec\.ts/, /.*portfolio\.setup\.ts/, /.*login\.spec\.ts/, /.*login\.setup\.ts/],
-      // dependencies: ['setup'],
-    },
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'],
-      locale: process.env.LANGUAGE || 'en',
-      },
-      testIgnore: [/.*portfolio\.spec\.ts/, /.*portfolio\.setup\.ts/, /.*login\.spec\.ts/, /.*login\.setup\.ts/],
-    },
-
-     {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'],
-      locale: process.env.LANGUAGE || 'en',
-      },
-      testIgnore: [/.*portfolio\.spec\.ts/, /.*portfolio\.setup\.ts/, /.*login\.spec\.ts/, /.*login\.setup\.ts/],
-    },
+    // {
+    //   name: "webkit",
+    //   use: {
+    //     ...devices["Desktop Safari"],
+    //     locale: process.env.LANGUAGE || "en",
+    //   },
+    //   testIgnore: [
+    //     /.*portfolio\.spec\.ts/,
+    //     /.*portfolio\.setup\.ts/,
+    //     /.*login\.spec\.ts/,
+    //     /.*login\.setup\.ts/,
+    //   ],
+    // },
 
     /* Test against mobile viewports. */
     // {
