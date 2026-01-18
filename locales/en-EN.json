@@ -40,6 +40,7 @@
     "userPasswordError": "We're sorry, something went wrong when attempting to log in.",
     "invalidEmailError": "Email is invalid",
     "sendEmailButton": "Send Email",
-    "accountBlockedMessage": "Your account has been blocked after multiple consecutive login attempts."
+    "accountBlockedMessage": "Your account has been blocked after multiple consecutive login attempts.",
+    "wrongCredentialsError": "Wrong email or password."
   }
 }

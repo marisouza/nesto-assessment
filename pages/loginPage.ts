@@ -14,6 +14,7 @@ export class LoginPage {
   readonly userPasswordError: Locator;
   readonly resetPasswordMessage: Locator;
   readonly blockAccountMessage: Locator;
+  readonly wrongCredentialsError: Locator;
   private language: "en" | "fr";
 
   constructor(page: Page, language: "en" | "fr" = "en") {
@@ -41,6 +42,7 @@ export class LoginPage {
       localeData.resetPasswordEmailSentMesage,
     );
     this.blockAccountMessage = page.getByText(localeData.accountBlockedMessage);
+    this.wrongCredentialsError = page.getByText(localeData.wrongCredentialsError);
   }
 
   async goTo() {

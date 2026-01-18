@@ -196,7 +196,7 @@ const runSignupTests = (lang: Language) => {
     // "valid.user123@test.com" user was pre-created in the system
     // Options: use /accounts endpoint to create the user in pre-test setup is not an option
     // or have user present in DB as part of env setup
-    test.skip("should not login when password provided is incorrect for an existing user", async ({
+    test("should not login when password provided is incorrect for an existing user", async ({
       loginPage,
     }) => {
       const validUserEmail = "valid.user123@test.com";
@@ -214,13 +214,20 @@ const runSignupTests = (lang: Language) => {
       await loginPage.submitLogin();
       await loginPage.waitsLoginRequestFails();
 
-      // TODO: add expectation for password error message
+      const wrongCredMessage = await loginPage.wrongCredentialsError.textContent();
+      expect(
+        wrongCredMessage,
+        "Wrong credentials error message should match expected text",
+      ).toContain(
+        await getLocaleText("wrongCredentialsError", "loginPage"),
+      );
+      await expect(loginPage.wrongCredentialsError).toBeVisible();
     });
   });
 
   // Account lockout test - runs in isolation to avoid affecting other tests
   // not sure why account is locked if account error does not exist.
-  test.describe.serial("Account Security", () => {
+  test.describe.serial(`Account Security - ${lang.toUpperCase()}`, () => {
     test("should block user after multiple failed login attempts", async ({
       loginPage,
     }) => {
