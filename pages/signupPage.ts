@@ -68,20 +68,24 @@ export class SignupPage {
     this.languageSelector = page.getByTestId("header-language-switch");
   }
 
-async goTo() {
-  const url = getSignupUrl(this.language);
-  const reponse = this.page.waitForResponse(resp =>
-                resp.url().includes('/api/geolocation/all') && resp.request().method() === 'GET' && resp.status() === 200);
+  async goTo() {
+    const url = getSignupUrl(this.language);
+    const reponse = this.page.waitForResponse(
+      (resp) =>
+        resp.url().includes("/api/geolocation/all") &&
+        resp.request().method() === "GET" &&
+        resp.status() === 200,
+    );
 
-  await this.page.goto(url);
-  await reponse;
-}
+    await this.page.goto(url);
+    await reponse;
+  }
 
   async submitSignupForm() {
     // In CI, region field has no default value, so select one if empty
     const regionValue = await this.regionInput.inputValue();
-    if (!regionValue || regionValue === '') {
-      await this.regionInput.selectOption('QC');
+    if (!regionValue || regionValue === "") {
+      await this.regionInput.selectOption("QC");
     }
     await this.signUpButton.click();
   }
@@ -96,7 +100,7 @@ async goTo() {
   }
 
   async getErrorMessages() {
-    await this.errorMessages.scrollIntoViewIfNeeded
+    await this.errorMessages.scrollIntoViewIfNeeded;
     return await this.errorMessages.allTextContents();
   }
 
@@ -156,26 +160,24 @@ async goTo() {
 
   checkAccountRequest(selectedLanguage: string, statusCode: number = 201) {
     const loggedInUrl =
-        selectedLanguage === "fr"
-          ? "/getaquote/fr"
-          : "/getaquote";
+      selectedLanguage === "fr" ? "/getaquote/fr" : "/getaquote";
 
     const accountResponse = this.page.waitForResponse(
-        (resp) =>
-          resp.url().includes("/api/accounts") &&
-          resp.request().method() === "POST" &&
-          resp.status() === statusCode,
-      );
+      (resp) =>
+        resp.url().includes("/api/accounts") &&
+        resp.request().method() === "POST" &&
+        resp.status() === statusCode,
+    );
 
-      return { loggedInUrl, accountResponse };
-  };
+    return { loggedInUrl, accountResponse };
+  }
 
-  async waitForLoginPageRedirect(){
+  async waitForLoginPageRedirect() {
     await this.page.waitForResponse(
-        (resp) =>
-          resp.url().includes("/oauth/token") &&
-          resp.request().method() === "POST" &&
-          resp.status() === 200,
-      );
+      (resp) =>
+        resp.url().includes("/oauth/token") &&
+        resp.request().method() === "POST" &&
+        resp.status() === 200,
+    );
   }
 }

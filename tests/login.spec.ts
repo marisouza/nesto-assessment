@@ -8,8 +8,14 @@ const test = baseTest.extend<{ loginPage: LoginPage }>({
     const language = selectedLanguage;
     const loginPage = new LoginPage(page, language);
     await loginPage.goTo();
-    await expect(loginPage.page, 'Login page URL validation should have correct URL').toHaveURL(/login/);
-    await expect(loginPage.emailInput, 'Login Email input should be visible').toBeVisible();
+    await expect(
+      loginPage.page,
+      "Login page URL validation should have correct URL",
+    ).toHaveURL(/login/);
+    await expect(
+      loginPage.emailInput,
+      "Login Email input should be visible",
+    ).toBeVisible();
     await use(loginPage);
   },
 });
@@ -19,57 +25,105 @@ const selectedLanguage =
   (process.env.LANGUAGE?.toLowerCase() as Language) || "en";
 
 const runSignupTests = (lang: Language) => {
-  test.describe(`Login Page - ${lang.toUpperCase()}`, { tag: '@login' }, () => {
-    test("should not login when invalid username is provided", async ({ loginPage }) => {
+  test.describe(`Login Page - ${lang.toUpperCase()}`, { tag: "@login" }, () => {
+    test("should not login when invalid username is provided", async ({
+      loginPage,
+    }) => {
       const wrongEmail = `${Date.now().toFixed()}wrong@example.com`;
       const correctPassword = "Test1234567890";
-      const expectedUsernameError = await getLocaleText("userPasswordError", "loginPage");
+      const expectedUsernameError = await getLocaleText(
+        "userPasswordError",
+        "loginPage",
+      );
 
       await loginPage.fillLoginInputs(wrongEmail, correctPassword);
-      await expect(loginPage.emailInput, 'Email input should have the wrong email value').toHaveValue(wrongEmail);
-      await expect(loginPage.passwordInput, 'Password input should have the correct password value').toHaveValue(correctPassword);
+      await expect(
+        loginPage.emailInput,
+        "Email input should have the wrong email value",
+      ).toHaveValue(wrongEmail);
+      await expect(
+        loginPage.passwordInput,
+        "Password input should have the correct password value",
+      ).toHaveValue(correctPassword);
       await loginPage.submitLogin();
       await loginPage.waitsLoginRequestFails();
 
-      const usernameErrorMessage = await loginPage.userPasswordError.textContent();
-      await expect(loginPage.userPasswordError, 'Username error message should be visible when invalid username is provided').toBeVisible();
-      expect(usernameErrorMessage, 'Username error message should match expected error when invalid username is provided').toContain(expectedUsernameError);
+      const usernameErrorMessage =
+        await loginPage.userPasswordError.textContent();
+      await expect(
+        loginPage.userPasswordError,
+        "Username error message should be visible when invalid username is provided",
+      ).toBeVisible();
+      expect(
+        usernameErrorMessage,
+        "Username error message should match expected error when invalid username is provided",
+      ).toContain(expectedUsernameError);
     });
 
     // BUG: it wont show validation error message when @ is not follwoed by any caracters
-    test.skip("should show invalid email inline error when invalid email is provided", async ({ loginPage }) => {
+    test.skip("should show invalid email inline error when invalid email is provided", async ({
+      loginPage,
+    }) => {
       const invalidEmail = `${Date.now().toFixed()}anotherwrong@.com`;
       const password = "Test1234567890";
-      const expectedInvalidEmailError = await getLocaleText("invalidEmailError", "loginPage");
+      const expectedInvalidEmailError = await getLocaleText(
+        "invalidEmailError",
+        "loginPage",
+      );
 
       await loginPage.fillLoginInputs(invalidEmail, password);
-      await expect(loginPage.emailInput, 'Email input should have the wrong email value').toHaveValue(invalidEmail);
+      await expect(
+        loginPage.emailInput,
+        "Email input should have the wrong email value",
+      ).toHaveValue(invalidEmail);
       await loginPage.submitLogin();
 
       const errorMessage = await loginPage.invalidEmailError.textContent();
-      await expect(loginPage.invalidEmailError, 'Username error message should be visible when invalid username is provided').toBeVisible();
-      expect(errorMessage, 'Username error message should match expected error when invalid username is provided').toContain(expectedInvalidEmailError);
+      await expect(
+        loginPage.invalidEmailError,
+        "Username error message should be visible when invalid username is provided",
+      ).toBeVisible();
+      expect(
+        errorMessage,
+        "Username error message should match expected error when invalid username is provided",
+      ).toContain(expectedInvalidEmailError);
     });
 
     // BUG: FR message is not matching EN message
     // it will fail on FR until the text is fixed
-     test("should show invalid email inline error when invalid email format is provided", async ({ loginPage }) => {
+    test("should show invalid email inline error when invalid email format is provided", async ({
+      loginPage,
+    }) => {
       const invalidEmail = `${Date.now().toFixed()}wrong.com`;
       const password = "Test1234567890";
-      const expectedInvalidEmailError = await getLocaleText("invalidEmailError", "loginPage");
+      const expectedInvalidEmailError = await getLocaleText(
+        "invalidEmailError",
+        "loginPage",
+      );
 
       await loginPage.fillLoginInputs(invalidEmail, password);
-      await expect(loginPage.emailInput, 'Email input should have the wrong email value').toHaveValue(invalidEmail);
+      await expect(
+        loginPage.emailInput,
+        "Email input should have the wrong email value",
+      ).toHaveValue(invalidEmail);
       await loginPage.submitLogin();
 
       const errorMessage = await loginPage.invalidEmailError.textContent();
-      await expect(loginPage.invalidEmailError, 'Username error message should be visible when invalid username is provided').toBeVisible();
-      expect(errorMessage, 'Username error message should match expected error when invalid username is provided').toContain(expectedInvalidEmailError);
+      await expect(
+        loginPage.invalidEmailError,
+        "Username error message should be visible when invalid username is provided",
+      ).toBeVisible();
+      expect(
+        errorMessage,
+        "Username error message should match expected error when invalid username is provided",
+      ).toContain(expectedInvalidEmailError);
     });
 
     // LOG-002: FR text for empty fields is not matchin EN verion
     // This test will fail in FR until the text is fixed
-    test("should show inline errors when empty fields are submitted", async ({ loginPage }) => {
+    test("should show inline errors when empty fields are submitted", async ({
+      loginPage,
+    }) => {
       await loginPage.submitLogin();
 
       const emailError = await loginPage.getEmailError();
@@ -83,27 +137,50 @@ const runSignupTests = (lang: Language) => {
         "loginPage",
       );
 
-      expect(emailError, 'Email error message should match expected error when empty fields are submitted').toContain(emailExpectedError);
-      expect(passwordError, 'Password error message should match expected error when empty fields are submitted').toContain(passwordExpectedError);
+      expect(
+        emailError,
+        "Email error message should match expected error when empty fields are submitted",
+      ).toContain(emailExpectedError);
+      expect(
+        passwordError,
+        "Password error message should match expected error when empty fields are submitted",
+      ).toContain(passwordExpectedError);
     });
 
     test("should allow user to reset password", async ({ loginPage }) => {
       const randomEmail = `${Date.now().toFixed()}-${faker.internet.email()}`;
-      const expectedError = await getLocaleText("forgotPasswordLink", "loginPage");
+      const expectedError = await getLocaleText(
+        "forgotPasswordLink",
+        "loginPage",
+      );
 
       await expect(loginPage.forgotPasswordLink).toBeVisible();
       await expect(loginPage.forgotPasswordLink).toHaveText(expectedError);
       await loginPage.forgotPasswordLink.click();
 
-      const sendEmailButton = await getLocaleText("sendEmailButton", "loginPage");
-      await expect(loginPage.page.getByLabel(sendEmailButton), 'Send Email button should be visible on reset password page').toBeVisible();
+      const sendEmailButton = await getLocaleText(
+        "sendEmailButton",
+        "loginPage",
+      );
+      await expect(
+        loginPage.page.getByLabel(sendEmailButton),
+        "Send Email button should be visible on reset password page",
+      ).toBeVisible();
 
       await loginPage.emailInput.fill(randomEmail);
-      await expect(loginPage.emailInput, 'Email input should have the random email value').toHaveValue(randomEmail);
+      await expect(
+        loginPage.emailInput,
+        "Email input should have the random email value",
+      ).toHaveValue(randomEmail);
       await loginPage.page.getByLabel(sendEmailButton).click();
 
       const resetMessage = await loginPage.resetPasswordMessage.textContent();
-      expect(resetMessage, 'Reset password message should match expected text').toContain(await getLocaleText("resetPasswordEmailSentMesage", "loginPage"));
+      expect(
+        resetMessage,
+        "Reset password message should match expected text",
+      ).toContain(
+        await getLocaleText("resetPasswordEmailSentMesage", "loginPage"),
+      );
       await expect(loginPage.resetPasswordMessage).toBeVisible();
     });
 
@@ -119,13 +196,21 @@ const runSignupTests = (lang: Language) => {
     // "valid.user123@test.com" user was pre-created in the system
     // Options: use /accounts endpoint to create the user in pre-test setup is not an option
     // or have user present in DB as part of env setup
-    test.skip('should not login when password provided is incorrect for an existing user', async ({ loginPage }) => {
+    test.skip("should not login when password provided is incorrect for an existing user", async ({
+      loginPage,
+    }) => {
       const validUserEmail = "valid.user123@test.com";
       const invalidUserPassword = "Password";
 
       await loginPage.fillLoginInputs(validUserEmail, invalidUserPassword);
-      await expect(loginPage.emailInput, 'Email input should have the correct email value').toHaveValue(validUserEmail);
-      await expect(loginPage.passwordInput, 'Password input should have the incorrect password value').toHaveValue(invalidUserPassword);
+      await expect(
+        loginPage.emailInput,
+        "Email input should have the correct email value",
+      ).toHaveValue(validUserEmail);
+      await expect(
+        loginPage.passwordInput,
+        "Password input should have the incorrect password value",
+      ).toHaveValue(invalidUserPassword);
       await loginPage.submitLogin();
       await loginPage.waitsLoginRequestFails();
 
@@ -133,31 +218,54 @@ const runSignupTests = (lang: Language) => {
     });
   });
 
-   // Account lockout test - runs in isolation to avoid affecting other tests
-   // not sure why account is locked if account error does not exist.
+  // Account lockout test - runs in isolation to avoid affecting other tests
+  // not sure why account is locked if account error does not exist.
   test.describe.serial("Account Security", () => {
-    test("should block user after multiple failed login attempts", async ({ loginPage }) => {
+    test("should block user after multiple failed login attempts", async ({
+      loginPage,
+    }) => {
       const randomEmail = `${Date.now().toFixed()}-${faker.internet.email()}`;
       const password = "Test1234567890";
-      const expectedUsernameError = await getLocaleText("userPasswordError", "loginPage");
-      const expectedBlockAccountMessage = await getLocaleText("accountBlockedMessage", "loginPage");
+      const expectedUsernameError = await getLocaleText(
+        "userPasswordError",
+        "loginPage",
+      );
+      const expectedBlockAccountMessage = await getLocaleText(
+        "accountBlockedMessage",
+        "loginPage",
+      );
 
       await loginPage.fillLoginInputs(randomEmail, password);
-      await expect(loginPage.emailInput, 'Email input should have the wrong email value').toHaveValue(randomEmail);
-      await expect(loginPage.passwordInput, 'Password input should have the correct password value').toHaveValue(password);
-    
+      await expect(
+        loginPage.emailInput,
+        "Email input should have the wrong email value",
+      ).toHaveValue(randomEmail);
+      await expect(
+        loginPage.passwordInput,
+        "Password input should have the correct password value",
+      ).toHaveValue(password);
+
       // First 5 failed attempts should show username/password error
       for (let attempt = 0; attempt < 5; attempt++) {
         await loginPage.submitLogin();
         await loginPage.waitsLoginRequestFails();
-        expect(await loginPage.userPasswordError.textContent(), 'Username error message should match expected error when invalid username is provided').toContain(expectedUsernameError);
+        expect(
+          await loginPage.userPasswordError.textContent(),
+          "Username error message should match expected error when invalid username is provided",
+        ).toContain(expectedUsernameError);
       }
 
       // 6th attempt should block the account
       await loginPage.submitLogin();
       await loginPage.waitsLoginRequestFails(429);
-      await expect(loginPage.blockAccountMessage, 'Block account message should be visible after multiple failed login attempts').toBeVisible();
-      expect(await loginPage.blockAccountMessage.textContent(), 'Blocked account message should match expected text after multiple failed login attempts').toContain(expectedBlockAccountMessage);
+      await expect(
+        loginPage.blockAccountMessage,
+        "Block account message should be visible after multiple failed login attempts",
+      ).toBeVisible();
+      expect(
+        await loginPage.blockAccountMessage.textContent(),
+        "Blocked account message should match expected text after multiple failed login attempts",
+      ).toContain(expectedBlockAccountMessage);
     });
   });
 };

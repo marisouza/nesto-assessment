@@ -30,7 +30,7 @@
     "alreadyloggedInWarning": "Vous êtes déjà connecté",
     "alreadyloggedInLink": "Aller au tableau de bord"
   },
-  "loginPage":{
+  "loginPage": {
     "logInButton": "Connexion",
     "forgotPasswordLink": "Mot de passe oublié ?",
     "resetPasswordEmailSentMesage": "Nous venons de vous envoyer un courriel pour réinitialiser votre mot de passe.",

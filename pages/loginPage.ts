@@ -37,12 +37,14 @@ export class LoginPage {
       exact: true,
     });
     this.userPasswordError = page.getByText(localeData.userPasswordError);
-    this.resetPasswordMessage = page.getByText(localeData.resetPasswordEmailSentMesage);
+    this.resetPasswordMessage = page.getByText(
+      localeData.resetPasswordEmailSentMesage,
+    );
     this.blockAccountMessage = page.getByText(localeData.accountBlockedMessage);
   }
 
   async goTo() {
-    await this.page.goto('/');
+    await this.page.goto("/");
   }
 
   async fillLoginInputs(email: string, password?: string) {
@@ -69,7 +71,13 @@ export class LoginPage {
   }
 
   async waitsLoginRequestFails(statusCode: number = 401) {
-    await this.page.waitForResponse(resp =>
-        resp.url().includes(`${process.env.LOGIN_URL}/usernamepassword/login`) && resp.request().method() === 'POST' && resp.status() === statusCode);
+    await this.page.waitForResponse(
+      (resp) =>
+        resp
+          .url()
+          .includes(`${process.env.LOGIN_URL}/usernamepassword/login`) &&
+        resp.request().method() === "POST" &&
+        resp.status() === statusCode,
+    );
   }
 }

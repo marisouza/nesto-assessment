@@ -31,7 +31,7 @@ This is an end-to-end test automation project for Nesto using Playwright and Typ
    npx playwright install --with-deps
    ```
 
-*Note: This step may not be necessary if browsers were installed during `npm ci`. Run this if you encounter browser-related errors.*
+_Note: This step may not be necessary if browsers were installed during `npm ci`. Run this if you encounter browser-related errors._
 
 ## Project Structure
 
