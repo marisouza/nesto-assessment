@@ -91,11 +91,13 @@ async goTo() {
   }
 
   async getErrorMessages() {
+    await this.errorMessages.scrollIntoViewIfNeeded
     return await this.errorMessages.allTextContents();
   }
 
   async getErrorMessageByTestId(testId: string) {
     const locator = this.page.getByTestId(testId);
+    await locator.scrollIntoViewIfNeeded();
     return await locator.textContent();
   }
 
