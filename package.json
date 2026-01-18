@@ -5,6 +5,7 @@
   "scripts": {
     "test:ui": "npx playwright test --ui",
     "test:headed": "npx playwright test --headed",
+    "test:docker": "npx playwright test",
     "test:signup": "npx playwright test --grep @signup --headed",
     "test:login": "npx playwright test --grep @login --headed --no-deps",
     "test:consent": "npx playwright test --grep @consent --headed",

@@ -437,3 +437,42 @@ Follow conventional commits format:
 - `test:` - Test-related changes
 - `refactor:` - Code refactoring
 - `chore:` - Maintenance tasks
+
+## Docker Support
+
+Pre-requisit have [docker](https://www.docker.com/) installed and running locally
+
+Build docker image based on Dockerfile
+
+```bash
+   docker build -t pw-test .
+```
+
+List docker images:
+
+```bash
+   docker images
+```
+
+Run docker image:
+
+```bash
+   docker run -it pw-test
+   npm run test:consent
+```
+
+### Docker-compose
+
+Another option to use docker-compose which will save reports into local test results folders.
+
+To build a new docker image and run docker-compose:
+
+```bash
+   docker-compose up --build
+```
+
+To run docker-compose out of existing built image:
+
+```bash
+   docker-compose up
+```
