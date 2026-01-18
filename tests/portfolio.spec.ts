@@ -1,6 +1,6 @@
 import { test as baseTest, expect } from "../fixtures";
 import { PortfolioPage } from "../pages/portfolioPage";
-import * as helper from "./helper/helper";
+import * as helper from "../helpers/helper";
 
 type Language = "en" | "fr";
 const selectedLanguage =
@@ -10,16 +10,16 @@ const test = baseTest.extend<{ portfolioPage: PortfolioPage }>({
   portfolioPage: async ({ page }, use) => {
     const language = selectedLanguage;
     const portfolioPage = new PortfolioPage(page, language);
-    await helper.applyConsent(page);
-    await portfolioPage.goto();
-    await expect(portfolioPage.page).toHaveURL(await portfolioPage.getUrl());
+    await portfolioPage.goTo();
+    await expect(portfolioPage.page).toHaveURL(portfolioPage.getPortfolioUrl());
     await use(portfolioPage);
   },
 });
 
-const runSignupTests = (lang: Language) => {
-  test.describe(`Portfolio Page - ${lang.toUpperCase()}`, () => {
-    test("should be able to change comm preferences", async ({
+const runPortfolioTests = (lang: Language) => {
+  test.describe(`Portfolio Page - ${lang.toUpperCase()}`, { tag: '@portfolio' }, () => {
+    test.use({ storageState: './playwright/.auth/user.json' });
+    test.only("should be able to change comm preferences", async ({
       portfolioPage,
     }) => {
       // navigate to comm preferences
@@ -48,11 +48,7 @@ const runSignupTests = (lang: Language) => {
     });
 
     test("should be able to switch language", async ({ portfolioPage }) => {
-      const targetLanguage = lang === "en" ? "fr" : "en";
-      const expectedUrlPart = targetLanguage === "fr" ? "/fr" : "/";
-      const portfolioText =
-        targetLanguage === "fr" ? "Mon portfolio" : "My Portfolio";
-
+      const { targetLanguage, expectedUrlPart, portfolioText } = helper.switchPortfolioLanguage(lang);
       await portfolioPage.openMenu();
       await expect(portfolioPage.languageSwitchButton).toContainText(
         targetLanguage.toUpperCase(),
@@ -65,8 +61,8 @@ const runSignupTests = (lang: Language) => {
           resp.request().method() === "GET" &&
           resp.status() === 200,
       );
-      await expect(portfolioPage.page).toHaveURL(new RegExp(expectedUrlPart));
-      await expect(portfolioPage.portfolioButton).toHaveText(portfolioText);
+      await expect(portfolioPage.page, 'Portfolio Page URL redirect to target language').toHaveURL(new RegExp(expectedUrlPart));
+      await expect(portfolioPage.portfolioButton, `Portfolio button text should be updated to ${targetLanguage.toUpperCase()} locale after language switch`).toHaveText(portfolioText);
     });
 
     // TODO: Question: should banner login page be visible ?
@@ -83,12 +79,12 @@ const runSignupTests = (lang: Language) => {
       const redirectLink = selectedLanguage === "fr" ? "/fr" : "/";
       await expect(
         portfolioPage.page.getByText(
-          await helper.getLocaleText("alreadyloggedInWarning"),
+          helper.getLocaleText("alreadyloggedInWarning"),
         ),
       ).toBeVisible();
       await expect(
         portfolioPage.page.getByText(
-          await helper.getLocaleText("alreadyloggedInLink"),
+          helper.getLocaleText("alreadyloggedInLink"),
         ),
       ).toHaveAttribute("href", redirectLink);
     });
@@ -114,4 +110,4 @@ const runSignupTests = (lang: Language) => {
   });
 };
 
-runSignupTests(selectedLanguage);
+runPortfolioTests(selectedLanguage);

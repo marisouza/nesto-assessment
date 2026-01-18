@@ -37,8 +37,8 @@ export class PortfolioPage {
     this.portfolioButton = page.getByTestId("my-portfolio-button");
   }
 
-  async goto() {
-    await this.page.goto(await this.getUrl());
+  async goTo() {
+    await this.page.goto(this.getPortfolioUrl());
   }
 
   async openMenu() {
@@ -76,11 +76,11 @@ export class PortfolioPage {
     await this.logoutButton.click();
   }
 
-  async getUrl() {
+  getPortfolioUrl() {
     const url =
       this.language === "fr"
-        ? "https://app.qa.nesto.ca/fr"
-        : "https://app.qa.nesto.ca";
+        ? '/fr'
+        : '/';
     return url;
   }
 }
