@@ -234,7 +234,10 @@ Multi-language support is managed through locale files in the [`locales/`](local
 
 ## CI/CD
 
-The project uses GitHub Actions for continuous integration and deployment. Workflows are defined in [.github/workflows/docker-playwright.yml](.github/workflows/docker-playwright.yml).
+The project uses GitHub Actions for continuous integration and deployment with multiple workflows:
+
+- **Test Workflow**: [.github/workflows/docker-playwright.yaml](.github/workflows/docker-playwright.yaml)
+- **Security Audit**: [.github/workflows/npm-audit.yaml](.github/workflows/npm-audit.yaml)
 
 ### Workflow Triggers
 
@@ -244,7 +247,7 @@ Tests run on:
 - **Pull requests** to `main` branch
 - **Manual trigger** via workflow dispatch
 
-### Workflow Steps
+### Test Workflow Steps
 
 1. **Setup**
    - Checkout code
@@ -266,6 +269,23 @@ Tests run on:
    - Upload Allure results
    - Generate and publish reports to GitHub Pages
    - Upload test artifacts for download
+
+### NPM Audit Workflow
+
+The npm audit workflow automatically scans for security vulnerabilities:
+
+- **Trigger**: Runs on push to `main` and on pull requests
+- **Audit Level**: Moderate (checks for moderate and higher severity vulnerabilities)
+- **Action**: Scans all dependencies for known security issues
+- **Failure**: Workflow fails if vulnerabilities at moderate level or higher are found
+
+You can also run npm audit locally:
+
+```bash
+npm audit                    # View all vulnerabilities
+npm audit --audit-level=moderate   # Only show moderate and above
+npm audit fix                # Automatically fix vulnerabilities
+```
 
 ### CI Reports
 
