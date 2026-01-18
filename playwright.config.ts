@@ -32,10 +32,9 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: process.env.CI ? 'blob' : [
-    ["html", { outputFolder: "playwright-report" }],
-    ["allure-playwright", { outputFolder: 'allure-results' }]
-  ],
+  reporter: process.env.CI
+    ? [['blob'], ['allure-playwright', { outputFolder: 'allure-results' }]]
+    : [['html', { outputFolder: 'playwright-report' }], ['allure-playwright', { outputFolder: 'allure-results' }]],
   
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
@@ -52,6 +51,11 @@ export default defineConfig({
       testMatch: "setup/acceptConsent.setup.ts",
       use: {
         ...devices["Desktop Chrome"],
+        launchOptions: {
+          args: [
+            '--disable-blink-features=AutomationControlled',
+          ],
+        },
       },
     },
     {

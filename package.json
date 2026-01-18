@@ -9,8 +9,6 @@
     "test:consent": "npx playwright test --grep @consent --headed",
     "report:show": "npx playwright show-report",
     "report:allure": "allure generate ./allure-results --clean -o ./allure-report && allure open ./allure-report",
-    "report-ci:allure": "allure generate ./allure-results --clean -o ./allure-report",
-    "report-ci:merge": "npx playwright merge-reports --reporter html ./all-blob-reports",
     "lint:ci": "npx tsc -p tsconfig.json --noEmit",
     "lint": "eslint . && tsc --noEmit",
     "format:check": "prettier . --check",

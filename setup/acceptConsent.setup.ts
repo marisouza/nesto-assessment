@@ -15,7 +15,7 @@ setup("consent", async ({ page }) => {
   await page.goto("/signup");
   await response;
 
-  await expect(page.getByTestId('notice')).toBeVisible();
+  await expect(page.getByTestId('notice'), 'Consent notice should be visible').toBeVisible();
   const agreeButton = page.locator("#didomi-notice-agree-button");
   await expect(agreeButton, 'Consent agree button should be visible').toBeVisible();
   await agreeButton.click();
