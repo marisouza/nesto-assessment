@@ -1,8 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 import { fileURLToPath } from "url";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 import * as path from "path";
-
 
 /**
  * Read environment variables from file.
@@ -17,7 +16,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const consentFile = path.join(__dirname, "./playwright/.auth/consent.json");
 
-dotenv.config({ path: path.resolve(__dirname, '.env.demo') });
+dotenv.config({ path: path.resolve(__dirname, ".env.demo") });
 
 export default defineConfig({
   // tsconfig: './tsconfig.json',
@@ -33,9 +32,16 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: process.env.CI
-    ? [['list'], ['blob'], ['allure-playwright', { outputFolder: 'allure-results' }]]
-    : [['html', { outputFolder: 'playwright-report' }], ['allure-playwright', { outputFolder: 'allure-results' }]],
-  
+    ? [
+        ["list"],
+        ["blob"],
+        ["allure-playwright", { outputFolder: "allure-results" }],
+      ]
+    : [
+        ["html", { outputFolder: "playwright-report" }],
+        ["allure-playwright", { outputFolder: "allure-results" }],
+      ],
+
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     baseURL: process.env.BASE_URL,
@@ -53,11 +59,11 @@ export default defineConfig({
         ...devices["Desktop Chrome"],
         launchOptions: {
           args: [
-            '--disable-blink-features=AutomationControlled',
-            '--disable-features=IsolateOrigins,site-per-process',
-            '--disable-web-security',
-            '--disable-site-isolation-trials',
-            '--disable-popup-blocking',
+            "--disable-blink-features=AutomationControlled",
+            "--disable-features=IsolateOrigins,site-per-process",
+            "--disable-web-security",
+            "--disable-site-isolation-trials",
+            "--disable-popup-blocking",
           ],
         },
       },
@@ -69,7 +75,7 @@ export default defineConfig({
         locale: process.env.LANGUAGE || "en",
         storageState: consentFile,
       },
-      dependencies: ['accept-consent'],
+      dependencies: ["accept-consent"],
       testMatch: ["tests/**/*.spec.ts"],
     },
   ],

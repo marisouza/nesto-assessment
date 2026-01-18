@@ -13,7 +13,7 @@ export class ConsentPage {
     this.page = page;
     this.language = language;
     const localeData = getLocaleData().signupPage;
-    this.consentModal =  page.getByTestId("notice");
+    this.consentModal = page.getByTestId("notice");
     this.partners = page.getByText(localeData.consentPartnersButton, {
       exact: true,
     });

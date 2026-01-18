@@ -1,5 +1,5 @@
 {
-  "signupPage":{
+  "signupPage": {
     "formHeader": "Create a nesto account",
     "firstNameInput": "First name",
     "lastNameInput": "Last name",
@@ -30,7 +30,7 @@
     "alreadyloggedInWarning": "Looks like you are already logged in",
     "alreadyloggedInLink": "Go to Dashboard"
   },
-  "loginPage":{
+  "loginPage": {
     "logInButton": "Log in",
     "forgotPasswordLink": "Don't remember your password?",
     "resetPasswordEmailSentMesage": "We've just sent you an email to reset your password.",
@@ -40,6 +40,7 @@
     "userPasswordError": "We're sorry, something went wrong when attempting to log in.",
     "invalidEmailError": "Email is invalid",
     "sendEmailButton": "Send Email",
-    "accountBlockedMessage": "Your account has been blocked after multiple consecutive login attempts."
+    "accountBlockedMessage": "Your account has been blocked after multiple consecutive login attempts.",
+    "wrongCredentialsError": "Wrong email or password."
   }
 }

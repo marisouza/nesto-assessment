@@ -30,7 +30,7 @@
     "alreadyloggedInWarning": "Vous êtes déjà connecté",
     "alreadyloggedInLink": "Aller au tableau de bord"
   },
-  "loginPage":{
+  "loginPage": {
     "logInButton": "Connexion",
     "forgotPasswordLink": "Mot de passe oublié ?",
     "resetPasswordEmailSentMesage": "Nous venons de vous envoyer un courriel pour réinitialiser votre mot de passe.",
@@ -40,6 +40,7 @@
     "userPasswordError": "Nous sommes désolés, un problème est survenu lors de la tentative de connexion.",
     "invalidEmailError": "Courriel invalide",
     "sendEmailButton": "Envoyer le courriel",
-    "accountBlockedMessage": "Votre compte a été bloqué à la suite de trop nombreuses tentatives de connexion consécutives."
+    "accountBlockedMessage": "Votre compte a été bloqué à la suite de trop nombreuses tentatives de connexion consécutives.",
+    "wrongCredentialsError": "Mauvaise adresse de messagerie ou mot de passe."
   }
 }
