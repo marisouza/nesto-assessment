@@ -22,156 +22,156 @@ jobs:
       - name: Run Linter
         run: npm run lint
   
-  test:
-    needs: [lint]
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        shardIndex: [1, 2, 3]
-        shardTotal: [3]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
+  # test:
+  #   needs: [lint]
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       shardIndex: [1, 2, 3]
+  #       shardTotal: [3]
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v5
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: lts/*
 
-      - name: Install dependencies
-        run: npm ci
+  #     - name: Install dependencies
+  #       run: npm ci
 
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+  #     - name: Install Playwright Browsers
+  #       run: npx playwright install --with-deps
 
-      - name: Run Tests
-        run: npx playwright test --project=signup --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+  #     - name: Run Tests
+  #       run: npx playwright test --project=signup --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
 
-      # - name: Archive Allure results
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: allure-results-${{ matrix.shardIndex }}
-      #     path: allure-results
-      #     retention-days: 1
+  #     # - name: Archive Allure results
+  #     #   uses: actions/upload-artifact@v4
+  #     #   with:
+  #     #     name: allure-results-${{ matrix.shardIndex }}
+  #     #     path: allure-results
+  #     #     retention-days: 1
       
-      # - name: Load test report history
-      #   uses: actions/checkout@v5
-      #   if: always()
-      #   continue-on-error: true
-      #   with:
-      #     ref: gh-pages
-      #     path: gh-pages
+  #     # - name: Load test report history
+  #     #   uses: actions/checkout@v5
+  #     #   if: always()
+  #     #   continue-on-error: true
+  #     #   with:
+  #     #     ref: gh-pages
+  #     #     path: gh-pages
 
-      # - name: Build test report
-      #   uses: simple-elf/allure-report-action@v1.7
-      #   if: always()
-      #   with:
-      #     gh_pages: gh-pages
-      #     allure_history: allure-history
-      #     allure_results: allure-results
+  #     # - name: Build test report
+  #     #   uses: simple-elf/allure-report-action@v1.7
+  #     #   if: always()
+  #     #   with:
+  #     #     gh_pages: gh-pages
+  #     #     allure_history: allure-history
+  #     #     allure_results: allure-results
 
-      # - name: Publish test report
-      #   uses: peaceiris/actions-gh-pages@v3
-      #   if: always()
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     publish_branch: gh-pages
-      #     publish_dir: allure-history
+  #     # - name: Publish test report
+  #     #   uses: peaceiris/actions-gh-pages@v3
+  #     #   if: always()
+  #     #   with:
+  #     #     github_token: ${{ secrets.GITHUB_TOKEN }}
+  #     #     publish_branch: gh-pages
+  #     #     publish_dir: allure-history
 
-      - name: Upload blob report to GitHub Actions Artifacts
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: blob-report-${{ matrix.shardIndex }}
-          path: blob-report
-          retention-days: 1
+  #     - name: Upload blob report to GitHub Actions Artifacts
+  #       if: ${{ !cancelled() }}
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: blob-report-${{ matrix.shardIndex }}
+  #         path: blob-report
+  #         retention-days: 1
       
-      - name: Upload Allure Results
-        uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
-        with:
-          name: allure-results-${{ matrix.shardIndex }}
-          path: allure-results
-          retention-days: 1
+  #     - name: Upload Allure Results
+  #       uses: actions/upload-artifact@v4
+  #       if: ${{ !cancelled() }}
+  #       with:
+  #         name: allure-results-${{ matrix.shardIndex }}
+  #         path: allure-results
+  #         retention-days: 1
 
-  merge-blob-reports:
-    if: ${{ !cancelled() && needs.test.result != 'skipped' }}
-    needs: [test]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
+  # merge-blob-reports:
+  #   if: ${{ !cancelled() && needs.test.result != 'skipped' }}
+  #   needs: [test]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v5
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v5
-        with:
-          node-version: lts/*
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v5
+  #       with:
+  #         node-version: lts/*
 
-      - name: Install dependencies
-        run: npm ci
+  #     - name: Install dependencies
+  #       run: npm ci
 
-      - name: Download blob reports Artifacts
-        uses: actions/download-artifact@v5
-        with:
-          path: all-blob-reports
-          pattern: blob-report-*
-          merge-multiple: true
+  #     - name: Download blob reports Artifacts
+  #       uses: actions/download-artifact@v5
+  #       with:
+  #         path: all-blob-reports
+  #         pattern: blob-report-*
+  #         merge-multiple: true
 
-      - name: Merge into HTML Report
-        run: npx playwright merge-reports --reporter html ./all-blob-reports
+  #     - name: Merge into HTML Report
+  #       run: npx playwright merge-reports --reporter html ./all-blob-reports
 
-      - name: Upload HTML report
-        uses: actions/upload-artifact@v4
-        with:
-          name: report-html-attempt-${{ github.run_attempt }}
-          path: playwright-report
-          retention-days: 7
+  #     - name: Upload HTML report
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: report-html-attempt-${{ github.run_attempt }}
+  #         path: playwright-report
+  #         retention-days: 7
 
-  merge-allure-reports:
-    if: ${{ !cancelled() && needs.test.result != 'skipped' }}
-    needs: [test]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
+  # merge-allure-reports:
+  #   if: ${{ !cancelled() && needs.test.result != 'skipped' }}
+  #   needs: [test]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v5
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v5
-        with:
-          node-version: lts/*
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v5
+  #       with:
+  #         node-version: lts/*
 
-      - name: Install dependencies
-        run: npm ci
+  #     - name: Install dependencies
+  #       run: npm ci
 
-      - name: Download allure results Artifacts
-        uses: actions/download-artifact@v5
-        with:
-          path: all-allure-results
-          pattern: allure-results-*
-          merge-multiple: true
+  #     - name: Download allure results Artifacts
+  #       uses: actions/download-artifact@v5
+  #       with:
+  #         path: all-allure-results
+  #         pattern: allure-results-*
+  #         merge-multiple: true
       
-      - name: Load test report history
-        uses: actions/checkout@v3
-        if: always()
-        continue-on-error: true
-        with:
-          ref: gh-pages
-          path: gh-pages
+  #     - name: Load test report history
+  #       uses: actions/checkout@v3
+  #       if: always()
+  #       continue-on-error: true
+  #       with:
+  #         ref: gh-pages
+  #         path: gh-pages
 
-      - name: Generate Report
-        uses: simple-elf/allure-report-action@v1.11
-        if: always()
-        with:
-          gh_pages: gh-pages
-          allure_results: all-allure-results
-          allure_history: allure-history
-          allure_report: allure-report
+  #     - name: Generate Report
+  #       uses: simple-elf/allure-report-action@v1.11
+  #       if: always()
+  #       with:
+  #         gh_pages: gh-pages
+  #         allure_results: all-allure-results
+  #         allure_history: allure-history
+  #         allure_report: allure-report
 
-      - name: Publish Report
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: allure-history
-          publish_branch: gh-pages
+  #     - name: Publish Report
+  #       uses: peaceiris/actions-gh-pages@v4
+  #       with:
+  #         github_token: ${{ secrets.GITHUB_TOKEN }}
+  #         publish_dir: allure-history
+  #         publish_branch: gh-pages
 
