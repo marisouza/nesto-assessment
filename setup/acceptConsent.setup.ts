@@ -8,6 +8,13 @@ const __dirname = path.dirname(__filename);
 const consentFile = path.join(__dirname, "../playwright/.auth/consent.json");
 
 setup("consent", async ({ page }) => {
+  // Override navigator.webdriver to avoid detection
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'webdriver', {
+      get: () => undefined,
+    });
+  });
+
   const response = page.waitForResponse(resp =>
     resp.url().includes('/api/geolocation/all') &&
     resp.request().method() === 'GET' && resp.status() === 200
