@@ -51,13 +51,7 @@ export default defineConfig({
       testMatch: "setup/acceptConsent.setup.ts",
       use: {
         ...devices["Desktop Chrome"],
-        userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36',
-        geolocation: { latitude: 45.4215, longitude: -75.6999 },
-        permissions: ['geolocation'],
-        storageState: undefined,
-        // viewport: { width: 1280, height: 720 },
         launchOptions: {
-          // headless: process.env.CI ? false : true,
           args: [
             '--disable-blink-features=AutomationControlled',
             '--disable-features=IsolateOrigins,site-per-process',
