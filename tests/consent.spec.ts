@@ -18,6 +18,7 @@ const selectedLanguage =
 const runSignupTests = (lang: Language) => {
   test.describe(`Consent Page - ${lang.toUpperCase()}`, { tag: '@consent' }, () => {
     test.describe("First Visit", () => {
+      test.skip(!!process.env.CI, 'Consent modal tests skipped in CI (Didomi blocks datacenter IPs)');
       test.use({ storageState: { cookies: [], origins: [] } });
 
       test("should show consent on first visit", async ({ consentPage }) => {
