@@ -15,8 +15,8 @@ This is an end-to-end test automation project for Nesto using Playwright and Typ
 1. **Clone the repository**
 
    ```bash
-   git clone <repository-url>
-   cd nesto
+   git clone https://github.com/marisouza/nesto-assessment
+   cd nesto-assessment
    ```
 
 2. **Install dependencies**
@@ -52,34 +52,24 @@ nesto/
 
 ### Interactive Mode (UI)
 
-Note: To run tests in french just add LANGUAGE=fr before the npm commad
+Note: To run tests in french just add LANGUAGE=fr before the npm command
 
 ```bash
-LANGUAGE=fr npm run test:all
+LANGUAGE=fr npm run test:headed
 ```
 
 Run all tests with Playwright UI:
 
 ```bash
-npm run test:all
+npm run test:ui
 ```
 
 Run specific test suites:
 
 ```bash
-npm run test:portfolio    # Portfolio tests
+npm run test:consent      # Consent tests
 npm run test:login        # Login tests
 npm run test:signup       # Signup tests
-```
-
-### Headless Mode (CI)
-
-Run tests in headless mode:
-
-```bash
-npm run test-ci:portfolio
-npm run test-ci:login
-npm run test-ci:signup
 ```
 
 ## Test Reports
@@ -105,6 +95,8 @@ Reports are generated in:
 - `playwright-report/` - HTML reports
 - `allure-results/` - Allure test results
 - `allure-report/` - Generated Allure reports
+
+CI Reports available at [github-pages](https://github.com/marisouza/nesto-assessment/deployments/github-pages)
 
 ## Code Quality
 
@@ -155,12 +147,10 @@ Configuration was kept the same for the assement purpose.
 The project uses environment variables for CI/CD. Key variables:
 
 - `CI` - Indicates CI environment
-- `DIDOMI` - Cookie consent configuration
-- `EUCONSENT` - EU consent configuration
 
 ## CI/CD
 
-The project uses GitHub Actions for continuous integration. Workflows are defined in [`.github/workflows/playwright.yml`](.github/workflows/playwright.yml).
+The project uses GitHub Actions for continuous integration. Workflows are defined in [`.github/workflows/docker-playwright.yml`](.github/workflows/docker-playwright.yml).
 
 ### Workflow Steps:
 
@@ -187,7 +177,7 @@ Linting rules are defined in [`eslint.config.js`](eslint.config.js).
 
 The project includes three main test suites:
 
-1. **Portfolio** - Portfolio functionality tests
+1. **Consent** - Consent functionality tests
 2. **Login** - Authentication and login tests
 3. **Signup** - User registration tests
 

@@ -25,7 +25,7 @@ const runSignupTests = (lang: Language) => {
     `Signup Page - ${lang.toUpperCase()}`,
     { tag: "@signup" },
     () => {
-      test.describe("Form Validation", () => {
+      test.describe(`Form Validation - ${lang.toUpperCase()}`, () => {
         test("should not submit form and show inline errors when mandatory fields are empty", async ({
           signupPage,
         }) => {
@@ -287,7 +287,7 @@ const runSignupTests = (lang: Language) => {
         });
       });
 
-      test.describe("Links and Navigation", () => {
+      test.describe(`Links and Navigation - ${lang.toUpperCase()}`, () => {
         test("should switch language when clicking the language toggle", async ({
           signupPage,
         }) => {
@@ -441,7 +441,7 @@ const runSignupTests = (lang: Language) => {
         });
       });
 
-      test.describe("Account Creation", () => {
+      test.describe(`Account Creation - ${lang.toUpperCase()}`, () => {
         // phone number is not from region of purchase
         test("should create account when valid inputs are provided and phone number is not from region of purchase", async ({
           signupPage,
@@ -502,39 +502,39 @@ const runSignupTests = (lang: Language) => {
         });
 
         // phone number is from region of purchase ( default: QC )
-        // test("should create account when valid inputs are provided", async ({ signupPage }) => {
-        //   const randomUserFirstName = faker.person.firstName();
-        //   const randomUserLastName = faker.person.lastName();
-        //   const randomEmail = faker.internet.email({
-        //     firstName: randomUserFirstName,
-        //     lastName: `${randomUserLastName}${Date.now().toFixed()}`,
-        //   });
-        //   const phoneNumber = "+15141234564";
-        //   const pwd = "PPassword1234";
-        //   const { loggedInUrl, accountResponse } =  signupPage.checkAccountRequest(selectedLanguage);
+        test("should create account when valid inputs are provided", async ({ signupPage }) => {
+          const randomUserFirstName = faker.person.firstName();
+          const randomUserLastName = faker.person.lastName();
+          const randomEmail = faker.internet.email({
+            firstName: randomUserFirstName,
+            lastName: `${randomUserLastName}${Date.now().toFixed()}`,
+          });
+          const phoneNumber = "+15141234564";
+          const pwd = "PPassword1234";
+          const { loggedInUrl, accountResponse } =  signupPage.checkAccountRequest(selectedLanguage);
 
-        //   await signupPage.fillSignupForm({
-        //     firstName: randomUserFirstName,
-        //     lastName: randomUserLastName,
-        //     phoneNumber: phoneNumber,
-        //     email: randomEmail,
-        //     password: pwd,
-        //   });
-        //   await signupPage.submitSignupForm();
-        //   const accountResponseBody = await (await accountResponse).json();
+          await signupPage.fillSignupForm({
+            firstName: randomUserFirstName,
+            lastName: randomUserLastName,
+            phoneNumber: phoneNumber,
+            email: randomEmail,
+            password: pwd,
+          });
+          await signupPage.submitSignupForm();
+          const accountResponseBody = await (await accountResponse).json();
 
-        //   expect(accountResponseBody.account.firstName, 'First name to match the input provided in the signup form').toEqual(
-        //     randomUserFirstName,
-        //   );
-        //   expect(accountResponseBody.account.lastName, 'Last name to match the input provided in the signup form').toEqual(randomUserLastName);
-        //   expect(accountResponseBody.account.email, 'Email to match the input provided in the signup form').toEqual(randomEmail);
-        //   expect(accountResponseBody.account.phone, 'Phone number to match the input provided in the signup form').toEqual(phoneNumber);
-        //   expect(accountResponseBody.account.region, 'Region to match the input provided in the signup form').toEqual('QC');
+          expect(accountResponseBody.account.firstName, 'First name to match the input provided in the signup form').toEqual(
+            randomUserFirstName,
+          );
+          expect(accountResponseBody.account.lastName, 'Last name to match the input provided in the signup form').toEqual(randomUserLastName);
+          expect(accountResponseBody.account.email, 'Email to match the input provided in the signup form').toEqual(randomEmail);
+          expect(accountResponseBody.account.phone, 'Phone number to match the input provided in the signup form').toEqual(phoneNumber);
+          expect(accountResponseBody.account.region, 'Region to match the input provided in the signup form').toEqual('QC');
 
-        //   await signupPage.waitForLoginPageRedirect();
-        //   await expect(signupPage.page, 'Url to match the expected url redirect after successful signup').toHaveURL(loggedInUrl);
-        //   await expect(signupPage.page.getByTestId("new-mortgage"), 'New mortgage section to be visible after signup').toBeVisible();
-        // });
+          await signupPage.waitForLoginPageRedirect();
+          await expect(signupPage.page, 'Url to match the expected url redirect after successful signup').toHaveURL(loggedInUrl);
+          await expect(signupPage.page.getByTestId("new-mortgage"), 'New mortgage section to be visible after signup').toBeVisible();
+        });
 
         // SU-001: Signup allows non-Canadian phone numbers
         test.skip("should not allow account creation for non-Canadian phone numbers", async ({
