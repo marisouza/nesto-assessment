@@ -182,7 +182,143 @@ The project includes three main test suites:
 3. **Signup** - User registration tests
 
 Each suite runs independently and can be executed in parallel.
+The project includes three main test suites with comprehensive coverage:
+
+### 1. Login Tests (@login tag)
+
+**Location**: [tests/login.spec.ts](tests/login.spec.ts)
+
+**Coverage**:
+
+- Invalid username/password validation
+- Email format validation
+- Empty field validation
+- Password reset functionality
+- Signup link navigation
+- Account lockout after multiple failed attempts
+
+**Multi-language support**: English & French
+
+### 2. Signup Tests (@signup tag)
+
+**Location**: [tests/signup.spec.ts](tests/signup.spec.ts)
+
+**Coverage**:
+
+- Form validation (email, password, phone, postal code)
+- Password strength requirements
+- Phone number country validation
+- Account creation flow
+- Terms of service and privacy policy links
+- Login link navigation
+
+**Multi-language support**: English & French
+
+### 3. Consent Tests (@consent tag)
+
+**Location**: [tests/consent.spec.ts](tests/consent.spec.ts)
+
+**Coverage**:
+
+- Cookie consent banner functionality
+- First visit behavior
+- Returning user preferences
+- Consent acceptance flow
+
+**Multi-language support**: English & French
+
+### Test Execution
+
+Each suite:
+
+- Runs independently and can be executed in parallel
+- Includes both positive and negative test scenarios
+- Uses Page Object Model for maintainability
+- Provides detailed assertions with custom error messages
+- Supports multi-language testing
+
+## Technologies & Tools
+
+### Core Technologies
+
+- **[Playwright](https://playwright.dev/)**: Modern end-to-end testing framework
+- **[TypeScript](https://www.typescriptlang.org/)**: Type-safe JavaScript
+- **[Node.js](https://nodejs.org/)**: JavaScript runtime
+
+### Testing Tools
+
+- **[@playwright/test](https://playwright.dev/docs/test-components)**: Playwright test runner
+- **[@faker-js/faker](https://fakerjs.dev/)**: Generate fake data for testing
+- **Allure**: Advanced test reporting
+
+### Development Tools
+
+- **[dotenv](https://github.com/motdotla/dotenv)**: Environment variable management
+- **TypeScript ESLint**: TypeScript-specific linting rules
+
+### Quality Tools
+
+The project uses several tools to maintain code quality:
+
+- **ESLint**: Enforces coding standards
+- **Prettier**: Maintains consistent formatting
+- **Husky**: Manages git hooks
+- **lint-staged**: Runs checks on staged files
+
+## Future Enhancements
+
+- Add API testing capabilities
+- Implement visual regression testing
+- Add performance testing
+- Expand test coverage for edge cases
+- Improve consent for CI
+
+### Commit Convention
+
+Follow conventional commits format:
+
+- `feat:` - New feature
+- `fix:` - Bug fix
+- `docs:` - Documentation changes
+- `test:` - Test-related changes
+- `refactor:` - Code refactoring
+- `chore:` - Maintenance tasks
 
 ## Docker Support
 
-A [`Dockerfile`](Dockerfile) is available for containerized test execution.
+Pre-requisit have [docker](https://www.docker.com/) installed and running locally
+
+Build docker image based on Dockerfile
+
+```bash
+   docker build -t pw-test .
+```
+
+List docker images:
+
+```bash
+   docker images
+```
+
+Run docker image:
+
+```bash
+   docker run -it pw-test
+   npm run test:consent
+```
+
+### Docker-compose
+
+Another option to use docker-compose which will save reports into local test results folders.
+
+To build a new docker image and run docker-compose:
+
+```bash
+   docker-compose up --build
+```
+
+To run docker-compose out of existing built image:
+
+```bash
+   docker-compose up
+```
