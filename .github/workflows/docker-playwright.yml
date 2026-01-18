@@ -61,12 +61,12 @@ jobs:
           path: blob-report
           retention-days: 1
 
-      - name: Upload Allure report to GitHub Actions Artifacts
+      - name: Upload Allure results to GitHub Actions Artifacts
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
-          name: allure-report-${{ matrix.shardIndex }}
-          path: allure-report
+          name: allure-results-${{ matrix.shardIndex }}
+          path: allure-results
           retention-days: 1
 
   merge-blob-reports:
@@ -124,15 +124,19 @@ jobs:
           path: all-allure-results
           pattern: allure-results-*
           merge-multiple: true
+
+      - name: Install Allure CLI
+        run: npm install -g allure-commandline --save-dev
     
-      - name: Run Allure Action
-        uses: allure-framework/allure-report@v0
+      - name: Generate Allure Report
+        run: allure generate all-allure-results -o allure-report --clean
+
+      - name: Upload Allure Report
+        uses: actions/upload-artifact@v4
         with:
-            # Path to the generated report directory
-            # By default, it's set to `./allure-report`
-            report-directory: "./all-allure-results"
-            # GitHub Token that's used for posting the comments in Pull Requests
-            github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: allure-report
+          path: allure-report
+          retention-days: 7
       
     #   - name: Load test report history
     #     uses: actions/checkout@v3
