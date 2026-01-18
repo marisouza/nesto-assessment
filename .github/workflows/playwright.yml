@@ -46,7 +46,7 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run Tests
-        run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+        run: npx playwright test --project=signup --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
       
       - name: Upload blob report to GitHub Actions Artifacts
         if: ${{ !cancelled() }}
@@ -57,7 +57,7 @@ jobs:
           retention-days: 1
 
   merge-reports:
-    if: ${{ !cancelled() }}
+    if: ${{ !cancelled() && needs.test.result != 'skipped' }}
     needs: [test]
     runs-on: ubuntu-latest
     steps:

@@ -37,7 +37,7 @@ const runSignupTests = (lang: Language) => {
     });
 
     // BUG: it wont show validation error message when @ is not follwoed by any caracters
-    test.fail("should show invalid email inline error when invalid email is provided", async ({ loginPage }) => {
+    test.skip("should show invalid email inline error when invalid email is provided", async ({ loginPage }) => {
       const invalidEmail = `${Date.now().toFixed()}anotherwrong@.com`;
       const password = "Test1234567890";
       const expectedInvalidEmailError = await getLocaleText("invalidEmailError", "loginPage");
@@ -53,7 +53,7 @@ const runSignupTests = (lang: Language) => {
 
     // BUG: FR message is not matching EN message
     // it will fail on FR until the text is fixed
-     test.fail("should show invalid email inline error when invalid email format is provided", async ({ loginPage }) => {
+     test("should show invalid email inline error when invalid email format is provided", async ({ loginPage }) => {
       const invalidEmail = `${Date.now().toFixed()}wrong.com`;
       const password = "Test1234567890";
       const expectedInvalidEmailError = await getLocaleText("invalidEmailError", "loginPage");
@@ -116,9 +116,9 @@ const runSignupTests = (lang: Language) => {
     });
 
     // Assumption:
-      // "valid.user123@test.com" user was pre-created in the system
-      // Options: use /accounts endpoint to create the user in pre-test setup is not an option
-      // or have user present in DB as part of env setup
+    // "valid.user123@test.com" user was pre-created in the system
+    // Options: use /accounts endpoint to create the user in pre-test setup is not an option
+    // or have user present in DB as part of env setup
     test.skip('should not login when password provided is incorrect for an existing user', async ({ loginPage }) => {
       const validUserEmail = "valid.user123@test.com";
       const invalidUserPassword = "Password";

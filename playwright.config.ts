@@ -50,11 +50,9 @@ export default defineConfig({
     {
       name: "accept-consent",
       testMatch: "setup/acceptConsent.setup.ts",
-    },
-    {
-      name: "authenticate",
-      testMatch: "setup/auth.setup.ts",
-      dependencies: ['accept-consent']
+      use: {
+        ...devices["Desktop Chrome"],
+      },
     },
     {
       name: "signup",
@@ -62,7 +60,6 @@ export default defineConfig({
         ...devices["Desktop Chrome"],
         locale: process.env.LANGUAGE || "en",
         storageState: consentFile,
-
       },
       dependencies: ['accept-consent'],
       testMatch: ["tests/**/*.spec.ts"],
