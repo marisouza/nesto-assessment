@@ -56,11 +56,9 @@ export default defineConfig({
           args: [
             '--disable-blink-features=AutomationControlled',
             '--disable-features=IsolateOrigins,site-per-process',
-            '--disable-site-isolation-trials',
             '--disable-web-security',
-            '--disable-features=ImprovedCookieControls',
-            '--disable-infobars',
-            '--window-size=1280,720',
+            '--disable-site-isolation-trials',
+            '--disable-popup-blocking',
           ],
         },
       },
