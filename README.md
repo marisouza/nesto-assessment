@@ -111,24 +111,6 @@ npm run test:login        # Login tests (@login tag)
 npm run test:signup       # Signup tests (@signup tag)
 ```
 
-### Additional Test Commands
-
-```bash
-# Run all tests (headless)
-npx playwright test
-
-# Run tests with specific browser
-npx playwright test --project=chromium
-npx playwright test --project=firefox
-npx playwright test --project=webkit
-
-# Run a specific test file
-npx playwright test tests/login.spec.ts
-
-# Debug mode
-npx playwright test --debug
-```
-
 ## Test Reports
 
 ### HTML Report
@@ -207,7 +189,6 @@ Test configuration is managed in [playwright.config.ts](playwright.config.ts):
 - **Test directory**: `./tests`
 - **Timeout**: 30 seconds per test
 - **Retries**: 1 (CI), 0 (local)
-- **Workers**: 4 (parallel execution)
 - **Base URL**: Configured for test environment
 - **Screenshots**: On failure
 - **Trace**: On first retry
@@ -245,7 +226,6 @@ Tests run on:
 
 - **Push** to `main` branch
 - **Pull requests** to `main` branch
-- **Manual trigger** via workflow dispatch
 
 ### Test Workflow Steps
 
@@ -318,7 +298,6 @@ Linting rules are defined in [eslint.config.js](eslint.config.js):
 Code formatting settings in [.prettierrc](.prettierrc):
 
 - Consistent code style across the project
-- Automatic formatting on save (if configured in your editor)
 
 ### Adding New Tests
 
@@ -343,6 +322,7 @@ Code formatting settings in [.prettierrc](.prettierrc):
 | --------------- | ------------------------------------------------------ |
 | `test:ui`       | Run tests in Playwright UI mode                        |
 | `test:headed`   | Run tests in headed mode (browser visible)             |
+| `"test:docker`  | Run tests in headless mode for docker                  |
 | `test:signup`   | Run signup tests with @signup tag                      |
 | `test:login`    | Run login tests with @login tag                        |
 | `test:consent`  | Run consent tests with @consent tag                    |
