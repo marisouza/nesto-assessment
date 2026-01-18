@@ -1,6 +1,5 @@
 import { type Locator, type Page } from "@playwright/test";
-import * as fs from "fs";
-import * as path from "path";
+import { getLocaleData } from "../helpers/helper.js";
 
 export class LoginPage {
   readonly page: Page;
@@ -9,38 +8,48 @@ export class LoginPage {
   readonly loginButton: Locator;
   readonly forgotPasswordLink: Locator;
   readonly signupLink: Locator;
-  readonly emailError: Locator;
+  readonly blankEmailError: Locator;
+  readonly invalidEmailError: Locator;
   readonly passwordError: Locator;
   readonly userPasswordError: Locator;
+  readonly resetPasswordMessage: Locator;
+  readonly blockAccountMessage: Locator;
   private language: "en" | "fr";
 
   constructor(page: Page, language: "en" | "fr" = "en") {
     this.page = page;
     this.language = language;
-    const localeData = this.getLocaleData();
+    const localeData = getLocaleData().loginPage;
     this.emailInput = page.getByRole("textbox", { name: "email" });
     this.passwordInput = page.getByRole("textbox", { name: "password" });
-    this.loginButton = page.getByLabel(localeData.logIn);
+    this.loginButton = page.getByLabel(localeData.logInButton);
     this.forgotPasswordLink = page.getByText(localeData.forgotPasswordLink, {
       exact: true,
     });
     this.signupLink = page.getByText(localeData.signupLink, { exact: true });
-    this.emailError = page.getByText(localeData.loginBlankEmailError, {
+    this.blankEmailError = page.getByText(localeData.loginBlankEmailError, {
+      exact: true,
+    });
+    this.invalidEmailError = page.getByText(localeData.invalidEmailError, {
       exact: true,
     });
     this.passwordError = page.getByText(localeData.loginBlankPasswordError, {
       exact: true,
     });
     this.userPasswordError = page.getByText(localeData.userPasswordError);
+    this.resetPasswordMessage = page.getByText(localeData.resetPasswordEmailSentMesage);
+    this.blockAccountMessage = page.getByText(localeData.accountBlockedMessage);
   }
 
-  async goto() {
-    await this.page.goto("https://app.qa.nesto.ca/");
+  async goTo() {
+    await this.page.goto('/');
   }
 
-  async loginInputs(email: string, password: string) {
+  async fillLoginInputs(email: string, password?: string) {
     await this.emailInput.fill(email);
-    await this.passwordInput.fill(password);
+    if (password !== undefined) {
+      await this.passwordInput.fill(password);
+    }
   }
 
   async submitLogin() {
@@ -52,28 +61,15 @@ export class LoginPage {
   }
 
   async getEmailError() {
-    return await this.emailError.textContent();
+    return await this.blankEmailError.textContent();
   }
 
   async getPasswordError() {
     return await this.passwordError.textContent();
   }
 
-  // TODO: refactor duplicate of ConsentPage
-  private getLocaleData() {
-    const localeMap = {
-      en: "en-EN.json",
-      fr: "fr-FR.json",
-    };
-    const localeFile = localeMap[this.language];
-    const localePath = path.join(
-      path.dirname(new URL(import.meta.url).pathname),
-      "..",
-      "resources",
-      "locales",
-      localeFile,
-    );
-    const data = fs.readFileSync(localePath, "utf-8");
-    return JSON.parse(data);
+  async waitsLoginRequestFails(statusCode: number = 401) {
+    await this.page.waitForResponse(resp =>
+        resp.url().includes(`${process.env.LOGIN_URL}/usernamepassword/login`) && resp.request().method() === 'POST' && resp.status() === statusCode);
   }
 }

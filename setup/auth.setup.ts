@@ -5,17 +5,11 @@ import * as fs from "fs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const authFile = path.join(__dirname, "../../playwright/.auth/user.json");
+const authFile = path.join(__dirname, "../playwright/.auth/user.json");
 
 setup("authenticate", async ({ page }) => {
-  // Navigate to the signup page and perform login
-  const agreeButton = await page.locator("#didomi-notice-agree-button");
-  await page.goto("https://app.qa.nesto.ca/signup");
-  await page.getByTestId("header-login-button").click();
-
-  if (await agreeButton.isVisible()) {
-    await agreeButton.click();
-  }
+  await page.goto(`${process.env.LOGIN_URL!}/login`);
+  await page.reload();
 
   await page
     .getByRole("textbox", { name: "email" })
@@ -28,11 +22,11 @@ setup("authenticate", async ({ page }) => {
   // Wait until the page receives the cookies.
   await page.waitForResponse(
     (resp) =>
-      resp.url().includes("https://auth.nesto.ca/oauth/token") &&
+      resp.url().includes("/oauth/token") &&
       resp.request().method() === "POST" &&
       resp.status() === 200,
   );
-  await expect(page).toHaveURL("https://app.qa.nesto.ca/");
+  await expect(page).toHaveURL("/");
   await expect(page.getByTestId("new-mortgage")).toBeVisible();
 
   const authDir = path.dirname(authFile);

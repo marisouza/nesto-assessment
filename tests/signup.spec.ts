@@ -1,15 +1,15 @@
 import { test as baseTest, expect } from "../fixtures";
 import { SignupPage } from "../pages/signupPage";
 import { faker } from "@faker-js/faker";
-import * as helper from "./helper/helper";
+import * as helper from "../helpers/helper";
 
 const test = baseTest.extend<{ signupPage: SignupPage }>({
   signupPage: async ({ page }, use) => {
     const language = selectedLanguage;
     const signupPage = new SignupPage(page, language);
-    await helper.applyConsent(page);
-    await signupPage.navigateToSignupPage();
-    await expect(signupPage.page).toHaveURL(await signupPage.getSignupUrl());
+    await signupPage.goTo();
+    await expect(signupPage.page,
+      'Signup url validation should have correct URL').toHaveURL(helper.getSignupUrl(language));
     await use(signupPage);
   },
 });
@@ -19,55 +19,45 @@ const selectedLanguage =
   (process.env.LANGUAGE?.toLowerCase() as Language) || "en";
 
 const runSignupTests = (lang: Language) => {
-  test.describe(`Signup Page - ${lang.toUpperCase()}`, () => {
+  test.describe(`Signup Page - ${lang.toUpperCase()}`, { tag: '@signup' }, () => {
     test.describe("Form Validation", () => {
       test("should not submit form and show inline errors when mandatory fields are empty", async ({
         signupPage,
       }) => {
-        // Monitor network requests to ensure no account creation is attempted
-        let accountRequestTriggered = false;
-        signupPage.page.on("request", (req) => {
-          console.log("inside request listener", req.url());
-          if (req.url().includes("/api/accounts") && req.method() === "POST") {
-            accountRequestTriggered = true;
-          }
-        });
+        const accountRequestTriggered = await signupPage.isAccountCreationRequestSent();
+        const expectedUrl = helper.getSignupUrl(lang);
+
         await signupPage.submitSignupForm();
-        await signupPage.confirmPasswordInput.waitFor({ state: "visible" });
-        const errors = await signupPage.getErrorMessages();
+        const inlineErrors = await signupPage.getErrorMessages();
 
         // 5 inline errors for 5 mandatory fields
-        expect(errors.length).toBe(5);
-        expect(errors).toEqual([
-          await helper.getLocaleText("mandatoryField"),
-          await helper.getLocaleText("mandatoryField"),
-          await helper.getLocaleText("invalidPhoneNumber"),
-          await helper.getLocaleText("invalidEmail"),
-          await helper.getLocaleText("passwordsMinimumRequirement"),
+        expect(inlineErrors.length, 'There should be 5 inline error messages for mandatory fields when form is submitted empty').toBe(5);
+        expect(inlineErrors, 'Inline error messages should match expected texts').toEqual([
+          helper.getLocaleText("mandatoryFieldError"),
+          helper.getLocaleText("mandatoryFieldError"),
+          helper.getLocaleText("invalidPhoneNumberError"),
+          helper.getLocaleText("invalidEmailError"),
+          helper.getLocaleText("passwordMinRequirementError"),
         ]);
 
-        const expectedUrl = await signupPage.getSignupUrl();
-        await expect(signupPage.page).toHaveURL(expectedUrl);
-        expect(accountRequestTriggered).toBe(false);
+        await expect(signupPage.page, 'Signup page URL should be correct').toHaveURL(expectedUrl);
+        expect(accountRequestTriggered, 'No account creation request should be triggered').toBe(false);
       });
 
       // SU-003: Validate phone number based on country code selected
-      test.skip("should show line error when phone number and country selection are different", async ({
+      test.fail("should show inline error when phone number and country selection are different", async ({
         signupPage,
       }) => {
-        // country code should be BR (55)
-        const invalidPhone = "558132456789";
+        const invalidPhone = "558132456789"; // country code should be BR (55)
+        const expectedErrorText = helper.getLocaleText("invalidPhoneNumberError");
+        const phoneNumberLocator = signupPage.page.getByText(expectedErrorText);
+        
         await signupPage.fillInputField(signupPage.phoneInput, invalidPhone);
         await signupPage.submitSignupForm();
 
-        expect(signupPage.phoneInput).toHaveValue(invalidPhone);
-        const locator = signupPage.page.getByText(
-          await helper.getLocaleText("invalidPhoneNumber"),
-        );
-        await expect(locator).toBeVisible();
-        await expect(locator).toHaveText(
-          await helper.getLocaleText("invalidPhoneNumber"),
-        );
+        await expect(signupPage.phoneInput, 'Phone input should retain the invalid phone number value').toHaveValue(invalidPhone);
+        await expect(phoneNumberLocator, 'Invalid phone number error message should be visible').toBeVisible();
+        await expect(phoneNumberLocator, 'Invalid phone number error message should have correct text').toHaveText(expectedErrorText);
       });
 
       test("should show invalid phone number inline error ", async ({
@@ -76,34 +66,34 @@ const runSignupTests = (lang: Language) => {
         const invalidPhone = faker.phone
           .number({ style: "national" })
           .slice(0, 7);
+        const invalidPhoneErrorMessage = helper.getLocaleText("invalidPhoneNumberError");
+        const phoneNumberErrorLocator = signupPage.page.getByText(invalidPhoneErrorMessage);
+
         await signupPage.fillInputField(signupPage.phoneInput, invalidPhone);
         await signupPage.submitSignupForm();
         await signupPage.phoneInput.waitFor({ state: "visible" });
 
-        expect(signupPage.phoneInput).toHaveValue(invalidPhone);
-        const locator = signupPage.page.getByText(
-          await helper.getLocaleText("invalidPhoneNumber"),
-        );
-        await expect(locator).toBeVisible();
-        await expect(locator).toHaveText(
-          await helper.getLocaleText("invalidPhoneNumber"),
-        );
+        await expect(signupPage.phoneInput, 'Phone input should retain have phone number value').toHaveValue(invalidPhone);
+        await expect(phoneNumberErrorLocator, 'Invalid phone number error message should be visible').toBeVisible();
+        await expect(phoneNumberErrorLocator, 'Invalid phone number error message should have correct text').toHaveText(invalidPhoneErrorMessage);
       });
 
       test("should show invalid email address inline error", async ({
         signupPage,
       }) => {
         const invalidEmail = "invalid-email@test";
+        const expectedErrorText = helper.getLocaleText("invalidEmailError");
+
         await signupPage.fillInputField(signupPage.emailInput, invalidEmail);
         await signupPage.submitSignupForm();
         await signupPage.emailInput.waitFor({ state: "visible" });
+        await expect(signupPage.emailInput, 'Email input should retain the invalid email value').toHaveValue(invalidEmail);
 
-        expect(signupPage.emailInput).toHaveValue(invalidEmail);
-        const error = await signupPage.getErrorMessageByTestId(
+        const emailErrorMessage = await signupPage.getErrorMessageByTestId(
           "email-error-message-typography",
         );
-        const expectedText = await helper.getLocaleText("invalidEmail");
-        expect(error).toContain(expectedText);
+        
+        expect(emailErrorMessage, 'Invalid email error message should contain the expected text').toContain(expectedErrorText);
       });
 
       test("should show password mismatch inline error", async ({
@@ -118,51 +108,51 @@ const runSignupTests = (lang: Language) => {
           "Different123",
         );
         await signupPage.submitSignupForm();
-        await signupPage.confirmPasswordInput.waitFor({ state: "visible" });
 
-        const error = await signupPage.getErrorMessageByTestId(
+        const mismatchErrorMessage = await signupPage.getErrorMessageByTestId(
           "passwordConfirmation-error-message-typography",
         );
-        const expectedText =
-          await helper.getLocaleText("passwordsMismatch");
-        expect(error).toEqual(expectedText);
+        const expectedErrorText =
+          helper.getLocaleText("passwordsMismatchError");
+        expect(mismatchErrorMessage, 'Password mismatch error message should contain the expected text').toEqual(expectedErrorText);
       });
 
       test("should show password below minimum length inline error", async ({
         signupPage,
       }) => {
+         const expectedErrorText = helper.getLocaleText(
+          "passwordMinRequirementError",
+        );
+
         await signupPage.fillInputField(signupPage.passwordInput, "Pass1");
         await signupPage.submitSignupForm();
-        await signupPage.passwordInput.waitFor({ state: "visible" });
 
-        const error = await signupPage.getErrorMessageByTestId(
+        const minLengthErrorMessage = await signupPage.getErrorMessageByTestId(
           "password-error-message-typography",
         );
-        const expectedText = await helper.getLocaleText(
-          "passwordsMinimumRequirement",
-        );
-        expect(error).toEqual(expectedText);
+        expect(minLengthErrorMessage, 'Password below minimum length error message should contain the expected text').toEqual(expectedErrorText);
       });
 
       test("should show password above maximum length inline error", async ({
         signupPage,
       }) => {
-        const tooLongPassword = "A".repeat(31) + "1a";
+        const invalidPassword = "A".repeat(31) + "1a";
+         const expectedErrorText = helper.getLocaleText(
+          "passwordMaxRequirementError",
+        );
+
         await signupPage.fillInputField(
           signupPage.passwordInput,
-          tooLongPassword,
+          invalidPassword,
         );
         await signupPage.submitSignupForm();
-        await signupPage.passwordInput.waitFor({ state: "visible" });
 
-        const expectedText = await helper.getLocaleText(
-          "passwordMaximumRequirement",
-        );
+       
         expect(
           await signupPage.getErrorMessageByTestId(
             "password-error-message-typography",
-          ),
-        ).toEqual(expectedText);
+          ), 'Password above maximum length error message should show expected error text'
+        ).toEqual(expectedErrorText);
       });
 
       test("should not show password minimum chars length inline error", async ({
@@ -173,11 +163,11 @@ const runSignupTests = (lang: Language) => {
           "Password1234",
         );
         await signupPage.submitSignupForm();
-        await signupPage.passwordInput.waitFor({ state: "visible" });
         await expect(
           await signupPage.getLocatorByTestId(
             "password-error-message-typography",
           ),
+          'Password minimum length error message should be hidden when password has minimum length required',
         ).toBeHidden();
       });
 
@@ -185,13 +175,14 @@ const runSignupTests = (lang: Language) => {
         signupPage,
       }) => {
         const longPassword = "A".repeat(30) + "1a";
+
         await signupPage.fillInputField(signupPage.passwordInput, longPassword);
         await signupPage.submitSignupForm();
-        await signupPage.passwordInput.waitFor({ state: "visible" });
         await expect(
           await signupPage.getLocatorByTestId(
             "password-error-message-typography",
           ),
+          'Password maximum length error message should be hidden when password has maximum length permitted',
         ).toBeHidden();
       });
 
@@ -199,17 +190,18 @@ const runSignupTests = (lang: Language) => {
       test("should show password does not match requirements inline error", async ({
         signupPage,
       }) => {
+        const expectedErrorText = helper.getLocaleText(
+          "passwordRequirementsError",
+        );
+
         await signupPage.fillInputField(
           signupPage.passwordInput,
           "password1234",
         );
         await signupPage.submitSignupForm();
 
-        const expectedText = await helper.getLocaleText(
-          "passwordRequirements",
-        );
-        const error = await signupPage.getErrorMessageByText(expectedText);
-        expect(error).toEqual(expectedText);
+        const requirementError = await signupPage.page.getByText(expectedErrorText).textContent();
+        expect(requirementError, 'Password requirements error message should contain the expected text').toEqual(expectedErrorText);
       });
 
       test("should not show error when password contains special chars(?!#_- ) but meets all requirements", async ({
@@ -220,10 +212,12 @@ const runSignupTests = (lang: Language) => {
           "Password123?!#_",
         );
         await signupPage.submitSignupForm();
+
         await expect(
           await signupPage.getLocatorByTestId(
             "password-error-message-typography",
           ),
+          'Password with special characters should not display error message when password meets all requirements',
         ).toBeHidden();
       });
     });
@@ -232,14 +226,7 @@ const runSignupTests = (lang: Language) => {
       test("should switch language when clicking the language toggle", async ({
         signupPage,
       }) => {
-        const targetLanguage = lang === "en" ? "fr" : "en";
-        const expectedUrlPart =
-          targetLanguage === "fr" ? "/fr/signup" : "/signup";
-        const headerText =
-          targetLanguage === "fr"
-            ? "Créez un compte nesto"
-            : "Create a nesto account";
-
+        const { targetLanguage, expectedUrlPath, headerText } = helper.switchSignupLanguage(lang);
         await signupPage.languageSelector.click();
         await signupPage.page.waitForResponse(
           (resp) =>
@@ -247,52 +234,57 @@ const runSignupTests = (lang: Language) => {
             resp.request().method() === "GET" &&
             resp.status() === 200,
         );
-        await expect(signupPage.page).toHaveURL(new RegExp(expectedUrlPart));
+        await expect(signupPage.page, `Signup page URL should have been updated to ${expectedUrlPath} after language switch`).toHaveURL(new RegExp(expectedUrlPath));
         expect(
-          signupPage.page.getByText(headerText, { exact: true }),
-        ).toBeTruthy();
+          signupPage.page.getByText(headerText),
+          `Signup page header should have been updated to target language ${targetLanguage.toUpperCase()} after language switch`,
+        ).toHaveText(headerText);
       });
 
       test("should redirect to login page when clicking the login link", async ({
         signupPage,
       }) => {
-        await signupPage.clickLoginHref();
-        expect(signupPage.page.url()).toContain("/login");
+        const expectedText = helper.getLocaleText("logInButton");
 
-        const expectedText = await helper.getLocaleText("logIn");
-        await signupPage.page.waitForSelector("button", { state: "visible" });
+        await signupPage.clickLoginHref();
+        await expect(signupPage.page, 'Signup page URL should have been updated to /login after clicking the login link').toHaveURL(/\/login/);
         await expect(
           signupPage.page.getByRole("button", { name: expectedText }),
+          'Login button should be visible on login page after redirection',
         ).toBeVisible();
       });
 
       test("should have correct link for terms of service", async ({
         signupPage,
       }) => {
-        await expect(signupPage.signUpButton).toBeVisible();
-        const href = await signupPage.getTermsOfServiceHref();
-        const expectedText =
-          await helper.getLocaleText("termsOfServiceLink");
-        expect(href).toContain(expectedText);
+        const termsLocator = signupPage.page.getByText(helper.getLocaleText("termsOfService"));
+        const expectedUrl = helper.getLocaleText("termsOfServiceLink");
+
+        await expect(termsLocator, 'Terms of Service link should have correct link value').toHaveAttribute("href", new RegExp(expectedUrl));
+        await expect(termsLocator, 'Terms of Service link should have the correct text').toHaveText(helper.getLocaleText("termsOfService"));
       });
 
       //SU-006: Test is skipped until the privacy policy link is for EN users is fixed
-      test.skip("should have correct link for privacy policy", async ({
+      test.fail("should have correct link for privacy policy", async ({
         signupPage,
       }) => {
-        const href = await signupPage.getPrivacyPolicyHref();
-        const expectedText =
-          await helper.getLocaleText("privacyPolicyLink");
-        expect(href).toContain(expectedText);
+        const privacyLocator = signupPage.page.getByText(helper.getLocaleText("privacyPolicy"));
+        const expectedUrl = helper.getLocaleText("privacyPolicyLink");
+
+        await expect(privacyLocator, 'Privacy Policy link shoulg have correct link value').toHaveAttribute("href", new RegExp(expectedUrl));
+        await expect(privacyLocator, 'Privacy Policy link should have the correct text').toHaveText(helper.getLocaleText("privacyPolicy"));
       });
 
       // Assumption:
-      // "valid.user123@test.com" user was pre-created in the system before
-      // use /accounts endpoint to create the user in pre-test setup is not an option
+      // "valid.user123@test.com" user was pre-created in the system
+      // Options: use /accounts endpoint to create the user in pre-test setup is not an option
       // or have user present in DB as part of env setup
       test("should display toast error when signup using email from existing user", async ({
         signupPage,
       }) => {
+        const expectedToastText = helper.getLocaleText("toastError");
+        const toastMessageLocator = signupPage.page.getByText(expectedToastText);
+
         await signupPage.fillSignupForm({
           firstName: "John",
           lastName: "Doe",
@@ -301,20 +293,18 @@ const runSignupTests = (lang: Language) => {
           password: "Password1234",
           region: "AB",
         });
+        const accountRequestTriggered = await signupPage.isAccountCreationRequestSent();
         await signupPage.submitSignupForm();
-
-        const expectedText = await helper.getLocaleText("toastError");
-        const locator = signupPage.page.getByText(expectedText, {
-          exact: true,
-        });
-
+      
         await signupPage.page.waitForSelector(".Toastify", {
           state: "attached",
         });
-        await expect(locator).toHaveText(expectedText);
+
+        expect(accountRequestTriggered, 'No account creation request should be triggered when using signup email from existing user').toBe(false);
+        await expect(toastMessageLocator, 'Toast error message should have correct text when using signup email from existing user').toHaveText(expectedToastText);
       });
 
-      test("should not allow signup with malicious strings in email/password", async ({
+      test("should not allow signup with malicious strings", async ({
         signupPage,
       }) => {
         const malicious = "<script>alert('XSS')</script>";
@@ -327,23 +317,16 @@ const runSignupTests = (lang: Language) => {
           region: "AB",
         });
 
-        // Monitor network requests to ensure no account creation is attempted
-        let accountRequestTriggered = false;
-        signupPage.page.on("request", (req) => {
-          console.log("inside request listener", req.url());
-          if (req.url().includes("/api/accounts") && req.method() === "POST") {
-            accountRequestTriggered = true;
-          }
-        });
+        const accountRequestTriggered = await signupPage.isAccountCreationRequestSent();
         await signupPage.submitSignupForm();
 
         const errors = await signupPage.getErrorMessages();
         // 3 inline errors for first name, last name and invalid email
         expect(errors.length).toBe(3);
         expect(errors).toEqual([
-          await helper.getLocaleText("mandatoryField"),
-          await helper.getLocaleText("mandatoryField"),
-          await helper.getLocaleText("invalidEmail"),
+          helper.getLocaleText("mandatoryFieldError"),
+          helper.getLocaleText("mandatoryFieldError"),
+          helper.getLocaleText("invalidEmailError"),
         ]);
 
         // Check that no alert popup is triggered
@@ -362,7 +345,8 @@ const runSignupTests = (lang: Language) => {
     });
 
     test.describe("Account Creation", () => {
-      test("should create account when valid inputs are provided", async ({ signupPage }) => {
+      // phone number is not from region of purchase
+      test("should create account when valid inputs are provided and phone number is not from region of purchase", async ({ signupPage }) => {
         const randomUserFirstName = faker.person.firstName();
         const randomUserLastName = faker.person.lastName();
         const randomEmail = faker.internet.email({
@@ -372,8 +356,8 @@ const runSignupTests = (lang: Language) => {
         const phoneNumber = "+15141234567";
         const pwd = "PPassword1234";
         const region = "AB";
-
-        // Submit the form and wait for the response
+        const { loggedInUrl, accountResponse } =  signupPage.checkAccountRequest(selectedLanguage);
+       
         await signupPage.fillSignupForm({
           firstName: randomUserFirstName,
           lastName: randomUserLastName,
@@ -382,42 +366,59 @@ const runSignupTests = (lang: Language) => {
           password: pwd,
           region: region,
         });
-
         await signupPage.submitSignupForm();
-        const accountResponse = await signupPage.page.waitForResponse(
-          (resp) =>
-            resp.url().includes("/api/accounts") &&
-            resp.request().method() === "POST" &&
-            resp.status() === 201,
-        );
+        const accountResponseBody = await (await accountResponse).json();
 
-        
-        const accountResponseBody = await accountResponse.json();
-        expect(accountResponseBody.account.firstName).toEqual(
+        expect(accountResponseBody.account.firstName, 'First name to match the input provided in the signup form').toEqual(
           randomUserFirstName,
         );
-        expect(accountResponseBody.account.lastName).toEqual(randomUserLastName);
-        expect(accountResponseBody.account.email).toEqual(randomEmail);
-        expect(accountResponseBody.account.phone).toEqual(phoneNumber);
-        expect(accountResponseBody.account.region).toEqual(region);
+        expect(accountResponseBody.account.lastName, 'Last name to match the input provided in the signup form').toEqual(randomUserLastName);
+        expect(accountResponseBody.account.email, 'Email to match the input provided in the signup form').toEqual(randomEmail);
+        expect(accountResponseBody.account.phone, 'Phone number to match the input provided in the signup form').toEqual(phoneNumber);
+        expect(accountResponseBody.account.region, 'Region to match the input provided in the signup form').toEqual(region);
 
-        const url =
-          selectedLanguage === "fr"
-            ? "https://app.qa.nesto.ca/getaquote/fr"
-            : "https://app.qa.nesto.ca/getaquote";
-        // ensure redirection to next step after signup
-        await signupPage.page.waitForResponse(
-          (resp) =>
-            resp.url().includes("https://auth.nesto.ca/oauth/token") &&
-            resp.request().method() === "POST" &&
-            resp.status() === 200,
+        await signupPage.waitForLoginPageRedirect();
+        await expect(signupPage.page, 'Url to match the expected url redirect after successful signup').toHaveURL(loggedInUrl);
+        await expect(signupPage.page.getByTestId("new-mortgage"), 'New mortgage section to be visible after signup').toBeVisible();
+      });
+
+      // phone number is from region of purchase ( default: QC )
+      test("should create account when valid inputs are provided", async ({ signupPage }) => {
+        const randomUserFirstName = faker.person.firstName();
+        const randomUserLastName = faker.person.lastName();
+        const randomEmail = faker.internet.email({
+          firstName: randomUserFirstName,
+          lastName: `${randomUserLastName}${Date.now().toFixed()}`,
+        });
+        const phoneNumber = "+15141234567";
+        const pwd = "PPassword1234";
+        const { loggedInUrl, accountResponse } =  signupPage.checkAccountRequest(selectedLanguage);
+       
+        await signupPage.fillSignupForm({
+          firstName: randomUserFirstName,
+          lastName: randomUserLastName,
+          phoneNumber: phoneNumber,
+          email: randomEmail,
+          password: pwd,
+        });
+        await signupPage.submitSignupForm();
+        const accountResponseBody = await (await accountResponse).json();
+
+        expect(accountResponseBody.account.firstName, 'First name to match the input provided in the signup form').toEqual(
+          randomUserFirstName,
         );
-        await expect(signupPage.page).toHaveURL(url);
-        await expect(signupPage.page.getByTestId("new-mortgage")).toBeVisible();
+        expect(accountResponseBody.account.lastName, 'Last name to match the input provided in the signup form').toEqual(randomUserLastName);
+        expect(accountResponseBody.account.email, 'Email to match the input provided in the signup form').toEqual(randomEmail);
+        expect(accountResponseBody.account.phone, 'Phone number to match the input provided in the signup form').toEqual(phoneNumber);
+        expect(accountResponseBody.account.region, 'Region to match the input provided in the signup form').toEqual('QC');
+
+        await signupPage.waitForLoginPageRedirect();
+        await expect(signupPage.page, 'Url to match the expected url redirect after successful signup').toHaveURL(loggedInUrl);
+        await expect(signupPage.page.getByTestId("new-mortgage"), 'New mortgage section to be visible after signup').toBeVisible();
       });
 
       // SU-001: Signup allows non-Canadian phone numbers
-      test.skip("should not create account for non-Canadian phone numbers", async ({ signupPage }) => {
+      test.skip("should not allow account creation for non-Canadian phone numbers", async ({ signupPage }) => {
         const randomUserFirstName = faker.person.firstName();
         const randomUserLastName = faker.person.lastName();
         const randomEmail = faker.internet.email({
@@ -427,6 +428,7 @@ const runSignupTests = (lang: Language) => {
         const phoneNumber = faker.phone.number({ style: "international" });
         const pwd = "PPassword1234";
         const region = "AB";
+        const { loggedInUrl, accountResponse } =  signupPage.checkAccountRequest(selectedLanguage, 400);
 
         // Submit the form and wait for the response
         await signupPage.fillSignupForm({
@@ -439,36 +441,11 @@ const runSignupTests = (lang: Language) => {
         });
 
         await signupPage.submitSignupForm();
-        const accountResponse = await signupPage.page.waitForResponse(
-          (resp) =>
-            resp.url().includes("/api/accounts") &&
-            resp.request().method() === "POST" &&
-            resp.status() === 401,
-        );
+        const accountResponseBody = await (await accountResponse).json();  
+        expect(accountResponseBody, 'Account request response boby should contain creation account error when non-canadian phone number is used').toEqual('Unsupported phone number region. Only Canadian phone numbers are allowed.');
 
-        const accountResponseBody = await accountResponse.json();
-        expect(accountResponseBody.account.firstName).toEqual(
-          randomUserFirstName,
-        );
-        expect(accountResponseBody.account.lastName).toEqual(randomUserLastName);
-        expect(accountResponseBody.account.email).toEqual(randomEmail);
-        expect(accountResponseBody.account.phone).toEqual(phoneNumber);
-        expect(accountResponseBody.account.region).toEqual(region);
-
-        const url =
-          selectedLanguage === "fr"
-            ? "https://app.qa.nesto.ca/getaquote/fr"
-            : "https://app.qa.nesto.ca/getaquote";
-
-        // ensure redirection to next step after signup
-        await signupPage.page.waitForResponse(
-          (resp) =>
-            resp.url().includes("https://auth.nesto.ca/oauth/token") &&
-            resp.request().method() === "POST" &&
-            resp.status() === 200,
-        );
-        await expect(signupPage.page).toHaveURL(url);
-        await expect(signupPage.page.getByTestId("new-mortgage")).toBeVisible();
+        await expect(signupPage.page, 'Url should not match the expected url redirect after failed signup').not.toHaveURL(loggedInUrl);
+        await expect(signupPage.page.getByTestId("new-mortgage"), 'New mortgage section should not be visible after failed signup').not.toBeVisible();
       });
     });
   });

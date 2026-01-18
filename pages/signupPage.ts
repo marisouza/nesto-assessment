@@ -1,6 +1,5 @@
 import { type Locator, type Page } from "@playwright/test";
-import * as fs from "fs";
-import * as path from "path";
+import { getLocaleData, getSignupUrl } from "../helpers/helper.js";
 
 export class SignupPage {
   readonly page: Page;
@@ -13,8 +12,6 @@ export class SignupPage {
   readonly confirmPasswordInput: Locator;
   readonly signUpButton: Locator;
   readonly loginLink: Locator;
-  readonly termsOfServiceLink: Locator;
-  readonly privacyPolicyLink: Locator;
   readonly errorMessages: Locator;
   readonly languageSelector: Locator;
   readonly regionInput: Locator;
@@ -24,47 +21,41 @@ export class SignupPage {
   constructor(page: Page, language: "en" | "fr" = "en") {
     this.page = page;
     this.language = language;
-    const localeData = this.getLocaleData();
+    const localeData = getLocaleData().signupPage;
     this.consent = page.getByRole("button", {
       name: localeData.consentAccept,
       exact: true,
     });
     this.firstNameInput = page.getByRole("textbox", {
-      name: localeData.firstName,
+      name: localeData.firstNameInput,
       exact: true,
     });
     this.lastNameInput = page.getByRole("textbox", {
-      name: localeData.lastName,
+      name: localeData.lastNameInput,
       exact: true,
     });
     this.emailInput = page.getByRole("textbox", {
-      name: localeData.email,
+      name: localeData.emailInput,
       exact: true,
     });
     this.phoneInput = page.getByRole("textbox", {
-      name: localeData.phoneNumber,
+      name: localeData.phoneNumberInput,
       exact: true,
     });
     this.passwordInput = page.getByRole("textbox", {
-      name: localeData.password,
+      name: localeData.passwordInput,
       exact: true,
     });
     this.confirmPasswordInput = page.getByRole("textbox", {
-      name: localeData.passwordConfirmation,
+      name: localeData.passwordConfirmationInput,
       exact: true,
     });
     this.signUpButton = page.getByRole("button", {
-      name: localeData.signUp,
+      name: localeData.signUpButton,
       exact: true,
     });
     this.loginLink = page.getByRole("link", {
-      name: localeData.logIn,
-      exact: true,
-    });
-    this.termsOfServiceLink = page.getByText(localeData.termsOfService, {
-      exact: true,
-    });
-    this.privacyPolicyLink = page.getByText(localeData.privacyPolicy, {
+      name: localeData.logInButton,
       exact: true,
     });
     this.errorMessages = page.locator(
@@ -77,60 +68,13 @@ export class SignupPage {
     this.languageSelector = page.getByTestId("header-language-switch");
   }
 
-  async getSignupUrl() {
-    const signUpUrl =
-      this.language === "fr"
-        ? "https://app.qa.nesto.ca/fr/signup"
-        : "https://app.qa.nesto.ca/signup";
-    return signUpUrl;
-  }
+async goTo() {
+  const url = getSignupUrl(this.language);
+  const reponse = this.page.waitForResponse(resp =>
+                resp.url().includes('/api/geolocation/all') && resp.request().method() === 'GET' && resp.status() === 200);
 
-  // TODO: make part of helper
-  private getLocaleData() {
-    const localeMap = {
-      en: "en-EN.json",
-      fr: "fr-FR.json",
-    };
-    const localeFile = localeMap[this.language];
-    const localePath = path.join(
-      path.dirname(new URL(import.meta.url).pathname),
-      "..",
-      "resources",
-      "locales",
-      localeFile,
-    );
-    const data = fs.readFileSync(localePath, "utf-8");
-    return JSON.parse(data);
-  }
-
-async navigateToSignupPage() {
-  const url = await this.getSignupUrl();
-  console.log(`Navigating to signup page: ${url}`);
-  
-  try {
-    const reponse = this.page.waitForResponse(
-      (resp) => {
-        const matchesUrl = resp.url().includes("/api/geolocation/all");
-        const matchesMethod = resp.request().method() === "GET";
-        const matchesStatus = resp.status() === 200;
-        
-        if (matchesUrl) {
-          console.log(`Geolocation API response - Status: ${resp.status()}, Method: ${resp.request().method()}`);
-        }
-        
-        return matchesUrl && matchesMethod && matchesStatus;
-      },
-    );
-    await this.page.goto(url);
-    await reponse;
-    console.log('Page loaded successfully');
-  
-    console.log('Geolocation API response received successfully');
-  } catch (error) {
-    console.error('Error navigating to signup page:', error);
-    console.error(`Failed URL: ${url}`);
-    throw error;
-  }
+  await this.page.goto(url);
+  await reponse;
 }
 
   async submitSignupForm() {
@@ -144,6 +88,15 @@ async navigateToSignupPage() {
   async getLocatorByTestId(loc: string) {
     const locator = this.page.getByTestId(loc);
     return locator;
+  }
+
+  async getErrorMessages() {
+    return await this.errorMessages.allTextContents();
+  }
+
+  async getErrorMessageByTestId(testId: string) {
+    const locator = this.page.getByTestId(testId);
+    return await locator.textContent();
   }
 
   async fillSignupForm({
@@ -160,7 +113,7 @@ async navigateToSignupPage() {
     phoneNumber: string;
     email: string;
     password: string;
-    region: string;
+    region?: string;
     confirmPassword?: string;
   }) {
     await this.firstNameInput.fill(firstName);
@@ -183,28 +136,39 @@ async navigateToSignupPage() {
     await this.page.waitForURL("https://auth.nesto.ca/login**");
   }
 
-  async getTermsOfServiceHref() {
-    return await this.termsOfServiceLink.getAttribute("href");
+  // Monitor network requests to ensure no account creation is attempted
+  async isAccountCreationRequestSent() {
+    let accountRequestTriggered = false;
+    this.page.on("request", (req) => {
+      if (req.url().includes("/api/accounts") && req.method() === "POST") {
+        accountRequestTriggered = true;
+      }
+    });
+    return accountRequestTriggered;
   }
 
-  async getPrivacyPolicyHref() {
-    return await this.privacyPolicyLink.getAttribute("href");
-  }
+  checkAccountRequest(selectedLanguage: string, statusCode: number = 201) {
+    const loggedInUrl =
+        selectedLanguage === "fr"
+          ? "/getaquote/fr"
+          : "/getaquote";
 
-  // Returns all error messages as an array of strings
-  async getErrorMessages() {
-    return await this.errorMessages.allTextContents();
-  }
+    const accountResponse = this.page.waitForResponse(
+        (resp) =>
+          resp.url().includes("/api/accounts") &&
+          resp.request().method() === "POST" &&
+          resp.status() === statusCode,
+      );
 
-  // Returns specific error message text by test ID
-  async getErrorMessageByTestId(testId: string) {
-    const locator = this.page.getByTestId(testId);
-    return await locator.textContent();
-  }
+      return { loggedInUrl, accountResponse };
+  };
 
-  // Returns specific error message text by test ID
-  async getErrorMessageByText(text: string) {
-    const locator = this.page.getByText(text);
-    return await locator.textContent();
+  async waitForLoginPageRedirect(){
+    await this.page.waitForResponse(
+        (resp) =>
+          resp.url().includes("/oauth/token") &&
+          resp.request().method() === "POST" &&
+          resp.status() === 200,
+      );
   }
 }

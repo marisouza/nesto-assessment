@@ -1,6 +1,5 @@
 import { type Locator, type Page } from "@playwright/test";
-import * as fs from "fs";
-import * as path from "path";
+import { getLocaleData, getSignupUrl } from "../helpers/helper.js";
 
 export class ConsentPage {
   readonly page: Page;
@@ -13,7 +12,7 @@ export class ConsentPage {
   constructor(page: Page, language: "en" | "fr" = "en") {
     this.page = page;
     this.language = language;
-    const localeData = this.getLocaleData();
+    const localeData = getLocaleData().signupPage;
     this.consentModal =  page.getByTestId("notice");
     this.partners = page.getByText(localeData.consentPartnersButton, {
       exact: true,
@@ -24,36 +23,13 @@ export class ConsentPage {
     });
   }
 
-  // TODO: Refactor duplicate of LoginPage and PortfolioPage
-  private getLocaleData() {
-    const localeMap = {
-      en: "en-EN.json",
-      fr: "fr-FR.json",
-    };
-    const localeFile = localeMap[this.language];
-    const localePath = path.join(
-      path.dirname(new URL(import.meta.url).pathname),
-      "..",
-      "resources",
-      "locales",
-      localeFile,
-    );
-    const data = fs.readFileSync(localePath, "utf-8");
-    return JSON.parse(data);
-  }
-
-  async goto() {
-    const url =
-      this.language === "fr"
-        ? "https://app.qa.nesto.ca/fr/signup"
-        : "https://app.qa.nesto.ca/signup";
+  async goTo() {
+    const url = getSignupUrl(this.language);
     await this.page.goto(url);
-    // Wait for what you actually need
-    await this.consentModal.waitFor({ state: 'attached' });
   }
 
-  async isConsentNotVisible() {
-    return await this.consentModal.isHidden();
+  async isConsentVisible() {
+    return await this.consentModal.isVisible();
   }
 
   async acceptConsent() {
