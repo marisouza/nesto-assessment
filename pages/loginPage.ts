@@ -42,7 +42,9 @@ export class LoginPage {
       localeData.resetPasswordEmailSentMesage,
     );
     this.blockAccountMessage = page.getByText(localeData.accountBlockedMessage);
-    this.wrongCredentialsError = page.getByText(localeData.wrongCredentialsError);
+    this.wrongCredentialsError = page.getByText(
+      localeData.wrongCredentialsError,
+    );
   }
 
   async goTo() {

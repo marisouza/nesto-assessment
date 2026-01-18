@@ -214,13 +214,12 @@ const runSignupTests = (lang: Language) => {
       await loginPage.submitLogin();
       await loginPage.waitsLoginRequestFails();
 
-      const wrongCredMessage = await loginPage.wrongCredentialsError.textContent();
+      const wrongCredMessage =
+        await loginPage.wrongCredentialsError.textContent();
       expect(
         wrongCredMessage,
         "Wrong credentials error message should match expected text",
-      ).toContain(
-        await getLocaleText("wrongCredentialsError", "loginPage"),
-      );
+      ).toContain(await getLocaleText("wrongCredentialsError", "loginPage"));
       await expect(loginPage.wrongCredentialsError).toBeVisible();
     });
   });
