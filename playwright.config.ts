@@ -51,10 +51,16 @@ export default defineConfig({
       testMatch: "setup/acceptConsent.setup.ts",
       use: {
         ...devices["Desktop Chrome"],
+        viewport: { width: 1280, height: 720 },
         launchOptions: {
-          headless: false,
           args: [
             '--disable-blink-features=AutomationControlled',
+            '--disable-features=IsolateOrigins,site-per-process',
+            '--disable-site-isolation-trials',
+            '--disable-web-security',
+            '--disable-features=ImprovedCookieControls',
+            '--disable-infobars',
+            '--window-size=1280,720',
           ],
         },
       },
