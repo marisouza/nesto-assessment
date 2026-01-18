@@ -5,6 +5,7 @@ on:
   pull_request:
 
 permissions:
+  contents: write
   pull-requests: write
   checks: write
 
@@ -125,19 +126,6 @@ jobs:
           pattern: allure-results-*
           merge-multiple: true
 
-    #   - name: Install Allure CLI
-    #     run: npm install -g allure-commandline --save-dev
-    
-    #   - name: Generate Allure Report
-    #     run: allure generate all-allure-results -o allure-report --clean
-
-    #   - name: Upload Allure Report
-    #     uses: actions/upload-artifact@v4
-    #     with:
-    #       name: allure-report
-    #       path: allure-report
-    #       retention-days: 7
-      
       - name: Load test report history
         uses: actions/checkout@v3
         if: always()
