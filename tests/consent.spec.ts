@@ -1,51 +1,52 @@
-import { test, expect } from "@playwright/test";
+import { test as baseTest, expect } from "@playwright/test";
 import { ConsentPage } from "../pages/consentPage";
-import * as helper from "./helper/helper";
+import * as helper from "../helpers/helper";
+
+const test = baseTest.extend<{ consentPage: ConsentPage }>({
+  consentPage: async ({ page }, use) => {
+    const language = selectedLanguage;
+    const consentPage = new ConsentPage(page, language);
+    await consentPage.goTo();
+    await use(consentPage);
+  },
+});
 
 type Language = "en" | "fr";
 const selectedLanguage =
   (process.env.LANGUAGE?.toLowerCase() as Language) || "en";
 
 const runSignupTests = (lang: Language) => {
-  test.describe(`Consent Page - ${lang.toUpperCase()}`, () => {
-    let consentPage: ConsentPage;
+  test.describe(`Consent Page - ${lang.toUpperCase()}`, { tag: '@consent' }, () => {
+    test.describe("First Visit", () => {
+      test.skip(!!process.env.CI, 'Consent modal tests skipped in CI (Didomi blocks datacenter IPs)');
+      test.use({ storageState: { cookies: [], origins: [] } });
 
-    test.beforeEach(async ({ page }) => {
-      consentPage = new ConsentPage(page, lang);
-      await consentPage.goto();
-      await consentPage.consentModal.waitFor({ state: 'visible' });
+      test("should show consent on first visit", async ({ consentPage }) => {
+        const expectedAcceptText = helper.getLocaleText(
+          "consentAcceptButton",
+        );
+        const expectedLearnMoreText = helper.getLocaleText(
+          "consentLearnMoreButton",
+        );
+        const expectedPartnersText = helper.getLocaleText(
+          "consentPartnersButton",
+        );
+
+        await expect(consentPage.consentModal, 'Consent modal should be visible on first visit').toBeVisible();
+        await expect(consentPage.agreeButton, 'Agree button should have correct text').toContainText(expectedAcceptText);
+        await expect(consentPage.learnMoreButton, 'Learn More button should have correct text').toContainText(
+          expectedLearnMoreText,
+        );
+        await expect(consentPage.partners, 'Partners link should have correct text').toContainText(expectedPartnersText);
+      });
     });
 
-    test("should show consent on first visit", async () => {
-      const expectedAcceptText = await helper.getLocaleText(
-        "consentAcceptButton",
-      );
-      const expectedLearnMoreText = await helper.getLocaleText(
-        "consentLearnMoreButton",
-      );
-      const expectedPartnersText = await helper.getLocaleText(
-        "consentPartnersButton",
-      );
-
-      await expect(consentPage.consentModal).toBeVisible();
-      await expect(consentPage.agreeButton).toContainText(expectedAcceptText);
-      await expect(consentPage.learnMoreButton).toContainText(
-        expectedLearnMoreText,
-      );
-      await expect(consentPage.partners).toContainText(expectedPartnersText);
-    });
-
-    test("should not show consent after accepting it", async () => {
-      await expect(consentPage.consentModal).toBeVisible();
-      await consentPage.acceptConsent();
-
-      const isHidden = await consentPage.isConsentNotVisible();
-      await expect(isHidden).toBe(true);
-
-      consentPage.page.reload();
-       await consentPage.consentModal.waitFor({ state: 'hidden' });
-      const isHiddenAfterReload = await consentPage.isConsentNotVisible();
-      await expect(isHiddenAfterReload).toBe(true);
+    test.describe("Returning User", () => {
+      test("should not show consent to a user that already accepted it", async ({ consentPage }) => {
+        await consentPage.consentModal.waitFor({ state: 'hidden' });
+        const isHiddenAfterReload = await consentPage.isConsentVisible();
+        await expect(isHiddenAfterReload, 'Consent modal should not be visible for returning users').toBe(false);
+      });
     });
   });
 };
