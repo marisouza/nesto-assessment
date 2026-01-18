@@ -78,6 +78,11 @@ async goTo() {
 }
 
   async submitSignupForm() {
+    // In CI, region field has no default value, so select one if empty
+    const regionValue = await this.regionInput.inputValue();
+    if (!regionValue || regionValue === '') {
+      await this.regionInput.selectOption('QC');
+    }
     await this.signUpButton.click();
   }
 
