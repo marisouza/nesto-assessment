@@ -67,7 +67,6 @@ export default defineConfig({
       },
       dependencies: ['accept-consent'],
       testMatch: ["tests/**/*.spec.ts"],
-      testIgnore: ["tests/portfolio.spec.ts"],
     },
   ],
 
