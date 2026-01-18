@@ -28,8 +28,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        shardIndex: [1, 2, 3, 4]
-        shardTotal: [4]
+        shardIndex: [1, 2, 3]
+        shardTotal: [3]
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -82,14 +82,22 @@ jobs:
       - name: Merge into HTML Report
         run: |
           npx playwright merge-reports --reporter html ./all-blob-reports
-          npx playwright merge-reports --reporter allure ./all-blob-reports
+          # npx playwright merge-reports --reporter allure-playwright ./all-blob-reports
+
+      - name: Merge into Allure Report
+        run: |
+          npx allure generate ./all-blob-reports --clean -o allure-report || true
 
       - name: Upload HTML report
         uses: actions/upload-artifact@v4
         with:
-          name: report-attempt-${{ github.run_attempt }}
-          path: |
-            playwright-report
-            allure-report
-          retention-days: 14
+          name: report-html-attempt-${{ github.run_attempt }}
+          path: playwright-report
+          retention-days: 7
 
+      - name: Upload allure report
+        uses: actions/upload-artifact@v4
+        with:
+          name: report-allure-attempt-${{ github.run_attempt }}
+          path: allure-report
+          retention-days: 7
