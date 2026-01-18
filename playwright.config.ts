@@ -8,9 +8,6 @@ import * as path from "path";
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -18,7 +15,6 @@ import * as path from "path";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-// const authFile = path.join(__dirname, "./playwright/.auth/user.json");
 const consentFile = path.join(__dirname, "./playwright/.auth/consent.json");
 
 dotenv.config({ path: path.resolve(__dirname, '.env.demo') });
@@ -72,17 +68,6 @@ export default defineConfig({
       testMatch: ["tests/**/*.spec.ts"],
       testIgnore: ["tests/portfolio.spec.ts"],
     },
-    {
-      name: "portfolio",
-      use: {
-        ...devices["Desktop Chrome"],
-        locale: process.env.LANGUAGE || "en",
-        storageState: consentFile,
-
-      },
-      dependencies: ['authenticate'],
-      testMatch: ["tests/**/*.spec.ts"],
-    }
   ],
 
   /* Run your local dev server before starting the tests */
