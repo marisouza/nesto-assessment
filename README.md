@@ -2,7 +2,18 @@
 
 ## Overview
 
-This is an end-to-end test automation project for Nesto using Playwright and TypeScript. The project includes comprehensive test suites for portfolio, login, and signup functionalities with parallel test execution and detailed reporting.
+This is an end-to-end test automation project for Nesto using Playwright and TypeScript. The project includes comprehensive test suites for login, signup, and consent functionalities with multi-language support (English and French), parallel test execution, and detailed reporting.
+
+## Features
+
+- ✅ **Multi-language testing** (English & French)
+- ✅ **Page Object Model** architecture
+- ✅ **Parallel test execution**
+- ✅ **Automated code quality checks** (ESLint & Prettier)
+- ✅ **Pre-commit hooks** for code quality enforcement
+- ✅ **Comprehensive test reporting** (HTML & Allure)
+- ✅ **CI/CD integration** with GitHub Actions
+- ✅ **Type-safe** with TypeScript
 
 ## Prerequisites
 
@@ -37,26 +48,44 @@ _Note: This step may not be necessary if browsers were installed during `npm ci`
 
 ```bash
 nesto/
-├── tests/                  # Test files
+├── .github/workflows/      # CI/CD workflows
+├── .husky/                 # Git hooks (pre-commit)
+├── allure-report/          # Generated Allure reports
+├── allure-results/         # Test execution results
+├── helpers/                # Helper utilities
+├── locales/                # Multi-language support files
 ├── pages/                  # Page Object Models
 ├── playwright/             # Playwright configuration files
+├── playwright-report/      # HTML test reports
+├── setup/                  # Test setup files
+├── test-results/           # Test execution artifacts
+├── tests/                  # Test suites
+│   ├── consent.spec.ts     # Consent functionality tests
+│   ├── login.spec.ts       # Login/authentication tests
+│   └── signup.spec.ts      # User registration tests
+├── .prettierrc             # Prettier configuration
+├── eslint.config.js        # ESLint configuration
 ├── fixtures.ts             # Custom test fixtures
 ├── playwright.config.ts    # Playwright configuration
-├── allure-results/         # Test execution results
-├── playwright-report/      # HTML test reports
-├── .github/workflows/      # CI/CD workflows
-└── docs/                   # Documentation
+├── tsconfig.json           # TypeScript configuration
+└── package.json            # Project dependencies and scripts
 ```
 
 ## Running Tests
 
-### Interactive Mode (UI)
+### Language Support
 
-Note: To run tests in french just add LANGUAGE=fr before the npm command
+Tests support both English and French. Set the language using the `LANGUAGE` environment variable:
 
 ```bash
+# Run tests in French
 LANGUAGE=fr npm run test:headed
+
+# Run tests in English (default)
+npm run test:headed
 ```
+
+### Interactive Mode (UI)
 
 Run all tests with Playwright UI:
 
@@ -64,12 +93,40 @@ Run all tests with Playwright UI:
 npm run test:ui
 ```
 
-Run specific test suites:
+### Headed Mode
+
+Run all tests in headed mode (browser visible):
 
 ```bash
-npm run test:consent      # Consent tests
-npm run test:login        # Login tests
-npm run test:signup       # Signup tests
+npm run test:headed
+```
+
+### Test Suites by Tag
+
+Run specific test suites using tags:
+
+```bash
+npm run test:consent      # Consent tests (@consent tag)
+npm run test:login        # Login tests (@login tag)
+npm run test:signup       # Signup tests (@signup tag)
+```
+
+### Additional Test Commands
+
+```bash
+# Run all tests (headless)
+npx playwright test
+
+# Run tests with specific browser
+npx playwright test --project=chromium
+npx playwright test --project=firefox
+npx playwright test --project=webkit
+
+# Run a specific test file
+npx playwright test tests/login.spec.ts
+
+# Debug mode
+npx playwright test --debug
 ```
 
 ## Test Reports
@@ -100,89 +157,283 @@ CI Reports available at [github-pages](https://github.com/marisouza/nesto-assess
 
 ## Code Quality
 
-### Linting
+The project enforces code quality through ESLint and Prettier with automated pre-commit hooks.
+
+### Pre-commit Hooks
+
+Git hooks are managed by **Husky** and **lint-staged**:
+
+- **Automatic linting**: ESLint runs with `--fix` on staged `.ts` and `.js` files
+- **Automatic formatting**: Prettier formats staged files before commit
+- **Type checking**: TypeScript compilation checks ensure type safety
+
+The pre-commit hook runs automatically when you commit. To bypass (not recommended):
+
+```bash
+git commit --no-verify
+```
+
+### Manual Code Quality Checks
+
+#### Linting
 
 Check for linting errors:
 
 ```bash
-npm run lint
+npm run lint              # Run ESLint and TypeScript type checking
+npm run lint:ci           # Run TypeScript type checking only (CI mode)
 ```
 
-Run linter in CI mode:
+#### Code Formatting
+
+Check and fix code formatting:
 
 ```bash
-npm run lint:ci
+npm run format:check      # Check if files are formatted
+npm run format:fix        # Auto-fix formatting issues
 ```
 
-### Code Formatting
+### Supported File Types
 
-Check code formatting:
-
-```bash
-npm run format:check
-```
-
-Auto-fix formatting issues:
-
-```bash
-npm run format:fix
-```
+- **Linting**: `.ts`, `.js` files
+- **Formatting**: `.ts`, `.js`, `.json`, `.md` files
 
 ## Configuration
 
 ### Playwright Configuration
 
-Test configuration is managed in [`playwright.config.ts`](playwright.config.ts):
-Configuration was kept the same for the assement purpose.
+Test configuration is managed in [playwright.config.ts](playwright.config.ts):
 
-- Test directory: `./tests`
-- Reporters: HTML and Allure
-
-### Project-Specific Settings
-
-**Important:** The `consent.json` file requires manual configuration with appropriate cookie consent values. This will be automated in a future update.
+- **Test directory**: `./tests`
+- **Timeout**: 30 seconds per test
+- **Retries**: 1 (CI), 0 (local)
+- **Workers**: 4 (parallel execution)
+- **Base URL**: Configured for test environment
+- **Screenshots**: On failure
+- **Trace**: On first retry
+- **Reporters**: HTML and Allure
 
 ### Environment Variables
 
-The project uses environment variables for CI/CD. Key variables:
+The project supports the following environment variables:
 
-- `CI` - Indicates CI environment
+- **`LANGUAGE`**: Set test language (`en` or `fr`, default: `en`)
+- **`CI`**: Indicates CI environment (automatically set by GitHub Actions)
+
+Example:
+
+```bash
+LANGUAGE=fr npx playwright test
+```
+
+### Locales Configuration
+
+Multi-language support is managed through locale files in the [`locales/`](locales/) directory. Each page has its own locale file with translations for both English and French.
+
+### Project-Specific Settings
 
 ## CI/CD
 
-The project uses GitHub Actions for continuous integration. Workflows are defined in [`.github/workflows/docker-playwright.yml`](.github/workflows/docker-playwright.yml).
+The project uses GitHub Actions for continuous integration and deployment. Workflows are defined in [.github/workflows/docker-playwright.yml](.github/workflows/docker-playwright.yml).
 
-### Workflow Steps:
-
-1. **Lint** - Code quality checks
-2. **Test** - Parallel test execution across multiple suites
-3. **Report** - Artifact upload for test reports
+### Workflow Triggers
 
 Tests run on:
 
-- Push to `main` branch
-- Pull requests
+- **Push** to `main` branch
+- **Pull requests** to `main` branch
+- **Manual trigger** via workflow dispatch
+
+### Workflow Steps
+
+1. **Setup**
+   - Checkout code
+   - Setup Node.js environment
+   - Install dependencies
+
+2. **Code Quality**
+   - Run ESLint checks
+   - Run TypeScript type checking
+   - Run Prettier formatting checks
+
+3. **Test Execution**
+   - Run tests in parallel across multiple browsers
+   - Execute separate jobs for login, signup, and consent suites
+   - Generate test reports
+
+4. **Reporting**
+   - Upload Playwright HTML reports
+   - Upload Allure results
+   - Generate and publish reports to GitHub Pages
+   - Upload test artifacts for download
+
+### CI Reports
+
+View CI reports at: [GitHub Pages](https://github.com/marisouza/nesto-assessment/deployments/github-pages)
+
+### Artifacts
+
+Test reports and screenshots are available as downloadable artifacts in the GitHub Actions run summary.
 
 ## Development
 
 ### TypeScript Configuration
 
-TypeScript settings are in [`tsconfig.json`](tsconfig.json). Type checking is performed during linting.
+TypeScript settings are defined in [tsconfig.json](tsconfig.json):
+
+- **Target**: ES2020
+- **Module**: ESNext
+- **Strict mode**: Enabled
+- **Type checking**: Enforced during linting
 
 ### ESLint Configuration
 
-Linting rules are defined in [`eslint.config.js`](eslint.config.js).
+Linting rules are defined in [eslint.config.js](eslint.config.js):
+
+- Based on recommended ESLint and TypeScript ESLint rules
+- Custom rules for code quality and consistency
+
+### Prettier Configuration
+
+Code formatting settings in [.prettierrc](.prettierrc):
+
+- Consistent code style across the project
+- Automatic formatting on save (if configured in your editor)
+
+### Adding New Tests
+
+1. Create test file in `tests/` directory
+2. Import required fixtures and page objects
+3. Follow existing test patterns and naming conventions
+4. Add appropriate test tags for categorization
+5. Ensure multi-language support if applicable
+6. Run tests locally before committing
+
+### Adding New Page Objects
+
+1. Create page class in `pages/` directory
+2. Extend from base page if needed
+3. Define locators and methods
+4. Support multi-language if applicable
+5. Follow naming conventions
+
+## Available Scripts
+
+| Script          | Description                                            |
+| --------------- | ------------------------------------------------------ |
+| `test:ui`       | Run tests in Playwright UI mode                        |
+| `test:headed`   | Run tests in headed mode (browser visible)             |
+| `test:signup`   | Run signup tests with @signup tag                      |
+| `test:login`    | Run login tests with @login tag                        |
+| `test:consent`  | Run consent tests with @consent tag                    |
+| `report:show`   | Open Playwright HTML report                            |
+| `report:allure` | Generate and open Allure report                        |
+| `lint`          | Run ESLint and TypeScript type checking                |
+| `lint:ci`       | Run TypeScript type checking (CI mode)                 |
+| `format:check`  | Check code formatting                                  |
+| `format:fix`    | Auto-fix code formatting issues                        |
+| `prepare`       | Set up Husky git hooks (runs automatically on install) |
 
 ## Test Suites
 
-The project includes three main test suites:
+The project includes three main test suites with comprehensive coverage:
 
-1. **Consent** - Consent functionality tests
-2. **Login** - Authentication and login tests
-3. **Signup** - User registration tests
+### 1. Login Tests (@login tag)
 
-Each suite runs independently and can be executed in parallel.
+**Location**: [tests/login.spec.ts](tests/login.spec.ts)
 
-## Docker Support
+**Coverage**:
 
-A [`Dockerfile`](Dockerfile) is available for containerized test execution.
+- Invalid username/password validation
+- Email format validation
+- Empty field validation
+- Password reset functionality
+- Signup link navigation
+- Account lockout after multiple failed attempts
+
+**Multi-language support**: English & French
+
+### 2. Signup Tests (@signup tag)
+
+**Location**: [tests/signup.spec.ts](tests/signup.spec.ts)
+
+**Coverage**:
+
+- Form validation (email, password, phone, postal code)
+- Password strength requirements
+- Phone number country validation
+- Account creation flow
+- Terms of service and privacy policy links
+- Login link navigation
+
+**Multi-language support**: English & French
+
+### 3. Consent Tests (@consent tag)
+
+**Location**: [tests/consent.spec.ts](tests/consent.spec.ts)
+
+**Coverage**:
+
+- Cookie consent banner functionality
+- First visit behavior
+- Returning user preferences
+- Consent acceptance flow
+
+**Multi-language support**: English & French
+
+### Test Execution
+
+Each suite:
+
+- Runs independently and can be executed in parallel
+- Includes both positive and negative test scenarios
+- Uses Page Object Model for maintainability
+- Provides detailed assertions with custom error messages
+- Supports multi-language testing
+
+## Technologies & Tools
+
+### Core Technologies
+
+- **[Playwright](https://playwright.dev/)**: Modern end-to-end testing framework
+- **[TypeScript](https://www.typescriptlang.org/)**: Type-safe JavaScript
+- **[Node.js](https://nodejs.org/)**: JavaScript runtime
+
+### Testing Tools
+
+- **[@playwright/test](https://playwright.dev/docs/test-components)**: Playwright test runner
+- **[@faker-js/faker](https://fakerjs.dev/)**: Generate fake data for testing
+- **Allure**: Advanced test reporting
+
+### Development Tools
+
+- **[dotenv](https://github.com/motdotla/dotenv)**: Environment variable management
+- **TypeScript ESLint**: TypeScript-specific linting rules
+
+### Quality Tools
+
+The project uses several tools to maintain code quality:
+
+- **ESLint**: Enforces coding standards
+- **Prettier**: Maintains consistent formatting
+- **Husky**: Manages git hooks
+- **lint-staged**: Runs checks on staged files
+
+## Future Enhancements
+
+- Add API testing capabilities
+- Implement visual regression testing
+- Add performance testing
+- Expand test coverage for edge cases
+- Improve consent for CI
+
+### Commit Convention
+
+Follow conventional commits format:
+
+- `feat:` - New feature
+- `fix:` - Bug fix
+- `docs:` - Documentation changes
+- `test:` - Test-related changes
+- `refactor:` - Code refactoring
+- `chore:` - Maintenance tasks
