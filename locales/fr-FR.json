@@ -38,7 +38,7 @@
     "loginBlankEmailError": "Ne peut être vide",
     "loginBlankPasswordError": "Ne peut être vide",
     "userPasswordError": "Nous sommes désolés, un problème est survenu lors de la tentative de connexion.",
-    "invalidEmailError": "Courriel invalide",
+    "invalidEmailError": "Invalide",
     "sendEmailButton": "Envoyer le courriel",
     "accountBlockedMessage": "Votre compte a été bloqué à la suite de trop nombreuses tentatives de connexion consécutives.",
     "wrongCredentialsError": "Mauvaise adresse de messagerie ou mot de passe."
