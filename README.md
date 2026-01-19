@@ -135,7 +135,7 @@ Reports are generated in:
 - `allure-results/` - Allure test results
 - `allure-report/` - Generated Allure reports
 
-CI Reports available at [github-pages](https://github.com/marisouza/nesto-assessment/deployments/github-pages)
+CI Reports available at [github-pages](https://github.com/marisouza/nesto-assessment/deployments/github-pages) by clicking on **Latest deployments** link
 
 ## Code Quality
 
@@ -322,7 +322,7 @@ Code formatting settings in [.prettierrc](.prettierrc):
 | --------------- | ------------------------------------------------------ |
 | `test:ui`       | Run tests in Playwright UI mode                        |
 | `test:headed`   | Run tests in headed mode (browser visible)             |
-| `"test:docker`  | Run tests in headless mode for docker                  |
+| `test:docker`   | Run tests in headless mode for docker                  |
 | `test:signup`   | Run signup tests with @signup tag                      |
 | `test:login`    | Run login tests with @login tag                        |
 | `test:consent`  | Run consent tests with @consent tag                    |
