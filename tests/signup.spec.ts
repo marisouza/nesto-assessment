@@ -419,8 +419,14 @@ const runSignupTests = (lang: Language) => {
 
           const errors = await signupPage.getErrorMessages();
           // 3 inline errors for first name, last name and invalid email
-          expect(errors.length).toBe(3);
-          expect(errors).toEqual([
+          expect(
+            errors.length,
+            "There should be 3 inline errors when 3 malicious input are provided",
+          ).toBe(3);
+          expect(
+            errors,
+            "Error messages should match expected errors for malicious inputs",
+          ).toEqual([
             helper.getLocaleText("mandatoryFieldError"),
             helper.getLocaleText("mandatoryFieldError"),
             helper.getLocaleText("invalidEmailError"),
@@ -435,9 +441,14 @@ const runSignupTests = (lang: Language) => {
             }
           });
 
-          // Check that the account creation endpoint was NOT triggered and no alert was shown
-          expect(accountRequestTriggered).toBe(false);
-          expect(alertTriggered).toBe(false);
+          expect(
+            accountRequestTriggered,
+            "Account creation request should not be triggered when malicious inputs are provided",
+          ).toBe(false);
+          expect(
+            alertTriggered,
+            "No alert dialog should be triggered for malicious inputs",
+          ).toBe(false);
         });
       });
 
@@ -588,7 +599,7 @@ const runSignupTests = (lang: Language) => {
           const accountResponseBody = await (await accountResponse).json();
           expect(
             accountResponseBody,
-            "Account request response boby should contain creation account error when non-canadian phone number is used",
+            "Account request response body should contain creation account error when non-Canadian phone number is used",
           ).toEqual(
             "Unsupported phone number region. Only Canadian phone numbers are allowed.",
           );

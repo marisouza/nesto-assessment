@@ -3,15 +3,6 @@ import { fileURLToPath } from "url";
 import dotenv from "dotenv";
 import * as path from "path";
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-
-/**
- * See https://playwright.dev/docs/test-configuration.
- */
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const consentFile = path.join(__dirname, "./playwright/.auth/consent.json");
@@ -19,7 +10,6 @@ const consentFile = path.join(__dirname, "./playwright/.auth/consent.json");
 dotenv.config({ path: path.resolve(__dirname, ".env.demo") });
 
 export default defineConfig({
-  // tsconfig: './tsconfig.json',
   testDir: ".",
   testMatch: "tests/**/*.spec.ts",
   /* Run tests in files in parallel */
@@ -57,15 +47,6 @@ export default defineConfig({
       testMatch: "setup/acceptConsent.setup.ts",
       use: {
         ...devices["Desktop Chrome"],
-        launchOptions: {
-          args: [
-            "--disable-blink-features=AutomationControlled",
-            "--disable-features=IsolateOrigins,site-per-process",
-            "--disable-web-security",
-            "--disable-site-isolation-trials",
-            "--disable-popup-blocking",
-          ],
-        },
       },
     },
     {
@@ -79,11 +60,4 @@ export default defineConfig({
       testMatch: ["tests/**/*.spec.ts"],
     },
   ],
-
-  /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://localhost:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
 });
