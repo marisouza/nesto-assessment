@@ -229,54 +229,58 @@ const runSignupTests = (lang: Language) => {
   });
 
   // Account lockout test - runs in isolation to avoid affecting other tests
-  test.describe.serial(`Account Security - ${lang.toUpperCase()}`, () => {
-    test("should block user after multiple failed login attempts", async ({
-      loginPage,
-    }) => {
-      const randomEmail = `${Date.now().toFixed()}-${faker.internet.email()}`;
-      const password = "Test1234567890";
-      const expectedUsernameError = await getLocaleText(
-        "userPasswordError",
-        "loginPage",
-      );
-      const expectedBlockAccountMessage = await getLocaleText(
-        "accountBlockedMessage",
-        "loginPage",
-      );
+  test.describe.serial(
+    `Account Security - ${lang.toUpperCase()}`,
+    { tag: "@smoke" },
+    () => {
+      test("should block user after multiple failed login attempts", async ({
+        loginPage,
+      }) => {
+        const randomEmail = `${Date.now().toFixed()}-${faker.internet.email()}`;
+        const password = "Test1234567890";
+        const expectedUsernameError = await getLocaleText(
+          "userPasswordError",
+          "loginPage",
+        );
+        const expectedBlockAccountMessage = await getLocaleText(
+          "accountBlockedMessage",
+          "loginPage",
+        );
 
-      await loginPage.fillLoginInputs(randomEmail, password);
-      await expect(
-        loginPage.emailInput,
-        "Email input should have the wrong email value",
-      ).toHaveValue(randomEmail);
-      await expect(
-        loginPage.passwordInput,
-        "Password input should have the correct password value",
-      ).toHaveValue(password);
+        await loginPage.fillLoginInputs(randomEmail, password);
+        await expect(
+          loginPage.emailInput,
+          "Email input should have the wrong email value",
+        ).toHaveValue(randomEmail);
+        await expect(
+          loginPage.passwordInput,
+          "Password input should have the correct password value",
+        ).toHaveValue(password);
 
-      // First 5 failed attempts should show username/password error
-      for (let attempt = 0; attempt < 5; attempt++) {
+        // First 5 failed attempts should show username/password error
+        for (let attempt = 0; attempt < 5; attempt++) {
+          await loginPage.submitLogin();
+          await loginPage.waitsLoginRequestFails();
+          expect(
+            await loginPage.userPasswordError.textContent(),
+            "Username error message should match expected error when invalid username is provided",
+          ).toContain(expectedUsernameError);
+        }
+
+        // 6th attempt should block the account
         await loginPage.submitLogin();
-        await loginPage.waitsLoginRequestFails();
+        await loginPage.waitsLoginRequestFails(429);
+        await expect(
+          loginPage.blockAccountMessage,
+          "Block account message should be visible after multiple failed login attempts",
+        ).toBeVisible();
         expect(
-          await loginPage.userPasswordError.textContent(),
-          "Username error message should match expected error when invalid username is provided",
-        ).toContain(expectedUsernameError);
-      }
-
-      // 6th attempt should block the account
-      await loginPage.submitLogin();
-      await loginPage.waitsLoginRequestFails(429);
-      await expect(
-        loginPage.blockAccountMessage,
-        "Block account message should be visible after multiple failed login attempts",
-      ).toBeVisible();
-      expect(
-        await loginPage.blockAccountMessage.textContent(),
-        "Blocked account message should match expected text after multiple failed login attempts",
-      ).toContain(expectedBlockAccountMessage);
-    });
-  });
+          await loginPage.blockAccountMessage.textContent(),
+          "Blocked account message should match expected text after multiple failed login attempts",
+        ).toContain(expectedBlockAccountMessage);
+      });
+    },
+  );
 };
 
 runSignupTests(selectedLanguage);

@@ -15,7 +15,7 @@ type Language = "en" | "fr";
 const selectedLanguage =
   (process.env.LANGUAGE?.toLowerCase() as Language) || "en";
 
-const runSignupTests = (lang: Language) => {
+const runConsentTests = (lang: Language) => {
   test.describe(
     `Consent Page - ${lang.toUpperCase()}`,
     { tag: "@consent" },
@@ -73,4 +73,4 @@ const runSignupTests = (lang: Language) => {
   );
 };
 
-runSignupTests(selectedLanguage);
+runConsentTests(selectedLanguage);

@@ -599,7 +599,7 @@ const runSignupTests = (lang: Language) => {
           const accountResponseBody = await (await accountResponse).json();
           expect(
             accountResponseBody,
-            "Account request response boby should contain creation account error when non-canadian phone number is used",
+            "Account request response body should contain creation account error when non-Canadian phone number is used",
           ).toEqual(
             "Unsupported phone number region. Only Canadian phone numbers are allowed.",
           );

@@ -47,15 +47,6 @@ export default defineConfig({
       testMatch: "setup/acceptConsent.setup.ts",
       use: {
         ...devices["Desktop Chrome"],
-        // launchOptions: {
-        //   args: [
-        //     "--disable-blink-features=AutomationControlled",
-        //     "--disable-features=IsolateOrigins,site-per-process",
-        //     "--disable-web-security",
-        //     "--disable-site-isolation-trials",
-        //     "--disable-popup-blocking",
-        //   ],
-        // },
       },
     },
     {
