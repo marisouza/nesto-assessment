@@ -1,7 +1,7 @@
 services:
   playwright:
     image: playwright-test
-    build: 
+    build:
       context: .
       dockerfile: ./Dockerfile
     command: npm run test:docker
@@ -9,4 +9,3 @@ services:
       - ./playwright-report:/app/playwright-report
       - ./test-results:/app/test-results
       - ./allure-results:/app/allure-results
-    
