@@ -180,7 +180,7 @@ test.describe(
         resetMessage,
         "Reset password message should match expected text",
       ).toContain(
-        await getLocaleText("resetPasswordEmailSentMesage", "loginPage"),
+        await getLocaleText("resetPasswordEmailSentMessage", "loginPage"),
       );
       await expect(loginPage.resetPasswordMessage).toBeVisible();
     });

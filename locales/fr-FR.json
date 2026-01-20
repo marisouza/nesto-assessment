@@ -34,7 +34,7 @@
   "loginPage": {
     "logInButton": "Connexion",
     "forgotPasswordLink": "Mot de passe oublié ?",
-    "resetPasswordEmailSentMesage": "Nous venons de vous envoyer un courriel pour réinitialiser votre mot de passe.",
+    "resetPasswordEmailSentMessage": "Nous venons de vous envoyer un courriel pour réinitialiser votre mot de passe.",
     "signupLink": "Vous n'avez pas de compte ?",
     "loginBlankEmailError": "Ne peut être vide",
     "loginBlankPasswordError": "Ne peut être vide",

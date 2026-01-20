@@ -37,7 +37,7 @@ export class LoginPage {
     });
     this.userPasswordError = page.getByText(localeData.userPasswordError);
     this.resetPasswordMessage = page.getByText(
-      localeData.resetPasswordEmailSentMesage,
+      localeData.resetPasswordEmailSentMessage,
     );
     this.blockAccountMessage = page.getByText(localeData.accountBlockedMessage);
     this.wrongCredentialsError = page.getByText(
