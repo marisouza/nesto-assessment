@@ -338,7 +338,7 @@ test.describe(
         ).toHaveText(helper.getLocaleText("termsOfService"));
       });
 
-      //SU-006: Test is skipped until the privacy policy link is for EN users is fixed
+      // SU-006: Test is skipped until the privacy policy link is for EN users is fixed
       test.skip("should have correct link for privacy policy", async ({
         signupPage,
       }) => {

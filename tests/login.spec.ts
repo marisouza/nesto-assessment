@@ -240,6 +240,7 @@ test.describe(
     // or inject new user in DB as part of env setup.
     // This will avoid account block due to multiple failed login attempts
     // LOG-005: Fix french text for wrong credentials error message
+    // TECH-002: Currently running in CI only to avoid account lockout issues locally
     test("should not login when password provided is incorrect for an existing user", async ({
       loginPage,
     }) => {
@@ -279,7 +280,7 @@ test.describe(
 );
 
 // Account lockout test - to run in isolation to avoid affecting other tests
-// currently running in CI only to avoid account lockout issues locally
+// TECH-003: Currently running in CI only to avoid account lockout issues locally
 test.describe(
   `Account Security - ${selectedLanguage.toUpperCase()}`,
   { tag: "@smoke" },
