@@ -23,8 +23,10 @@ const test = baseTest.extend<{ loginPage: LoginPage }>({
 const selectedLanguage =
   (process.env.LANGUAGE?.toLowerCase() as Language) || "en";
 
-const runSignupTests = (lang: Language) => {
-  test.describe(`Login Page - ${lang.toUpperCase()}`, { tag: "@login" }, () => {
+test.describe(
+  `Login Page - ${selectedLanguage.toUpperCase()}`,
+  { tag: "@login" },
+  () => {
     test("should not login when invalid username is provided", async ({
       loginPage,
     }) => {
@@ -185,7 +187,7 @@ const runSignupTests = (lang: Language) => {
 
     test("should signup link have correct href", async ({ loginPage }) => {
       const linkText = await getLocaleText("signupLink", "loginPage");
-      const urlPart = lang === "fr" ? "/fr/signup" : "/signup";
+      const urlPart = selectedLanguage === "fr" ? "/fr/signup" : "/signup";
 
       await expect(loginPage.signupLink).toHaveText(linkText);
       expect(loginPage.signupLink).toHaveAttribute("href", new RegExp(urlPart));
@@ -226,61 +228,59 @@ const runSignupTests = (lang: Language) => {
         "Wrong credentials error message should be visible",
       ).toBeVisible();
     });
-  });
+  },
+);
 
-  // Account lockout test - runs in isolation to avoid affecting other tests
-  test.describe.serial(
-    `Account Security - ${lang.toUpperCase()}`,
-    { tag: "@smoke" },
-    () => {
-      test("should block user after multiple failed login attempts", async ({
-        loginPage,
-      }) => {
-        const randomEmail = `${Date.now().toFixed()}-${faker.internet.email()}`;
-        const password = "Test1234567890";
-        const expectedUsernameError = await getLocaleText(
-          "userPasswordError",
-          "loginPage",
-        );
-        const expectedBlockAccountMessage = await getLocaleText(
-          "accountBlockedMessage",
-          "loginPage",
-        );
+// Account lockout test - runs in isolation to avoid affecting other tests
+test.describe.serial(
+  `Account Security - ${selectedLanguage.toUpperCase()}`,
+  { tag: "@smoke" },
+  () => {
+    test("should block user after multiple failed login attempts", async ({
+      loginPage,
+    }) => {
+      const randomEmail = `${Date.now().toFixed()}-${faker.internet.email()}`;
+      const password = "Test1234567890";
+      const expectedUsernameError = await getLocaleText(
+        "userPasswordError",
+        "loginPage",
+      );
+      const expectedBlockAccountMessage = await getLocaleText(
+        "accountBlockedMessage",
+        "loginPage",
+      );
 
-        await loginPage.fillLoginInputs(randomEmail, password);
-        await expect(
-          loginPage.emailInput,
-          "Email input should have the wrong email value",
-        ).toHaveValue(randomEmail);
-        await expect(
-          loginPage.passwordInput,
-          "Password input should have the correct password value",
-        ).toHaveValue(password);
+      await loginPage.fillLoginInputs(randomEmail, password);
+      await expect(
+        loginPage.emailInput,
+        "Email input should have the wrong email value",
+      ).toHaveValue(randomEmail);
+      await expect(
+        loginPage.passwordInput,
+        "Password input should have the correct password value",
+      ).toHaveValue(password);
 
-        // First 5 failed attempts should show username/password error
-        for (let attempt = 0; attempt < 5; attempt++) {
-          await loginPage.submitLogin();
-          await loginPage.waitsLoginRequestFails();
-          expect(
-            await loginPage.userPasswordError.textContent(),
-            "Username error message should match expected error when invalid username is provided",
-          ).toContain(expectedUsernameError);
-        }
-
-        // 6th attempt should block the account
+      // First 5 failed attempts should show username/password error
+      for (let attempt = 0; attempt < 5; attempt++) {
         await loginPage.submitLogin();
-        await loginPage.waitsLoginRequestFails(429);
-        await expect(
-          loginPage.blockAccountMessage,
-          "Block account message should be visible after multiple failed login attempts",
-        ).toBeVisible();
+        await loginPage.waitsLoginRequestFails();
         expect(
-          await loginPage.blockAccountMessage.textContent(),
-          "Blocked account message should match expected text after multiple failed login attempts",
-        ).toContain(expectedBlockAccountMessage);
-      });
-    },
-  );
-};
+          await loginPage.userPasswordError.textContent(),
+          "Username error message should match expected error when invalid username is provided",
+        ).toContain(expectedUsernameError);
+      }
 
-runSignupTests(selectedLanguage);
+      // 6th attempt should block the account
+      await loginPage.submitLogin();
+      await loginPage.waitsLoginRequestFails(429);
+      await expect(
+        loginPage.blockAccountMessage,
+        "Block account message should be visible after multiple failed login attempts",
+      ).toBeVisible();
+      expect(
+        await loginPage.blockAccountMessage.textContent(),
+        "Blocked account message should match expected text after multiple failed login attempts",
+      ).toContain(expectedBlockAccountMessage);
+    });
+  },
+);
