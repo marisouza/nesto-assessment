@@ -1,7 +1,8 @@
-import { test as baseTest, expect } from "../fixtures";
+import { test as baseTest, expect } from "@playwright/test";
 import { SignupPage } from "../pages/signupPage";
 import { faker } from "@faker-js/faker";
 import * as helper from "../helpers/helper";
+import { Language } from "../types/types.js";
 
 const test = baseTest.extend<{ signupPage: SignupPage }>({
   signupPage: async ({ page }, use) => {
@@ -16,7 +17,6 @@ const test = baseTest.extend<{ signupPage: SignupPage }>({
   },
 });
 
-type Language = "en" | "fr";
 const selectedLanguage =
   (process.env.LANGUAGE?.toLowerCase() as Language) || "en";
 
@@ -29,11 +29,11 @@ const runSignupTests = (lang: Language) => {
         test("should not submit form and show inline errors when mandatory fields are empty", async ({
           signupPage,
         }) => {
-          const accountRequestTriggered =
-            await signupPage.isAccountCreationRequestSent();
+          const listener = signupPage.accountCreationRequestMonitor();
           const expectedUrl = helper.getSignupUrl(lang);
 
           await signupPage.submitSignupForm();
+
           const inlineErrors = await signupPage.getErrorMessages();
 
           // 5 inline errors for 5 mandatory fields
@@ -57,8 +57,8 @@ const runSignupTests = (lang: Language) => {
             "Signup page URL should be correct",
           ).toHaveURL(expectedUrl);
           expect(
-            accountRequestTriggered,
-            "No account creation request should be triggered",
+            listener.wasTriggered(),
+            "No account creation request should be triggered when mandatory fields are empty",
           ).toBe(false);
         });
 
@@ -365,14 +365,15 @@ const runSignupTests = (lang: Language) => {
 
         // Assumption:
         // "valid.user123@test.com" user was pre-created in the system
-        // Options: use /accounts endpoint to create the user in pre-test setup is not an option
-        // or have user present in DB as part of env setup
+        // Options: use /accounts endpoint to create a new user in pre-test setup
+        // or inject new user in DB as part of env setup.
         test("should display toast error when signup using email from existing user", async ({
           signupPage,
         }) => {
           const expectedToastText = helper.getLocaleText("toastError");
           const toastMessageLocator =
             signupPage.page.getByText(expectedToastText);
+          const listener = signupPage.setupAccountCreationMonitor();
 
           await signupPage.fillSignupForm({
             firstName: "John",
@@ -382,22 +383,23 @@ const runSignupTests = (lang: Language) => {
             password: "Password1234",
             region: "AB",
           });
-          const accountRequestTriggered =
-            await signupPage.isAccountCreationRequestSent();
+
           await signupPage.submitSignupForm();
+          await listener.waitForResponse();
+
+          const statusCode = listener.getStatusCode();
 
           await signupPage.page.waitForSelector(".Toastify", {
             state: "attached",
           });
-
-          expect(
-            accountRequestTriggered,
-            "No account creation request should be triggered when using signup email from existing user",
-          ).toBe(false);
           await expect(
             toastMessageLocator,
             "Toast error message should have correct text when using signup email from existing user",
           ).toHaveText(expectedToastText);
+          expect(
+            statusCode,
+            "Account creation response status code should be 400 when using signup email from existing user",
+          ).toBe(400);
         });
 
         test("should not allow signup with malicious strings", async ({
@@ -412,9 +414,8 @@ const runSignupTests = (lang: Language) => {
             password: "Password1234",
             region: "AB",
           });
+          const listener = signupPage.accountCreationRequestMonitor();
 
-          const accountRequestTriggered =
-            await signupPage.isAccountCreationRequestSent();
           await signupPage.submitSignupForm();
 
           const errors = await signupPage.getErrorMessages();
@@ -431,23 +432,9 @@ const runSignupTests = (lang: Language) => {
             helper.getLocaleText("mandatoryFieldError"),
             helper.getLocaleText("invalidEmailError"),
           ]);
-
-          // Check that no alert popup is triggered
-          let alertTriggered = false;
-          signupPage.page.on("dialog", (dialog) => {
-            console.log("inside request listener", dialog.message());
-            if (dialog.type() === "alert") {
-              alertTriggered = true;
-            }
-          });
-
           expect(
-            accountRequestTriggered,
-            "Account creation request should not be triggered when malicious inputs are provided",
-          ).toBe(false);
-          expect(
-            alertTriggered,
-            "No alert dialog should be triggered for malicious inputs",
+            listener.wasTriggered(),
+            "No account creation request should be triggered when malicious inputs are provided",
           ).toBe(false);
         });
       });
@@ -467,7 +454,7 @@ const runSignupTests = (lang: Language) => {
           const pwd = "PPassword1234";
           const region = "AB";
           const { loggedInUrl, accountResponse } =
-            signupPage.checkAccountRequest(selectedLanguage);
+            signupPage.waitAndCheckAccountRequest(selectedLanguage);
 
           await signupPage.fillSignupForm({
             firstName: randomUserFirstName,
@@ -525,7 +512,7 @@ const runSignupTests = (lang: Language) => {
           const phoneNumber = "+15141234564";
           const pwd = "PPassword1234";
           const { loggedInUrl, accountResponse } =
-            signupPage.checkAccountRequest(selectedLanguage);
+            signupPage.waitAndCheckAccountRequest(selectedLanguage);
 
           await signupPage.fillSignupForm({
             firstName: randomUserFirstName,
@@ -583,7 +570,7 @@ const runSignupTests = (lang: Language) => {
           const pwd = "PPassword1234";
           const region = "AB";
           const { loggedInUrl, accountResponse } =
-            signupPage.checkAccountRequest(selectedLanguage, 400);
+            signupPage.waitAndCheckAccountRequest(selectedLanguage, 400);
 
           // Submit the form and wait for the response
           await signupPage.fillSignupForm({

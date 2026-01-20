@@ -1,6 +1,7 @@
 import { test as baseTest, expect } from "@playwright/test";
 import { ConsentPage } from "../pages/consentPage";
 import * as helper from "../helpers/helper";
+import { Language } from "../types/types.js";
 
 const test = baseTest.extend<{ consentPage: ConsentPage }>({
   consentPage: async ({ page }, use) => {
@@ -11,7 +12,6 @@ const test = baseTest.extend<{ consentPage: ConsentPage }>({
   },
 });
 
-type Language = "en" | "fr";
 const selectedLanguage =
   (process.env.LANGUAGE?.toLowerCase() as Language) || "en";
 
@@ -61,12 +61,10 @@ const runConsentTests = (lang: Language) => {
         test("should not show consent to a user that already accepted it", async ({
           consentPage,
         }) => {
-          await consentPage.consentModal.waitFor({ state: "hidden" });
-          const isHiddenAfterReload = await consentPage.isConsentVisible();
           await expect(
-            isHiddenAfterReload,
+            consentPage.consentModal,
             "Consent modal should not be visible for returning users",
-          ).toBe(false);
+          ).toBeHidden();
         });
       });
     },

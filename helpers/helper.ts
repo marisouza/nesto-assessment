@@ -1,22 +1,17 @@
 import * as path from "path";
-import { fileURLToPath } from "url";
 import * as fs from "fs";
+import { Language } from "../types/types.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-// const consentFilePath = path.join(__dirname, "../../playwright/.auth/consent.json");
-
-type Language = "en" | "fr";
 const selectedLanguage =
   (process.env.LANGUAGE?.toLowerCase() as Language) || "en";
 
-export function getLocaleData() {
+export function getLocaleData(language: Language = selectedLanguage) {
   const localeMap = {
     en: "en-EN.json",
     fr: "fr-FR.json",
   };
 
-  const localeFile = localeMap[selectedLanguage];
+  const localeFile = localeMap[language];
   const localePath = path.join(
     path.dirname(new URL(import.meta.url).pathname),
     "..",
@@ -35,10 +30,8 @@ export function getLocaleText(key: string, pageLocale: string = "signupPage") {
 export function switchSignupLanguage(currentLanguage: string) {
   const targetLanguage = currentLanguage === "en" ? "fr" : "en";
   const expectedUrlPath = targetLanguage === "fr" ? "/fr/signup" : "/signup";
-  const headerText =
-    targetLanguage === "fr"
-      ? "Créez un compte nesto"
-      : "Create a nesto account";
+  const localeData = getLocaleData(targetLanguage as Language);
+  const headerText = localeData.signupPage.formHeader;
 
   return { targetLanguage, expectedUrlPath, headerText };
 }
@@ -46,8 +39,8 @@ export function switchSignupLanguage(currentLanguage: string) {
 export function switchPortfolioLanguage(currentLanguage: string) {
   const targetLanguage = currentLanguage === "en" ? "fr" : "en";
   const expectedUrlPart = targetLanguage === "fr" ? "/fr" : "/";
-  const portfolioText =
-    targetLanguage === "fr" ? "Mon portfolio" : "My Portfolio";
+  const localeData = getLocaleData(targetLanguage as Language);
+  const portfolioText = localeData.signupPage.myPortfolio;
 
   return { targetLanguage, expectedUrlPart, portfolioText };
 }

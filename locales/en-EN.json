@@ -28,7 +28,8 @@
     "toastError": "Something went wrong! Please try again and if you continue to have trouble feel free to contact your advisor",
     "checkBoxTerms": "By checking this box, you agree to be contacted by nesto's partners for the purposes of offering you financial products. You agree to nesto sharing your mortgage information with its partners. You can opt-out at any time.",
     "alreadyloggedInWarning": "Looks like you are already logged in",
-    "alreadyloggedInLink": "Go to Dashboard"
+    "alreadyloggedInLink": "Go to Dashboard",
+    "myPortfolio": "My Portfolio"
   },
   "loginPage": {
     "logInButton": "Log in",

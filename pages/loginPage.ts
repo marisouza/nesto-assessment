@@ -15,11 +15,9 @@ export class LoginPage {
   readonly resetPasswordMessage: Locator;
   readonly blockAccountMessage: Locator;
   readonly wrongCredentialsError: Locator;
-  private language: "en" | "fr";
 
-  constructor(page: Page, language: "en" | "fr" = "en") {
+  constructor(page: Page) {
     this.page = page;
-    this.language = language;
     const localeData = getLocaleData().loginPage;
     this.emailInput = page.getByRole("textbox", { name: "email" });
     this.passwordInput = page.getByRole("textbox", { name: "password" });
@@ -63,23 +61,21 @@ export class LoginPage {
   }
 
   async getSignupHref() {
-    return await this.signupLink.getAttribute("href");
+    return this.signupLink.getAttribute("href");
   }
 
   async getEmailError() {
-    return await this.blankEmailError.textContent();
+    return this.blankEmailError.textContent();
   }
 
   async getPasswordError() {
-    return await this.passwordError.textContent();
+    return this.passwordError.textContent();
   }
 
   async waitsLoginRequestFails(statusCode: number = 401) {
     await this.page.waitForResponse(
       (resp) =>
-        resp
-          .url()
-          .includes(`${process.env.LOGIN_URL}/usernamepassword/login`) &&
+        resp.url().includes("/usernamepassword/login") &&
         resp.request().method() === "POST" &&
         resp.status() === statusCode,
     );

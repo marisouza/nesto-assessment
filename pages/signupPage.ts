@@ -1,5 +1,11 @@
-import { type Locator, type Page } from "@playwright/test";
+import {
+  type Locator,
+  type Page,
+  type Response,
+  type Request,
+} from "@playwright/test";
 import { getLocaleData, getSignupUrl } from "../helpers/helper.js";
+import { Language } from "../types/types.js";
 
 export class SignupPage {
   readonly page: Page;
@@ -16,9 +22,9 @@ export class SignupPage {
   readonly languageSelector: Locator;
   readonly regionInput: Locator;
   readonly countrycodeSelector: Locator;
-  private language: "en" | "fr";
+  private language: Language;
 
-  constructor(page: Page, language: "en" | "fr" = "en") {
+  constructor(page: Page, language: Language = "en") {
     this.page = page;
     this.language = language;
     const localeData = getLocaleData().signupPage;
@@ -70,7 +76,7 @@ export class SignupPage {
 
   async goTo() {
     const url = getSignupUrl(this.language);
-    const reponse = this.page.waitForResponse(
+    const response = this.page.waitForResponse(
       (resp) =>
         resp.url().includes("/api/geolocation/all") &&
         resp.request().method() === "GET" &&
@@ -78,7 +84,7 @@ export class SignupPage {
     );
 
     await this.page.goto(url);
-    await reponse;
+    await response;
   }
 
   async submitSignupForm() {
@@ -94,20 +100,18 @@ export class SignupPage {
     await locator.fill(value);
   }
 
-  async getLocatorByTestId(loc: string) {
+  getLocatorByTestId(loc: string) {
     const locator = this.page.getByTestId(loc);
     return locator;
   }
 
   async getErrorMessages() {
-    await this.errorMessages.scrollIntoViewIfNeeded;
-    return await this.errorMessages.allTextContents();
+    return this.errorMessages.allTextContents();
   }
 
   async getErrorMessageByTestId(testId: string) {
     const locator = this.page.getByTestId(testId);
-    await locator.scrollIntoViewIfNeeded();
-    return await locator.textContent();
+    return locator.textContent();
   }
 
   async fillSignupForm({
@@ -147,18 +151,56 @@ export class SignupPage {
     await this.page.waitForURL("https://auth.nesto.ca/login**");
   }
 
-  // Monitor network requests to ensure no account creation is attempted
-  async isAccountCreationRequestSent() {
-    let accountRequestTriggered = false;
-    this.page.on("request", (req) => {
+  accountCreationRequestMonitor(): { wasTriggered: () => boolean } {
+    let triggered = false;
+
+    const handler = (req: Request) => {
       if (req.url().includes("/api/accounts") && req.method() === "POST") {
-        accountRequestTriggered = true;
+        triggered = true;
       }
-    });
-    return accountRequestTriggered;
+    };
+
+    this.page.on("request", handler);
+
+    return {
+      wasTriggered: () => triggered,
+    };
   }
 
-  checkAccountRequest(selectedLanguage: string, statusCode: number = 201) {
+  // Monitor network requests to ensure account creation request is not successful
+  setupAccountCreationMonitor(): {
+    getStatusCode: () => number | null;
+    waitForResponse: () => Promise<void>;
+  } {
+    let statusCode: number | null = null;
+
+    const responseListener = async (resp: Response) => {
+      if (
+        resp.url().includes("/api/accounts") &&
+        resp.request().method() === "POST"
+      ) {
+        statusCode = resp.status();
+      }
+    };
+
+    this.page.on("response", responseListener);
+
+    return {
+      getStatusCode: () => statusCode,
+      waitForResponse: async () => {
+        await this.page.waitForResponse(
+          (resp) =>
+            resp.url().includes("/api/accounts") &&
+            resp.request().method() === "POST",
+        );
+      },
+    };
+  }
+
+  waitAndCheckAccountRequest(
+    selectedLanguage: string,
+    statusCode: number = 201,
+  ) {
     const loggedInUrl =
       selectedLanguage === "fr" ? "/getaquote/fr" : "/getaquote";
 
