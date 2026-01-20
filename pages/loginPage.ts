@@ -1,5 +1,6 @@
 import { type Locator, type Page } from "@playwright/test";
 import { getLocaleData } from "../helpers/helper.js";
+import { Language } from "@/types/types.js";
 
 export class LoginPage {
   readonly page: Page;
@@ -45,8 +46,8 @@ export class LoginPage {
     );
   }
 
-  async goTo() {
-    await this.page.goto("/");
+  async goTo(language: Language) {
+    await this.page.goto(this.getLoggedInUrl(language));
   }
 
   async fillLoginInputs(email: string, password?: string) {
@@ -79,5 +80,11 @@ export class LoginPage {
         resp.request().method() === "POST" &&
         resp.status() === statusCode,
     );
+  }
+
+  getLoggedInUrl(selectedLanguage: string) {
+    const loggedInUrl = selectedLanguage === "fr" ? "/fr" : "/";
+
+    return loggedInUrl;
   }
 }
