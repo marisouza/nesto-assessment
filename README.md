@@ -42,6 +42,16 @@ This is an end-to-end test automation project for Nesto using Playwright and Typ
    npx playwright install --with-deps
    ```
 
+4. **Set values to .env file**
+
+Rename `.env.sample` file in the root directory to `.env.demo`, then add proper URL information as shown below.
+
+```bash
+# .env file
+BASE_URL="https://app.qa.nesto.ca"
+LOGIN_URL="https://auth.nesto.ca"
+```
+
 _Note: This step may not be necessary if browsers were installed during `npm ci`. Run this if you encounter browser-related errors._
 
 ## Project Structure
