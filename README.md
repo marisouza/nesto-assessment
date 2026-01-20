@@ -41,11 +41,11 @@ This is an end-to-end test automation project for Nesto using Playwright and Typ
    ```bash
    npx playwright install --with-deps
    ```
+   _Note: This step may not be necessary if browsers were installed during `npm ci`. Run this if you encounter browser-related errors._
 
 4. **Set values to .env file**
 
    Rename `.env.sample` file in the root directory to `.env.demo`, then add proper URL information as shown below.
-   _Note: This step may not be necessary if browsers were installed during `npm ci`. Run this if you encounter browser-related errors._
 
    ```bash
    # .env file
