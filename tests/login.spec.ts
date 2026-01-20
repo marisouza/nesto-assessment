@@ -243,6 +243,12 @@ test.describe(
     test("should not login when password provided is incorrect for an existing user", async ({
       loginPage,
     }) => {
+      if (!process.env.CI) {
+        test.skip(
+          true,
+          "Skipping test locally to avoid account lockout issues until a new user creation mechanism is implemented",
+        );
+      }
       const validUserEmail = "valid.user456@test.com";
       const invalidUserPassword = "Password";
 
