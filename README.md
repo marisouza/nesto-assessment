@@ -137,6 +137,8 @@ Reports are generated in:
 
 CI Reports available at [github-pages](https://github.com/marisouza/nesto-assessment/deployments/github-pages) by clicking on **Latest deployments** link
 
+_Note: You must have signed in to github to be able to access the page._
+
 ## Code Quality
 
 The project enforces code quality through ESLint and Prettier with automated pre-commit hooks.

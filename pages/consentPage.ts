@@ -1,5 +1,6 @@
 import { type Locator, type Page } from "@playwright/test";
 import { getLocaleData, getSignupUrl } from "../helpers/helper.js";
+import { Language } from "../types/types.js";
 
 export class ConsentPage {
   readonly page: Page;
@@ -7,9 +8,9 @@ export class ConsentPage {
   readonly partners: Locator;
   readonly agreeButton: Locator;
   readonly learnMoreButton: Locator;
-  private language: "en" | "fr";
+  private language: Language;
 
-  constructor(page: Page, language: "en" | "fr" = "en") {
+  constructor(page: Page, language: Language = "en") {
     this.page = page;
     this.language = language;
     const localeData = getLocaleData().signupPage;
@@ -26,10 +27,6 @@ export class ConsentPage {
   async goTo() {
     const url = getSignupUrl(this.language);
     await this.page.goto(url);
-  }
-
-  async isConsentVisible() {
-    return await this.consentModal.isVisible();
   }
 
   async acceptConsent() {

@@ -1,12 +1,12 @@
-import { test as baseTest, expect } from "../fixtures";
+import { test as baseTest, expect } from "@playwright/test";
 import { LoginPage } from "../pages/loginPage";
 import { getLocaleText } from "../helpers/helper";
 import { faker } from "@faker-js/faker";
+import { Language } from "../types/types.js";
 
 const test = baseTest.extend<{ loginPage: LoginPage }>({
   loginPage: async ({ page }, use) => {
-    const language = selectedLanguage;
-    const loginPage = new LoginPage(page, language);
+    const loginPage = new LoginPage(page);
     await loginPage.goTo();
     await expect(
       loginPage.page,
@@ -20,7 +20,6 @@ const test = baseTest.extend<{ loginPage: LoginPage }>({
   },
 });
 
-type Language = "en" | "fr";
 const selectedLanguage =
   (process.env.LANGUAGE?.toLowerCase() as Language) || "en";
 
@@ -194,8 +193,9 @@ const runSignupTests = (lang: Language) => {
 
     // Assumption:
     // "valid.user123@test.com" user was pre-created in the system
-    // Options: use /accounts endpoint to create the user in pre-test setup is not an option
-    // or have user present in DB as part of env setup
+    // Options: use /accounts endpoint to create a new user in pre-test setup
+    // or inject new user in DB as part of env setup.
+    // This will avoid account block due to multiple failed login attempts
     // LOG-005: Fix french text for wrong credentials error message
     test("should not login when password provided is incorrect for an existing user", async ({
       loginPage,
