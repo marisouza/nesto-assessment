@@ -19,6 +19,7 @@ test.describe(
   `Consent Page - ${selectedLanguage.toUpperCase()}`,
   { tag: "@consent" },
   () => {
+    // TECH-001: Skipping first visit tests in CI
     test.describe("First Visit", () => {
       test.skip(
         !!process.env.CI,
