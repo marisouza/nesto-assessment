@@ -42,6 +42,16 @@ This is an end-to-end test automation project for Nesto using Playwright and Typ
    npx playwright install --with-deps
    ```
 
+4. **Set values to .env file**
+
+Rename `.env.sample` file in the root directory to `.env.demo`, then add proper URL information as shown below.
+
+```bash
+# .env file
+BASE_URL="https://app.qa.nesto.ca"
+LOGIN_URL="https://auth.nesto.ca"
+```
+
 _Note: This step may not be necessary if browsers were installed during `npm ci`. Run this if you encounter browser-related errors._
 
 ## Project Structure
@@ -320,21 +330,24 @@ Code formatting settings in [.prettierrc](.prettierrc):
 
 ## Available Scripts
 
-| Script          | Description                                            |
-| --------------- | ------------------------------------------------------ |
-| `test:ui`       | Run tests in Playwright UI mode                        |
-| `test:headed`   | Run tests in headed mode (browser visible)             |
-| `test:docker`   | Run tests in headless mode for docker                  |
-| `test:signup`   | Run signup tests with @signup tag                      |
-| `test:login`    | Run login tests with @login tag                        |
-| `test:consent`  | Run consent tests with @consent tag                    |
-| `report:show`   | Open Playwright HTML report                            |
-| `report:allure` | Generate and open Allure report                        |
-| `lint`          | Run ESLint and TypeScript type checking                |
-| `lint:ci`       | Run TypeScript type checking (CI mode)                 |
-| `format:check`  | Check code formatting                                  |
-| `format:fix`    | Auto-fix code formatting issues                        |
-| `prepare`       | Set up Husky git hooks (runs automatically on install) |
+| Script                | Description                                            |
+| --------------------- | ------------------------------------------------------ |
+| `test:ui`             | Open Playwright UI mode to run test                    |
+| `test:headed`         | Run all tests in headed mode (browser visible)         |
+| `test:docker`         | Run all tests in headless mode for docker              |
+| `test:docker:signup`  | Run signup tests in headless mode for docker           |
+| `test:docker:login`   | Run login tests in headless mode for docker            |
+| `test:docker:consent` | Run consent tests in headless mode for docker          |
+| `test:signup`         | Run signup tests with @signup tag                      |
+| `test:login`          | Run login tests with @login tag                        |
+| `test:consent`        | Run consent tests with @consent tag                    |
+| `report:show`         | Open Playwright HTML report                            |
+| `report:allure`       | Generate and open Allure report                        |
+| `lint`                | Run ESLint and TypeScript type checking                |
+| `lint:ci`             | Run TypeScript type checking (CI mode)                 |
+| `format:check`        | Check code formatting                                  |
+| `format:fix`          | Auto-fix code formatting issues                        |
+| `prepare`             | Set up Husky git hooks (runs automatically on install) |
 
 ## Test Suites
 
@@ -460,7 +473,7 @@ Run docker image:
 
 ```bash
    docker run -it pw-test
-   npm run test:consent
+   npm run test:docker
 ```
 
 ### Docker-compose

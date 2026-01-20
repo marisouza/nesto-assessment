@@ -194,7 +194,7 @@ test.describe(
     });
 
     // Assumption:
-    // "valid.user123@test.com" user was pre-created in the system
+    // "valid.user321@test.com" user was pre-created in the system
     // Options: use /accounts endpoint to create a new user in pre-test setup
     // or inject new user in DB as part of env setup.
     // This will avoid account block due to multiple failed login attempts
@@ -202,7 +202,7 @@ test.describe(
     test("should not login when password provided is incorrect for an existing user", async ({
       loginPage,
     }) => {
-      const validUserEmail = "valid.user123@test.com";
+      const validUserEmail = "valid.user321@test.com";
       const invalidUserPassword = "Password";
 
       await loginPage.fillLoginInputs(validUserEmail, invalidUserPassword);
