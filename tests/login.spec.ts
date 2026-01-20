@@ -7,7 +7,7 @@ import { Language } from "../types/types.js";
 const test = baseTest.extend<{ loginPage: LoginPage }>({
   loginPage: async ({ page }, use) => {
     const loginPage = new LoginPage(page);
-    await loginPage.goTo();
+    await loginPage.goTo(selectedLanguage);
     await expect(
       loginPage.page,
       "Login page URL validation should have correct URL",
@@ -27,6 +27,41 @@ test.describe(
   `Login Page - ${selectedLanguage.toUpperCase()}`,
   { tag: "@login" },
   () => {
+    // LOG-006: Fix language persistence after login
+    test("should allow user to login when valid credentials are provided", async ({
+      loginPage,
+    }) => {
+      if (selectedLanguage === "fr") {
+        test.skip(
+          true,
+          "Skipping test in FR until language persistence after login is fixed",
+        );
+      }
+      const validUserEmail = "valid.user456@test.com";
+      const validUserPassword = "Password1234567890";
+
+      await loginPage.fillLoginInputs(validUserEmail, validUserPassword);
+      await expect(
+        loginPage.emailInput,
+        "Email input should have the correct email value",
+      ).toHaveValue(validUserEmail);
+      await expect(
+        loginPage.passwordInput,
+        "Password input should have the correct password value",
+      ).toHaveValue(validUserPassword);
+
+      await loginPage.submitLogin();
+
+      await expect(
+        loginPage.page.getByTestId("new-mortgage"),
+        "New mortgage section should be visible after successful login",
+      ).toBeVisible();
+      await expect(
+        loginPage.page,
+        "Url should match the expected url redirect after successful login",
+      ).toHaveURL(new RegExp(loginPage.getLoggedInUrl(selectedLanguage)));
+    });
+
     test("should not login when invalid username is provided", async ({
       loginPage,
     }) => {
@@ -200,7 +235,7 @@ test.describe(
     });
 
     // Assumption:
-    // "valid.user321@test.com" user was pre-created in the system
+    // "valid.user456@test.comm" user was pre-created in the system
     // Options: use /accounts endpoint to create a new user in pre-test setup
     // or inject new user in DB as part of env setup.
     // This will avoid account block due to multiple failed login attempts
@@ -214,7 +249,7 @@ test.describe(
           "Skipping test locally to avoid account lockout issues until a new user creation mechanism is implemented",
         );
       }
-      const validUserEmail = "valid.user321@test.com";
+      const validUserEmail = "valid.user456@test.com";
       const invalidUserPassword = "Password";
 
       await loginPage.fillLoginInputs(validUserEmail, invalidUserPassword);
