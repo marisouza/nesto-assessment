@@ -44,15 +44,18 @@ This is an end-to-end test automation project for Nesto using Playwright and Typ
 
 4. **Set values to .env file**
 
-Rename `.env.sample` file in the root directory to `.env.demo`, then add proper URL information as shown below.
+   Rename `.env.sample` file in the root directory to `.env.demo`, then add proper URL information as shown below.
+   _Note: This step may not be necessary if browsers were installed during `npm ci`. Run this if you encounter browser-related errors._
 
-```bash
-# .env file
-BASE_URL="https://app.qa.nesto.ca"
-LOGIN_URL="https://auth.nesto.ca"
-```
+   ```bash
+   # .env file
+   BASE_URL="https://app.qa.nesto.ca"
+   LOGIN_URL="https://auth.nesto.ca"
+   ```
 
-_Note: This step may not be necessary if browsers were installed during `npm ci`. Run this if you encounter browser-related errors._
+5. **Install allurectl**
+
+Follow [allurectl](https://docs.qameta.io/allure-testops/ecosystem/allurectl/) documentation for installation steps.
 
 ## Project Structure
 
