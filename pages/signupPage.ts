@@ -148,7 +148,7 @@ export class SignupPage {
 
   async clickLoginHref() {
     await this.loginLink.click();
-    await this.page.waitForURL("https://auth.nesto.ca/login**");
+    await this.page.waitForURL(new RegExp(/\/login/));
   }
 
   accountCreationRequestMonitor(): { wasTriggered: () => boolean } {
