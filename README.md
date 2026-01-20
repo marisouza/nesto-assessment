@@ -330,21 +330,24 @@ Code formatting settings in [.prettierrc](.prettierrc):
 
 ## Available Scripts
 
-| Script          | Description                                            |
-| --------------- | ------------------------------------------------------ |
-| `test:ui`       | Run tests in Playwright UI mode                        |
-| `test:headed`   | Run tests in headed mode (browser visible)             |
-| `test:docker`   | Run tests in headless mode for docker                  |
-| `test:signup`   | Run signup tests with @signup tag                      |
-| `test:login`    | Run login tests with @login tag                        |
-| `test:consent`  | Run consent tests with @consent tag                    |
-| `report:show`   | Open Playwright HTML report                            |
-| `report:allure` | Generate and open Allure report                        |
-| `lint`          | Run ESLint and TypeScript type checking                |
-| `lint:ci`       | Run TypeScript type checking (CI mode)                 |
-| `format:check`  | Check code formatting                                  |
-| `format:fix`    | Auto-fix code formatting issues                        |
-| `prepare`       | Set up Husky git hooks (runs automatically on install) |
+| Script                | Description                                            |
+| --------------------- | ------------------------------------------------------ |
+| `test:ui`             | Open Playwright UI mode to run test                    |
+| `test:headed`         | Run all tests in headed mode (browser visible)         |
+| `test:docker`         | Run all tests in headless mode for docker              |
+| `test:docker:signup`  | Run signup tests in headless mode for docker           |
+| `test:docker:login`   | Run login tests in headless mode for docker            |
+| `test:docker:consent` | Run consent tests in headless mode for docker          |
+| `test:signup`         | Run signup tests with @signup tag                      |
+| `test:login`          | Run login tests with @login tag                        |
+| `test:consent`        | Run consent tests with @consent tag                    |
+| `report:show`         | Open Playwright HTML report                            |
+| `report:allure`       | Generate and open Allure report                        |
+| `lint`                | Run ESLint and TypeScript type checking                |
+| `lint:ci`             | Run TypeScript type checking (CI mode)                 |
+| `format:check`        | Check code formatting                                  |
+| `format:fix`          | Auto-fix code formatting issues                        |
+| `prepare`             | Set up Husky git hooks (runs automatically on install) |
 
 ## Test Suites
 
@@ -470,7 +473,7 @@ Run docker image:
 
 ```bash
    docker run -it pw-test
-   npm run test:consent
+   npm run test:docker
 ```
 
 ### Docker-compose

@@ -551,6 +551,7 @@ test.describe(
       });
 
       // SU-001: Signup allows non-Canadian phone numbers
+      // Test will fail as the account creation endpoint should return a 400 error
       test.skip("should not allow account creation for non-Canadian phone numbers", async ({
         signupPage,
       }) => {
